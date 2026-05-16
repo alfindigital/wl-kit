@@ -4,7 +4,6 @@ import { toast } from "sonner";
 import { toPng } from "html-to-image";
 import { z } from "zod";
 
-import { Header } from "@/components/watchlist/Header";
 import { Footer } from "@/components/watchlist/Footer";
 import { TickerInput } from "@/components/watchlist/TickerInput";
 import { FormatTabs } from "@/components/watchlist/FormatTabs";
@@ -13,9 +12,22 @@ import { ActionButtons } from "@/components/watchlist/ActionButtons";
 import { SaveDialog } from "@/components/watchlist/SaveDialog";
 import { SavedWatchlists } from "@/components/watchlist/SavedWatchlists";
 import { ShareCard } from "@/components/watchlist/ShareCard";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
 
-import { formatTickers, parseTickers, type OutputFormat } from "@/lib/tickers";
-import { applyTheme, getStoredTheme, type Theme } from "@/lib/theme";
+import {
+  formatTickers,
+  parseTickers,
+  diffTickers,
+  mergeTickers,
+  type OutputFormat,
+} from "@/lib/tickers";
 import {
   loadWatchlists,
   saveWatchlists,
@@ -39,10 +51,7 @@ export const Route = createFileRoute("/")({
           "Format your IDX watchlist in seconds. Paste tickers in any format and export to TradingView, plain text, or newline-separated lists.",
       },
       { property: "og:title", content: "WatchlistKit — IDX Watchlist Formatter" },
-      {
-        property: "og:description",
-        content: "Format your IDX watchlist in seconds.",
-      },
+      { property: "og:description", content: "Format your IDX watchlist in seconds." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/" },
     ],
@@ -50,23 +59,24 @@ export const Route = createFileRoute("/")({
   }),
 });
 
+type DiffData = {
+  a: SavedWatchlist;
+  b: SavedWatchlist;
+  added: string[];
+  removed: string[];
+  unchanged: string[];
+};
+
 function Index() {
   const search = useSearch({ from: "/" });
   const [input, setInput] = useState("");
   const [format, setFormat] = useState<OutputFormat>("tradingview");
-  const [theme, setTheme] = useState<Theme>("dark");
   const [saved, setSaved] = useState<SavedWatchlist[]>([]);
   const [saveOpen, setSaveOpen] = useState(false);
   const [loadedName, setLoadedName] = useState<string | null>(null);
+  const [diff, setDiff] = useState<DiffData | null>(null);
   const shareCardRef = useRef<HTMLDivElement>(null);
-  const textareaWrapRef = useRef<HTMLDivElement>(null);
-
-  // Theme bootstrap
-  useEffect(() => {
-    const t = getStoredTheme();
-    setTheme(t);
-    applyTheme(t);
-  }, []);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Load saved watchlists
   useEffect(() => {
@@ -80,67 +90,16 @@ function Index() {
     }
   }, [search.t]);
 
+  // Autofocus on mount
+  useEffect(() => {
+    if (!search.t) {
+      setTimeout(() => textareaRef.current?.focus(), 50);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const tickers = useMemo(() => parseTickers(input), [input]);
   const output = useMemo(() => formatTickers(tickers, format), [tickers, format]);
-
-  // Keyboard shortcuts
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      const mod = e.metaKey || e.ctrlKey;
-      const target = e.target as HTMLElement | null;
-      const inField =
-        target &&
-        (target.tagName === "INPUT" ||
-          target.tagName === "TEXTAREA" ||
-          target.isContentEditable);
-
-      if (mod && e.key === "Enter") {
-        e.preventDefault();
-        if (output) {
-          navigator.clipboard.writeText(output).then(
-            () => toast.success("Copied!"),
-            () => {},
-          );
-        }
-        return;
-      }
-      if (mod && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        const ta = textareaWrapRef.current?.querySelector("textarea");
-        ta?.focus();
-        ta?.select();
-        return;
-      }
-      if (mod && e.key.toLowerCase() === "s") {
-        e.preventDefault();
-        if (tickers.length > 0) setSaveOpen(true);
-        return;
-      }
-      if (mod && (e.key === "1" || e.key === "2" || e.key === "3")) {
-        e.preventDefault();
-        const map: Record<string, OutputFormat> = {
-          "1": "tradingview",
-          "2": "plain",
-          "3": "newline",
-        };
-        handleFormatChange(map[e.key]);
-        return;
-      }
-      if (e.key === "Escape" && inField && target?.tagName === "TEXTAREA") {
-        e.preventDefault();
-        setInput("");
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [output, tickers.length]);
-
-  const toggleTheme = () => {
-    const next: Theme = theme === "dark" ? "light" : "dark";
-    setTheme(next);
-    applyTheme(next);
-  };
 
   const handleCopy = async (silent = false) => {
     if (!output) return;
@@ -154,7 +113,6 @@ function Index() {
 
   const handleFormatChange = (f: OutputFormat) => {
     setFormat(f);
-    // Auto-copy on format change if there is output
     if (tickers.length > 0) {
       const next = formatTickers(tickers, f);
       navigator.clipboard.writeText(next).then(
@@ -184,6 +142,7 @@ function Index() {
   };
 
   const handleOpenSave = () => {
+    if (tickers.length === 0) return;
     if (saved.length >= MAX_WATCHLISTS) {
       toast.error(`Limit reached (${MAX_WATCHLISTS} watchlists max)`);
       return;
@@ -198,20 +157,80 @@ function Index() {
     toast.success("Deleted");
   };
 
+  const handleRename = (id: string, name: string) => {
+    const next = saved.map((w) =>
+      w.id === id ? { ...w, name, savedAt: Date.now() } : w,
+    );
+    setSaved(next);
+    saveWatchlists(next);
+    toast.success("Renamed");
+  };
+
+  const handleMerge = (ids: string[]) => {
+    const lists = ids
+      .map((id) => saved.find((w) => w.id === id))
+      .filter((x): x is SavedWatchlist => !!x)
+      .map((w) => w.tickers);
+    const merged = mergeTickers(lists);
+    const entry: SavedWatchlist = {
+      id: crypto.randomUUID(),
+      name: `Merged (${ids.length})`,
+      tickers: merged,
+      savedAt: Date.now(),
+    };
+    const next = [entry, ...saved];
+    setSaved(next);
+    saveWatchlists(next);
+    toast.success(`Merged ${merged.length} unique tickers`);
+  };
+
+  const handleCompare = (idA: string, idB: string) => {
+    const a = saved.find((w) => w.id === idA);
+    const b = saved.find((w) => w.id === idB);
+    if (!a || !b) return;
+    const d = diffTickers(a.tickers, b.tickers);
+    setDiff({ a, b, ...d });
+  };
+
   const handleLoad = (item: SavedWatchlist) => {
     setInput(item.tickers.join("\n"));
     setLoadedName(item.name);
     toast.success(`Loaded "${item.name}"`);
   };
 
+  const handleDownload = () => {
+    if (!output) return;
+    const blob = new Blob([output], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${(loadedName || "watchlistkit").replace(/[^a-z0-9-_]+/gi, "-")}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Downloaded .txt");
+  };
+
   const handleShare = async () => {
     if (tickers.length === 0) return;
     const url = `${window.location.origin}/?t=${tickers.join(",")}`;
+    if (typeof navigator !== "undefined" && (navigator as Navigator).share) {
+      try {
+        await (navigator as Navigator).share({
+          title: "WatchlistKit",
+          text: output,
+          url,
+        });
+        return;
+      } catch (e) {
+        const err = e as DOMException;
+        if (err?.name === "AbortError") return;
+      }
+    }
     try {
       await navigator.clipboard.writeText(url);
       toast.success("Share link copied!");
     } catch {
-      toast.error("Failed to copy link");
+      toast.error("Failed to share");
     }
   };
 
@@ -232,6 +251,67 @@ function Index() {
     }
   };
 
+  // Keyboard shortcuts
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const mod = e.metaKey || e.ctrlKey;
+      const target = e.target as HTMLElement | null;
+      const inField =
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.isContentEditable);
+
+      if (mod && e.key === "Enter") {
+        e.preventDefault();
+        handleCopy();
+        return;
+      }
+      if (mod && e.shiftKey && e.key.toLowerCase() === "c") {
+        e.preventDefault();
+        handleCopy();
+        return;
+      }
+      if (mod && !e.shiftKey && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        textareaRef.current?.focus();
+        textareaRef.current?.select();
+        return;
+      }
+      if (mod && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        handleOpenSave();
+        return;
+      }
+      if (mod && e.key.toLowerCase() === "d") {
+        e.preventDefault();
+        handleDownload();
+        return;
+      }
+      if (mod && !inField && e.key.toLowerCase() === "v") {
+        // focus textarea so native paste lands there
+        textareaRef.current?.focus();
+      }
+      if (mod && (e.key === "1" || e.key === "2" || e.key === "3")) {
+        e.preventDefault();
+        const map: Record<string, OutputFormat> = {
+          "1": "tradingview",
+          "2": "plain",
+          "3": "newline",
+        };
+        handleFormatChange(map[e.key]);
+        return;
+      }
+      if (e.key === "Escape" && inField && target?.tagName === "TEXTAREA") {
+        e.preventDefault();
+        setInput("");
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [output, tickers.length, saved.length]);
+
   const dateStr = new Date().toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "short",
@@ -240,28 +320,24 @@ function Index() {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <Header theme={theme} onToggle={toggleTheme} />
-
       <main className="flex-1">
-        <div className="mx-auto w-full max-w-2xl px-4 py-10 sm:px-6 sm:py-14">
-          <div className="mb-10 text-center sm:mb-12">
-            <h1 className="font-display text-5xl leading-[1.05] tracking-tight sm:text-6xl">
-              Format your IDX watchlist
-              <br />
-              <em className="not-italic text-primary italic">in seconds.</em>
+        <div className="mx-auto w-full max-w-2xl px-4 pb-10 pt-6 sm:px-6 sm:pt-10">
+          <div className="mb-5 text-center sm:mb-6">
+            <h1 className="font-display text-2xl leading-tight tracking-tight sm:text-3xl">
+              Format your IDX watchlist{" "}
+              <em className="italic text-primary">in seconds.</em>
             </h1>
           </div>
 
           <div className="flex flex-col gap-4">
-            <div ref={textareaWrapRef}>
-              <TickerInput value={input} onChange={setInput} />
-            </div>
+            <TickerInput ref={textareaRef} value={input} onChange={setInput} />
             <FormatTabs value={format} onChange={handleFormatChange} />
-            <OutputBlock output={output} count={tickers.length} />
+            <OutputBlock output={output} count={tickers.length} format={format} />
             <ActionButtons
               disabled={tickers.length === 0}
               onCopy={() => handleCopy()}
               onSave={handleOpenSave}
+              onDownload={handleDownload}
               onImage={handleImage}
               onShare={handleShare}
             />
@@ -273,6 +349,9 @@ function Index() {
               items={saved}
               onLoad={handleLoad}
               onDelete={handleDelete}
+              onRename={handleRename}
+              onMerge={handleMerge}
+              onCompare={handleCompare}
             />
           </div>
         </div>
@@ -287,6 +366,25 @@ function Index() {
         tickerCount={tickers.length}
       />
 
+      <Dialog open={!!diff} onOpenChange={(o) => !o && setDiff(null)}>
+        <DialogContent className="rounded-2xl sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Compare watchlists</DialogTitle>
+            <DialogDescription>
+              <span className="font-medium">{diff?.a.name}</span> → {" "}
+              <span className="font-medium">{diff?.b.name}</span>
+            </DialogDescription>
+          </DialogHeader>
+          {diff && (
+            <div className="space-y-4 text-sm">
+              <DiffSection label="Added" tone="added" items={diff.added} />
+              <DiffSection label="Removed" tone="removed" items={diff.removed} />
+              <DiffSection label="Unchanged" tone="muted" items={diff.unchanged} />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
       {/* Off-screen card for PNG export */}
       <div style={{ position: "fixed", top: -10000, left: -10000, pointerEvents: "none" }}>
         <ShareCard
@@ -297,6 +395,49 @@ function Index() {
           date={dateStr}
         />
       </div>
+    </div>
+  );
+}
+
+function DiffSection({
+  label,
+  tone,
+  items,
+}: {
+  label: string;
+  tone: "added" | "removed" | "muted";
+  items: string[];
+}) {
+  const toneClass =
+    tone === "added"
+      ? "border-green-500/40 bg-green-500/10 text-green-700 dark:text-green-300"
+      : tone === "removed"
+        ? "border-destructive/40 bg-destructive/10 text-destructive"
+        : "border-border bg-muted text-muted-foreground";
+  return (
+    <div>
+      <div className="mb-1 flex items-center gap-2">
+        <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+          {label}
+        </span>
+        <Badge variant="secondary" className="rounded-full text-[10px]">
+          {items.length}
+        </Badge>
+      </div>
+      {items.length === 0 ? (
+        <p className="text-xs text-muted-foreground">None</p>
+      ) : (
+        <div className="flex flex-wrap gap-1.5">
+          {items.map((t) => (
+            <span
+              key={t}
+              className={`rounded-md border px-2 py-0.5 font-mono text-xs ${toneClass}`}
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -325,11 +466,11 @@ function ShortcutHint() {
       </span>
       <span className="inline-flex items-center gap-1">
         <Kbd>{mod}</Kbd>
-        <Kbd>K</Kbd> focus
+        <Kbd>S</Kbd> save
       </span>
       <span className="inline-flex items-center gap-1">
         <Kbd>{mod}</Kbd>
-        <Kbd>S</Kbd> save
+        <Kbd>D</Kbd> download
       </span>
       <span className="inline-flex items-center gap-1">
         <Kbd>{mod}</Kbd>
@@ -343,4 +484,3 @@ function ShortcutHint() {
     </div>
   );
 }
-
