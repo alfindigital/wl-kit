@@ -59,6 +59,7 @@ function Index() {
   const [saveOpen, setSaveOpen] = useState(false);
   const [loadedName, setLoadedName] = useState<string | null>(null);
   const shareCardRef = useRef<HTMLDivElement>(null);
+  const textareaWrapRef = useRef<HTMLDivElement>(null);
 
   // Theme bootstrap
   useEffect(() => {
@@ -190,20 +191,18 @@ function Index() {
 
       <main className="flex-1">
         <div className="mx-auto w-full max-w-2xl px-4 py-10 sm:px-6 sm:py-14">
-          <div className="mb-8 text-center sm:mb-10">
-            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+          <div className="mb-10 text-center sm:mb-12">
+            <h1 className="font-display text-5xl leading-[1.05] tracking-tight sm:text-6xl">
               Format your IDX watchlist
               <br />
-              <span className="text-primary">in seconds.</span>
+              <em className="not-italic text-primary italic">in seconds.</em>
             </h1>
-            <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground sm:text-base">
-              Paste tickers in any format. Get a clean, ready-to-use watchlist
-              for TradingView and beyond.
-            </p>
           </div>
 
           <div className="flex flex-col gap-4">
-            <TickerInput value={input} onChange={setInput} />
+            <div ref={textareaWrapRef}>
+              <TickerInput value={input} onChange={setInput} />
+            </div>
             <FormatTabs value={format} onChange={handleFormatChange} />
             <OutputBlock output={output} count={tickers.length} />
             <ActionButtons
@@ -213,6 +212,7 @@ function Index() {
               onImage={handleImage}
               onShare={handleShare}
             />
+            <ShortcutHint />
           </div>
 
           <div className="mt-10">
