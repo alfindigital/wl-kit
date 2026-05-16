@@ -22,7 +22,7 @@ export const ShareCard = forwardRef<
             width: 28,
             height: 28,
             borderRadius: 8,
-            background: "#f59e0b",
+            background: "#ea580c",
           }}
         />
         <span style={{ fontSize: 22, fontWeight: 700, letterSpacing: -0.3 }}>

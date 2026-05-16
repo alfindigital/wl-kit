@@ -24,3 +24,26 @@ export function formatTickers(tickers: string[], format: OutputFormat): string {
       return tickers.join("\n");
   }
 }
+
+export function diffTickers(a: string[], b: string[]) {
+  const A = new Set(a);
+  const B = new Set(b);
+  const added = b.filter((t) => !A.has(t));
+  const removed = a.filter((t) => !B.has(t));
+  const unchanged = a.filter((t) => B.has(t));
+  return { added, removed, unchanged };
+}
+
+export function mergeTickers(lists: string[][]): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const list of lists) {
+    for (const t of list) {
+      if (!seen.has(t)) {
+        seen.add(t);
+        out.push(t);
+      }
+    }
+  }
+  return out;
+}
