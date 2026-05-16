@@ -59,6 +59,7 @@ function Index() {
   const [saveOpen, setSaveOpen] = useState(false);
   const [loadedName, setLoadedName] = useState<string | null>(null);
   const shareCardRef = useRef<HTMLDivElement>(null);
+  const textareaWrapRef = useRef<HTMLDivElement>(null);
 
   // Theme bootstrap
   useEffect(() => {
@@ -81,6 +82,59 @@ function Index() {
 
   const tickers = useMemo(() => parseTickers(input), [input]);
   const output = useMemo(() => formatTickers(tickers, format), [tickers, format]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const mod = e.metaKey || e.ctrlKey;
+      const target = e.target as HTMLElement | null;
+      const inField =
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.isContentEditable);
+
+      if (mod && e.key === "Enter") {
+        e.preventDefault();
+        if (output) {
+          navigator.clipboard.writeText(output).then(
+            () => toast.success("Copied!"),
+            () => {},
+          );
+        }
+        return;
+      }
+      if (mod && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        const ta = textareaWrapRef.current?.querySelector("textarea");
+        ta?.focus();
+        ta?.select();
+        return;
+      }
+      if (mod && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        if (tickers.length > 0) setSaveOpen(true);
+        return;
+      }
+      if (mod && (e.key === "1" || e.key === "2" || e.key === "3")) {
+        e.preventDefault();
+        const map: Record<string, OutputFormat> = {
+          "1": "tradingview",
+          "2": "plain",
+          "3": "newline",
+        };
+        handleFormatChange(map[e.key]);
+        return;
+      }
+      if (e.key === "Escape" && inField && target?.tagName === "TEXTAREA") {
+        e.preventDefault();
+        setInput("");
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [output, tickers.length]);
 
   const toggleTheme = () => {
     const next: Theme = theme === "dark" ? "light" : "dark";
@@ -190,20 +244,18 @@ function Index() {
 
       <main className="flex-1">
         <div className="mx-auto w-full max-w-2xl px-4 py-10 sm:px-6 sm:py-14">
-          <div className="mb-8 text-center sm:mb-10">
-            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+          <div className="mb-10 text-center sm:mb-12">
+            <h1 className="font-display text-5xl leading-[1.05] tracking-tight sm:text-6xl">
               Format your IDX watchlist
               <br />
-              <span className="text-primary">in seconds.</span>
+              <em className="not-italic text-primary italic">in seconds.</em>
             </h1>
-            <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground sm:text-base">
-              Paste tickers in any format. Get a clean, ready-to-use watchlist
-              for TradingView and beyond.
-            </p>
           </div>
 
           <div className="flex flex-col gap-4">
-            <TickerInput value={input} onChange={setInput} />
+            <div ref={textareaWrapRef}>
+              <TickerInput value={input} onChange={setInput} />
+            </div>
             <FormatTabs value={format} onChange={handleFormatChange} />
             <OutputBlock output={output} count={tickers.length} />
             <ActionButtons
@@ -213,6 +265,7 @@ function Index() {
               onImage={handleImage}
               onShare={handleShare}
             />
+            <ShortcutHint />
           </div>
 
           <div className="mt-10">
@@ -251,3 +304,43 @@ function Index() {
 function labelFor(f: OutputFormat): string {
   return f === "tradingview" ? "TradingView" : f === "plain" ? "Plain" : "Newline";
 }
+
+function Kbd({ children }: { children: React.ReactNode }) {
+  return (
+    <kbd className="rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] font-medium text-muted-foreground">
+      {children}
+    </kbd>
+  );
+}
+
+function ShortcutHint() {
+  const isMac =
+    typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform);
+  const mod = isMac ? "⌘" : "Ctrl";
+  return (
+    <div className="mt-1 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[11px] text-muted-foreground">
+      <span className="inline-flex items-center gap-1">
+        <Kbd>{mod}</Kbd>
+        <Kbd>↵</Kbd> copy
+      </span>
+      <span className="inline-flex items-center gap-1">
+        <Kbd>{mod}</Kbd>
+        <Kbd>K</Kbd> focus
+      </span>
+      <span className="inline-flex items-center gap-1">
+        <Kbd>{mod}</Kbd>
+        <Kbd>S</Kbd> save
+      </span>
+      <span className="inline-flex items-center gap-1">
+        <Kbd>{mod}</Kbd>
+        <Kbd>1</Kbd>
+        <Kbd>2</Kbd>
+        <Kbd>3</Kbd> format
+      </span>
+      <span className="inline-flex items-center gap-1">
+        <Kbd>Esc</Kbd> clear
+      </span>
+    </div>
+  );
+}
+

@@ -65,7 +65,7 @@ export const ShareCard = forwardRef<
           textAlign: "center",
         }}
       >
-        watchlistkit.com · by alfindigital
+        @alfindigital
       </div>
     </div>
   );
