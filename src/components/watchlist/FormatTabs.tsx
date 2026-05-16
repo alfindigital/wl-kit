@@ -8,16 +8,18 @@ export function FormatTabs({
   value: OutputFormat;
   onChange: (v: OutputFormat) => void;
 }) {
+  const cls =
+    "rounded-lg text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground";
   return (
     <Tabs value={value} onValueChange={(v) => onChange(v as OutputFormat)}>
       <TabsList className="grid w-full grid-cols-3 rounded-xl bg-muted p-1">
-        <TabsTrigger value="tradingview" className="rounded-lg text-xs sm:text-sm">
+        <TabsTrigger value="tradingview" className={cls}>
           TradingView
         </TabsTrigger>
-        <TabsTrigger value="plain" className="rounded-lg text-xs sm:text-sm">
+        <TabsTrigger value="plain" className={cls}>
           Plain
         </TabsTrigger>
-        <TabsTrigger value="newline" className="rounded-lg text-xs sm:text-sm">
+        <TabsTrigger value="newline" className={cls}>
           Newline
         </TabsTrigger>
       </TabsList>
