@@ -136,9 +136,6 @@ function Index() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [output, tickers.length]);
 
-  const tickers = useMemo(() => parseTickers(input), [input]);
-  const output = useMemo(() => formatTickers(tickers, format), [tickers, format]);
-
   const toggleTheme = () => {
     const next: Theme = theme === "dark" ? "light" : "dark";
     setTheme(next);
