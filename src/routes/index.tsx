@@ -83,6 +83,62 @@ function Index() {
   const tickers = useMemo(() => parseTickers(input), [input]);
   const output = useMemo(() => formatTickers(tickers, format), [tickers, format]);
 
+  // Keyboard shortcuts
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const mod = e.metaKey || e.ctrlKey;
+      const target = e.target as HTMLElement | null;
+      const inField =
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.isContentEditable);
+
+      if (mod && e.key === "Enter") {
+        e.preventDefault();
+        if (output) {
+          navigator.clipboard.writeText(output).then(
+            () => toast.success("Copied!"),
+            () => {},
+          );
+        }
+        return;
+      }
+      if (mod && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        const ta = textareaWrapRef.current?.querySelector("textarea");
+        ta?.focus();
+        ta?.select();
+        return;
+      }
+      if (mod && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        if (tickers.length > 0) setSaveOpen(true);
+        return;
+      }
+      if (mod && (e.key === "1" || e.key === "2" || e.key === "3")) {
+        e.preventDefault();
+        const map: Record<string, OutputFormat> = {
+          "1": "tradingview",
+          "2": "plain",
+          "3": "newline",
+        };
+        handleFormatChange(map[e.key]);
+        return;
+      }
+      if (e.key === "Escape" && inField && target?.tagName === "TEXTAREA") {
+        e.preventDefault();
+        setInput("");
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [output, tickers.length]);
+
+  const tickers = useMemo(() => parseTickers(input), [input]);
+  const output = useMemo(() => formatTickers(tickers, format), [tickers, format]);
+
   const toggleTheme = () => {
     const next: Theme = theme === "dark" ? "light" : "dark";
     setTheme(next);
