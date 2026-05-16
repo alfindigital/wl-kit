@@ -2,9 +2,9 @@ export type Theme = "light" | "dark";
 const KEY = "watchlistkit.theme";
 
 export function getStoredTheme(): Theme {
-  if (typeof window === "undefined") return "dark";
+  if (typeof window === "undefined") return "light";
   const v = localStorage.getItem(KEY);
-  return v === "light" ? "light" : "dark";
+  return v === "dark" ? "dark" : "light";
 }
 
 export function applyTheme(theme: Theme): void {
