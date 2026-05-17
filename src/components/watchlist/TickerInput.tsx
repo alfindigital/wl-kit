@@ -54,6 +54,7 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
           autoFocus
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          aria-label="Ticker input"
           placeholder="Paste your tickers here... (any format)"
           className="min-h-[96px] resize-none overflow-hidden rounded-2xl border-border/80 bg-card p-4 pr-20 text-base shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-primary sm:min-h-[140px]"
         />

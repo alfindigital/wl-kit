@@ -1,0 +1,13 @@
+# WatchlistKit
+
+> Format your IDX (Indonesia Stock Exchange) watchlist in seconds. Paste tickers in any format and export to TradingView, plain text, or newline-separated lists.
+
+WatchlistKit is a free, browser-based tool by @alfindigital for cleaning and formatting Indonesian stock tickers. It automatically prefixes tickers with `IDX:`, deduplicates them, and outputs them in formats compatible with TradingView watchlists and other tools. Watchlists can be saved locally, merged, compared, shared by URL, and exported as `.txt` or PNG.
+
+## Pages
+
+- [Home](/): Paste tickers, format them for TradingView, save and manage watchlists.
+
+## Optional
+
+- [Sitemap](/sitemap.xml)

@@ -44,6 +44,7 @@ export function SaveDialog({
         </DialogHeader>
         <Input
           autoFocus
+          aria-label="Watchlist name"
           placeholder="My watchlist name"
           value={name}
           onChange={(e) => setName(e.target.value)}
