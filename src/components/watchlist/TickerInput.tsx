@@ -44,8 +44,10 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
       innerRef.current?.focus();
     };
 
-    const hasClipboard =
-      typeof navigator !== "undefined" && !!navigator.clipboard?.readText;
+    const [hasClipboard, setHasClipboard] = useState(false);
+    useEffect(() => {
+      setHasClipboard(typeof navigator !== "undefined" && !!navigator.clipboard?.readText);
+    }, []);
 
     return (
       <div className="relative">
