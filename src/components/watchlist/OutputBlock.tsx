@@ -29,7 +29,7 @@ export function OutputBlock({
           <div className="grid grid-cols-[auto_1fr] gap-x-3">
             {lines.map((line, i) => (
               <div key={i} className="contents">
-                <span className="select-none text-right text-muted-foreground/60">
+                <span className="select-none text-right text-muted-foreground">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <span className="break-all">{line}</span>
