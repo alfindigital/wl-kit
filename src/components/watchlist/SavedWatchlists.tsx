@@ -103,6 +103,7 @@ export function SavedWatchlists({
                     <Input
                       value={query}
                       onChange={(e) => setQuery(e.target.value)}
+                      aria-label="Search watchlists"
                       placeholder="Search name or ticker…"
                       className="h-8 rounded-lg pl-8 text-xs"
                     />
@@ -193,12 +194,14 @@ export function SavedWatchlists({
                           <Checkbox
                             checked={selected.includes(item.id)}
                             onCheckedChange={() => toggleSelect(item.id)}
+                            aria-label={`Select ${item.name}`}
                           />
                         )}
                         {isEditing ? (
                           <div className="flex flex-1 items-center gap-1">
                             <Input
                               autoFocus
+                              aria-label="Rename watchlist"
                               value={editName}
                               onChange={(e) => setEditName(e.target.value)}
                               onKeyDown={(e) => {
@@ -213,6 +216,7 @@ export function SavedWatchlists({
                               size="icon"
                               variant="ghost"
                               className="h-8 w-8"
+                              aria-label="Confirm rename"
                               onClick={() => {
                                 if (editName.trim()) {
                                   onRename(item.id, editName.trim());
@@ -226,6 +230,7 @@ export function SavedWatchlists({
                               size="icon"
                               variant="ghost"
                               className="h-8 w-8"
+                              aria-label="Cancel rename"
                               onClick={() => setEditingId(null)}
                             >
                               <X className="h-4 w-4" />

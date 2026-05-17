@@ -85,7 +85,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary" },
       { property: "og:title", content: "WatchlistKit — IDX Watchlist Formatter" },
       { name: "twitter:title", content: "WatchlistKit — IDX Watchlist Formatter" },
-      { name: "description", content: "WatchlistKit formats IDX stock tickers instantly, offering multiple output styles and saving options." },
       { property: "og:description", content: "WatchlistKit formats IDX stock tickers instantly, offering multiple output styles and saving options." },
       { name: "twitter:description", content: "WatchlistKit formats IDX stock tickers instantly, offering multiple output styles and saving options." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/2a892bf6-446b-4970-bddb-a7e6b913153e/id-preview-5aca8ba8--516b6643-21e0-4189-b5eb-524eee3a2886.lovable.app-1778940106352.png" },

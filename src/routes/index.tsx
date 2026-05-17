@@ -44,18 +44,9 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "WatchlistKit — IDX Watchlist Formatter" },
-      {
-        name: "description",
-        content:
-          "Format your IDX watchlist in seconds. Paste tickers in any format and export to TradingView, plain text, or newline-separated lists.",
-      },
-      { property: "og:title", content: "WatchlistKit — IDX Watchlist Formatter" },
-      { property: "og:description", content: "Format your IDX watchlist in seconds." },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: "/" },
+      { property: "og:url", content: "https://watchlistkit.lovable.app/" },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [{ rel: "canonical", href: "https://watchlistkit.lovable.app/" }],
   }),
 });
 
