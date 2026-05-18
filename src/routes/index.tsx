@@ -44,7 +44,25 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
+      { title: "WatchlistKit — Free IDX Watchlist Formatter" },
+      {
+        name: "description",
+        content:
+          "Format your IDX watchlist in seconds. Paste tickers in any format, auto-prefix with IDX:, and export to TradingView, plain text, or lists. Save, merge & share.",
+      },
       { property: "og:url", content: "https://watchlistkit.lovable.app/" },
+      { property: "og:title", content: "WatchlistKit — Free IDX Watchlist Formatter" },
+      {
+        property: "og:description",
+        content:
+          "Format your IDX watchlist in seconds. Paste tickers in any format, auto-prefix with IDX:, and export to TradingView, plain text, or lists. Save, merge & share.",
+      },
+      { name: "twitter:title", content: "WatchlistKit — Free IDX Watchlist Formatter" },
+      {
+        name: "twitter:description",
+        content:
+          "Format your IDX watchlist in seconds. Paste tickers in any format, auto-prefix with IDX:, and export to TradingView, plain text, or lists. Save, merge & share.",
+      },
     ],
     links: [{ rel: "canonical", href: "https://watchlistkit.lovable.app/" }],
   }),
