@@ -5,6 +5,7 @@ const BASE_URL = "https://watchlistkit.lovable.app";
 
 interface SitemapEntry {
   path: string;
+  lastmod?: string;
   changefreq?: "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
   priority?: string;
 }
@@ -13,8 +14,9 @@ export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
+        const today = new Date().toISOString().split("T")[0];
         const entries: SitemapEntry[] = [
-          { path: "/", changefreq: "weekly", priority: "1.0" },
+          { path: "/", changefreq: "weekly", priority: "1.0", lastmod: today },
         ];
 
         const urls = entries.map((e) =>
