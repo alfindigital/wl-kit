@@ -1,16 +1,72 @@
 export type OutputFormat = "tradingview" | "plain" | "newline";
 
-export function parseTickers(input: string): string[] {
-  const matches = input.toUpperCase().match(/\b[A-Z]{4}\b/g) ?? [];
-  const seen = new Set<string>();
-  const out: string[] = [];
-  for (const t of matches) {
-    if (!seen.has(t)) {
-      seen.add(t);
-      out.push(t);
-    }
+export type InvalidToken = { token: string; reason: "length" | "chars" };
+export type Delimiter = "tab" | "comma" | "semicolon" | "newline" | "space" | "mixed";
+
+export type InputAnalysis = {
+  valid: string[];
+  invalid: InvalidToken[];
+  duplicates: string[];
+  delimiter: Delimiter | null;
+};
+
+export function analyzeInput(raw: string): InputAnalysis {
+  if (!raw || !raw.trim()) {
+    return { valid: [], invalid: [], duplicates: [], delimiter: null };
   }
-  return out;
+
+  // Detect delimiter
+  const hasTab = /\t/.test(raw);
+  const hasComma = /,/.test(raw);
+  const hasSemi = /;/.test(raw);
+  const hasNl = /\n/.test(raw);
+  const hasSpace = / /.test(raw);
+  const delimsCount = [hasTab, hasComma, hasSemi, hasNl].filter(Boolean).length;
+  let delimiter: Delimiter | null = null;
+  if (delimsCount > 1) delimiter = "mixed";
+  else if (hasTab) delimiter = "tab";
+  else if (hasComma) delimiter = "comma";
+  else if (hasSemi) delimiter = "semicolon";
+  else if (hasNl) delimiter = "newline";
+  else if (hasSpace) delimiter = "space";
+
+  // Tokenize
+  const tokens = raw
+    .toUpperCase()
+    .split(/[\s,;]+/)
+    .map((t) => t.trim())
+    .filter(Boolean);
+
+  const valid: string[] = [];
+  const invalid: InvalidToken[] = [];
+  const seen = new Set<string>();
+  const dupSet = new Set<string>();
+
+  for (const token of tokens) {
+    // Strip prefixes like IDX:
+    const clean = token.replace(/^[A-Z]+:/, "");
+    if (!/^[A-Z0-9]+$/.test(clean)) {
+      invalid.push({ token, reason: "chars" });
+      continue;
+    }
+    if (!/^[A-Z]{4}$/.test(clean)) {
+      invalid.push({ token, reason: clean.length === 4 ? "chars" : "length" });
+      continue;
+    }
+    if (seen.has(clean)) {
+      dupSet.add(clean);
+      continue;
+    }
+    seen.add(clean);
+    valid.push(clean);
+  }
+
+  return { valid, invalid, duplicates: Array.from(dupSet), delimiter };
+}
+
+// Backwards-compat
+export function parseTickers(input: string): string[] {
+  return analyzeInput(input).valid;
 }
 
 export function formatTickers(tickers: string[], format: OutputFormat): string {
