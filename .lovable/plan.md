@@ -1,133 +1,180 @@
+# WatchlistKit — Round 2 Improvements
 
-# WatchlistKit — UX, Feature & Mobile Overhaul
-
-Comprehensive revision covering UX, new features, layout, and mobile. Single-page app, no backend, all client-side.
-
----
-
-## A. Header & Layout
-
-### A1. Remove top header entirely
-- Delete `<Header />` usage from `src/routes/index.tsx`.
-- Drop `theme`/`toggleTheme` state, the `Header.tsx` import, and the `Moon/Sun` toggle. Keep light mode as the only theme (remove dark-mode toggle UI; `.dark` styles in `styles.css` can stay unused).
-- File `src/components/watchlist/Header.tsx` no longer imported — leave the file but unused, or delete. Plan: delete it to keep tree clean.
-- Main container top padding reduced so content sits closer to the top (`pt-6 sm:pt-10` instead of `py-10 sm:py-14`).
-
-### A2. Hero shrink
-- Current `text-5xl sm:text-6xl` is too tall. New: `text-2xl sm:text-3xl`, `font-display`, `leading-tight`, centered, single line where possible: `Format your IDX watchlist <em>in seconds.</em>`.
-- Remove the `<br/>` so it can wrap naturally on narrow screens.
-- Reduce vertical margin: `mb-5 sm:mb-6`.
+Empat kelompok fitur: **Smart Input**, **Watchlist Management**, **UX Polish**, **PWA**. Semua client-side, no backend. Light mode tetap.
 
 ---
 
-## B. Input UX (Section A in user message)
+## 1. Smart Input & Validasi
 
-### B1. Auto-focus textarea on load
-- Add `autoFocus` to `<Textarea>` in `TickerInput.tsx`, plus `ref.current?.focus()` in a `useEffect` on mount in `index.tsx` (skip if `?t=` query is present or saved input is loaded).
+### 1.1 Parser baru dengan klasifikasi
+`src/lib/tickers.ts` — ganti `parseTickers` jadi `analyzeInput(raw)` yang mengembalikan:
+```ts
+{
+  valid: string[],            // 4 huruf, unique, urut sesuai input
+  invalid: { token: string, reason: 'length' | 'chars' }[],
+  duplicates: string[],       // ticker valid yang muncul >1x (dihitung dari occurrence)
+  delimiter: 'tab' | 'comma' | 'semicolon' | 'newline' | 'space' | 'mixed'
+}
+```
+- Tokenisasi: split by `/[\s,;]+/` lalu trim; deteksi `\t` → delimiter `tab` (handle paste Excel multi-kolom).
+- Token uppercase. Cocokkan `^[A-Z0-9]+$`:
+  - Bukan huruf saja & bukan 4 char → `invalid` dengan reason.
+  - 4 huruf A–Z → valid. Selain itu (3 atau 5+, atau berisi angka) → `invalid`.
+- Hitung duplikat sebelum dedupe (untuk badge).
+- `formatTickers` tetap; hanya konsumsi `valid` array.
 
-### B2. Clear button (X icon) inside textarea
-- Wrap `<Textarea>` in a relative div. Render an `X` icon button (top-right corner of the textarea, `absolute top-2 right-2`) when `value.length > 0`. Click → `onChange("")` and refocus.
+### 1.2 Live counter di atas Output
+Komponen baru `<InputStats />` (di `index.tsx`, di atas `<OutputBlock />`):
+- `12 tickers • 2 duplicates removed • 1 invalid`
+- Klik bagian "invalid" → expand list token-token invalid (small chips merah).
 
-### B3. Paste button
-- Below or next to the textarea (top-right, beside the X), add a `Clipboard` icon button labeled `Paste`. Uses `navigator.clipboard.readText()` → appends/replaces input. Handle permission failures with toast.
-- Hidden on devices without Clipboard API.
+### 1.3 Highlight invalid token di textarea
+Approach minim: di bawah `<TickerInput>` munculkan baris ringkas:
+- `Invalid: BBC, BBCAX` sebagai chip merah dengan tooltip alasan (`"must be 4 letters"`).
+- (Tidak edit canvas overlay di textarea — too brittle. Chip list cukup jelas.)
 
-### B4. Auto-grow textarea
-- Replace fixed `min-h-[160px]` with auto-grow: mobile `min-h-[96px]` (~3-4 rows), desktop `min-h-[140px]`. On `onChange`, `el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'` capped at e.g. `360px`. Keep `resize-y` removed in favor of auto.
+### 1.4 Drag & drop .txt / .csv
+- `TickerInput.tsx`: tambah `onDragOver` (preventDefault, set state `isDragging` → ring biru), `onDrop`:
+  - Ambil `e.dataTransfer.files[0]`, validasi `type` atau ekstensi `.txt/.csv`, max 1MB.
+  - `await file.text()` → append ke value (sama seperti paste).
+  - Toast sukses / error.
 
-### B5. Keyboard shortcuts additions
-- Existing: ⌘/Ctrl+Enter copy, ⌘/Ctrl+K focus, ⌘/Ctrl+S save, ⌘/Ctrl+1/2/3 format, Esc clear.
-- Add:
-  - When NOT in input: ⌘/Ctrl+V → focus textarea (browser native paste then handles).
-  - ⌘/Ctrl+Shift+C → copy from output (alias for current copy, but explicit "copy output").
-  - ⌘/Ctrl+D → download as TXT (see C1).
-- Update `ShortcutHint` row to show: Copy, Paste, Save, Download, Format, Clear.
-
----
-
-## C. Features (Section B in user message)
-
-### C1. Download as TXT
-- New action button `Download`. Generates a `Blob([output], {type:'text/plain'})`, file name `watchlistkit-<name|date>.txt`.
-- Bound to ⌘/Ctrl+D.
-
-### C2. Action buttons restructure
-- Primary `Copy` button: full-width, prominent, larger (`h-11`, primary color).
-- Secondary actions collapsed into icon-only row of small buttons: `Save`, `Download`, `Image`, `Share` — equal-size icon buttons with tooltip labels, in a single row (4 cols on mobile, inline on desktop).
-- Layout: `Copy` on top spanning full width, secondary row beneath. Removes the cramped 4-up grid.
-
-### C3. Output block improvements
-- **Line numbers for Newline format only**: prefix each line with a muted `01  BBCA`-style gutter using a CSS grid (line numbers in `text-muted-foreground` column, content in normal column). Non-newline formats render as today.
-- **Empty state**: change `"Your formatted tickers will appear here…"` → `"Paste tickers above to start"`.
-
-### C4. Saved watchlists — Rename
-- In `SavedWatchlists.tsx`, add `Pencil` icon button alongside Trash. Opens an inline rename input (or reuse a small dialog) → updates `name` and bumps `savedAt`. Persist via `saveWatchlists`.
-- Add `onRename(id, name)` prop wired in `index.tsx`.
-
-### C5. Saved watchlists — Search/filter
-- Add a small `<Input>` above the list with `Search` icon when `items.length > 5`. Filters by name (case-insensitive) and by ticker membership (typing `BBCA` shows watchlists containing it).
-
-### C6. Saved watchlists — Merge
-- "Select" mode toggle on the saved list. Checkboxes appear next to each item. With 2+ selected, show a `Merge` button → opens dialog asking for a new name, then creates a new watchlist whose tickers are the deduplicated union (preserve order: first occurrence wins). Toast count.
-- Originals not deleted.
-
-### C7. Saved watchlists — Diff
-- In select mode, with exactly 2 selected, show a `Compare` button → opens dialog showing:
-  - `Added` (in B not A): green chips
-  - `Removed` (in A not B): red chips
-  - `Unchanged`: muted chips
-- Order of A vs B: first selected = A (older state), second = B (new state). Show small legend.
-
-### C8. Accent color consistency audit
-- Verify all interactive states use `--primary` (focus rings, active tab, hover on buttons). In particular:
-  - `TickerInput` focus ring already uses `ring-primary` ✓.
-  - `FormatTabs` active state — verify shadcn `TabsTrigger` data-state=active uses primary; if not, add `data-[state=active]:bg-primary data-[state=active]:text-primary-foreground`.
-  - Icon buttons hover → `hover:text-primary`.
-  - Link hovers in footer → `hover:text-primary` (currently `hover:text-foreground`).
+### 1.5 Excel paste — handle multi-kolom
+Sudah jalan via tokenisasi 1.1 (tab = delimiter). Tambah explicit test: jika delimiter terdeteksi `tab`, toast subtle `Detected Excel paste`.
 
 ---
 
-## D. Mobile
+## 2. Watchlist Management
 
-### D1. Action button grid
-- Already handled in C2: primary `Copy` full-width + 4 small icon buttons row. On mobile this collapses neatly (icon-only, 4 cols). On desktop, icon+label horizontal.
+### 2.1 Schema update
+`src/lib/storage.ts` — perbesar `SavedWatchlist`:
+```ts
+type SavedWatchlist = {
+  id: string;
+  name: string;
+  tickers: string[];
+  savedAt: number;
+  pinned?: boolean;
+  tags?: string[];        // free-form, lowercase
+  lastUsedAt?: number;    // updated saat "Load" diklik
+};
+```
+Migration: pas `loadWatchlists`, fill missing field dengan default.
 
-### D2. Toast position
-- Update `<Toaster />` in `__root.tsx` (or wherever rendered): `position="top-center"` so toasts don't cover the bottom action buttons on mobile. Confirm sonner Toaster props.
+Helper baru: `togglePin(id)`, `setTags(id, tags)`, `touchUsed(id)`, `exportAll(): string` (JSON), `importAll(json: string): { added: number, skipped: number }` (skip kalau id sama).
 
-### D3. Saved WL swipe-to-delete
-- In `SavedWatchlists.tsx`, add touch handlers on each row: track `touchstart`/`touchmove` deltaX. Translate row left up to ~80px revealing a Delete background. On release, if past threshold → trigger delete confirmation; else snap back. Pure React, no library. Keep the visible Trash button as fallback for desktop.
+### 2.2 UI di `SavedWatchlists.tsx`
+Layout baru per item (sudah ada rename/delete/select dari plan sebelumnya — extend, jangan ganti):
+- Icon pin (kiri nama) — toggle.
+- Inline tag chips di bawah nama. Klik chip → set filter.
+- Action row: existing + dropdown "Edit tags" (popover dengan input comma-separated).
 
-### D4. Bottom safe area for footer
-- Footer: add `pb-[env(safe-area-inset-bottom)]` and ensure body uses `min-h-screen` with `flex-col` (already does).
-- Sticky behavior: footer currently is NOT sticky; it sits at end of flex column — fine. Just ensure safe area inset is respected on iOS.
+Header list:
+- Sort dropdown: `Recent`, `Name A–Z`, `Most tickers`, `Pinned first` (default).
+- Tag filter chips row (semua tag unik dari koleksi, klik untuk filter).
+- Tombol `Export all` & `Import` (file input, JSON).
 
-### D5. Native Web Share API
-- `handleShare`: if `navigator.share` exists, call it with `{title, text: output, url}`. Fallback to current copy-link behavior. Use `await navigator.share(...)` with try/catch (ignore AbortError).
+Section ordering (top → bottom):
+1. **Pinned** (kalau ada)
+2. **Recently used** (3 terbaru `lastUsedAt`, kecuali yang sudah pinned)
+3. **All** (sisanya, sort sesuai pilihan)
+
+### 2.3 Wiring di `index.tsx`
+- Saat `Load`: `touchUsed(id)`, set input ke joined newline, format newline, toast.
+- Export: trigger download `watchlistkit-backup-<date>.json`.
+- Import: konfirmasi dialog `Add N watchlists?`, jalankan, toast hasil.
 
 ---
 
-## E. Files to touch
+## 3. UX Polish
 
-- `src/routes/index.tsx` — remove header, hero shrink, autofocus, shortcut additions (V, Shift+C, D), share API, download TXT, rename/merge/diff handlers, ShortcutHint update.
-- `src/components/watchlist/TickerInput.tsx` — clear X, paste button, auto-grow, autoFocus ref.
-- `src/components/watchlist/ActionButtons.tsx` — restructure: primary Copy + secondary icon row, add Download.
-- `src/components/watchlist/OutputBlock.tsx` — line numbers for newline format, new empty text.
-- `src/components/watchlist/SavedWatchlists.tsx` — rename, search input, select mode, merge button, compare button, swipe-to-delete.
-- `src/components/watchlist/Footer.tsx` — safe-area padding, hover color → primary.
-- `src/components/watchlist/FormatTabs.tsx` — ensure active state uses primary.
-- `src/components/watchlist/ShareCard.tsx` — already updated to `@alfindigital`; verify accent square uses orange (`#ea580c`) not amber.
-- `src/lib/storage.ts` — add `renameWatchlist`, `mergeWatchlists` helpers (optional; logic can live in index).
-- `src/lib/tickers.ts` — add `diffTickers(a, b)` returning `{added, removed, unchanged}`.
-- `src/routes/__root.tsx` — Toaster `position="top-center"`; remove dark theme boot if any leftovers.
-- Delete `src/components/watchlist/Header.tsx`.
+### 3.1 Undo toast
+Util kecil di `index.tsx`: `withUndo(action, undoFn, message)`:
+- Simpan snapshot sebelum delete/clear/merge.
+- `toast(message, { action: { label: 'Undo', onClick: () => restore() }, duration: 5000 })`.
+- Pakai untuk: delete saved, clear textarea, bulk delete (kalau ada).
 
-No new dependencies.
+### 3.2 Command Palette (⌘K)
+- Pakai shadcn `command` (`CommandDialog`) yang sudah ada di `src/components/ui/command.tsx`.
+- Trigger: ⌘/Ctrl+K (override existing ⌘K focus shortcut — promote palette, focus textarea bisa pakai ⌘/Ctrl+/).
+- Groups:
+  - **Actions**: Copy output, Download TXT, Save, Share, Clear.
+  - **Format**: TradingView, Plain, Newline.
+  - **Saved Watchlists**: list, pilih → load.
+- Komponen baru `src/components/watchlist/CommandPalette.tsx`. Props: state + handlers dari index.
+
+### 3.3 Onboarding tooltip first-visit
+- `localStorage` key `watchlistkit.onboarded`.
+- Kalau belum: render small floating hint card di pojok kanan textarea: `Paste your tickers here →` dengan tombol `Got it`. Hilang otomatis saat user mulai ngetik atau klik close.
+
+### 3.4 Empty state interaktif di OutputBlock
+- Ganti teks `"Paste tickers above to start"` jadi:
+  - `"Try a sample:"` + 3 chip kecil: `BBCA BBRI BMRI`, `LQ45 starter`, `Banking`.
+  - Klik chip → isi textarea dengan tickers tersebut (hardcoded sample arrays di constants).
+
+### 3.5 Micro animation Copy success
+- Tombol Copy: saat sukses, swap icon `Copy` → `Check` dengan transisi scale + fade selama 1.2s.
+- Pakai state lokal `copied` + Tailwind classes (`transition-all duration-200`). No new dep.
 
 ---
 
-## F. Out of scope (per user)
+## 4. PWA — installable, light caching
 
-- No backend, no AI, no extra routes.
-- Dark mode toggle removed (light only). `.dark` CSS retained but inert.
+⚠️ Sesuai rule platform: **manifest-only**, tanpa `vite-plugin-pwa` / service worker yang aggressive. Cukup biar bisa "Add to Home Screen".
 
+### 4.1 Manifest
+- `public/manifest.webmanifest`:
+  ```json
+  {
+    "name": "WatchlistKit",
+    "short_name": "WatchlistKit",
+    "description": "Format your IDX watchlist in seconds.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ea580c",
+    "icons": [
+      { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+      { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+      { "src": "/icon-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    ]
+  }
+  ```
+- Generate 3 icon assets (orange "W" mark) ke `public/`.
+
+### 4.2 Link tags
+`src/routes/__root.tsx` head():
+- `<link rel="manifest" href="/manifest.webmanifest" />`
+- `<meta name="theme-color" content="#ea580c" />`
+- `<link rel="apple-touch-icon" href="/icon-192.png" />`
+- `<meta name="apple-mobile-web-app-capable" content="yes" />`
+
+### 4.3 Skip service worker
+Tidak install SW. Offline support real akan butuh SW yang bermasalah di preview iframe Lovable. App sudah client-side setelah load awal, jadi setelah dibuka sekali browser cache HTTP biasa cukup untuk usage berulang. Catat ini di response ke user.
+
+---
+
+## File yang berubah
+
+- `src/lib/tickers.ts` — `analyzeInput`, refactor.
+- `src/lib/storage.ts` — schema fields, helpers pin/tag/touch/export/import.
+- `src/lib/samples.ts` — **baru**, sample ticker arrays.
+- `src/components/watchlist/TickerInput.tsx` — drag & drop, onboarding hint.
+- `src/components/watchlist/InputStats.tsx` — **baru**, counter + invalid chips.
+- `src/components/watchlist/OutputBlock.tsx` — empty state interaktif.
+- `src/components/watchlist/ActionButtons.tsx` — copy check animation.
+- `src/components/watchlist/SavedWatchlists.tsx` — pin, tag chips, sort, sections, export/import.
+- `src/components/watchlist/CommandPalette.tsx` — **baru**.
+- `src/routes/index.tsx` — wiring, undo toasts, palette mount, shortcut update (⌘K → palette, ⌘/ → focus textarea).
+- `src/routes/__root.tsx` — manifest + meta tags.
+- `public/manifest.webmanifest`, `public/icon-192.png`, `public/icon-512.png`, `public/icon-maskable.png` — **baru**.
+
+Tidak ada dependency baru.
+
+---
+
+## Out of scope
+
+- Service worker / offline cache aktif (hanya manifest).
+- Preset watchlist LQ45/IDX30 (akan dibahas terpisah kalau diminta).
+- Backend / sync antar device (export-import JSON manual cukup).
