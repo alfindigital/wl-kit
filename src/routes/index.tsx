@@ -12,6 +12,8 @@ import { ActionButtons } from "@/components/watchlist/ActionButtons";
 import { SaveDialog } from "@/components/watchlist/SaveDialog";
 import { SavedWatchlists } from "@/components/watchlist/SavedWatchlists";
 import { ShareCard } from "@/components/watchlist/ShareCard";
+import { InputStats } from "@/components/watchlist/InputStats";
+import { CommandPalette } from "@/components/watchlist/CommandPalette";
 import {
   Dialog,
   DialogContent,
@@ -22,8 +24,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 import {
+  analyzeInput,
   formatTickers,
-  parseTickers,
   diffTickers,
   mergeTickers,
   type OutputFormat,
@@ -31,6 +33,8 @@ import {
 import {
   loadWatchlists,
   saveWatchlists,
+  exportAllJSON,
+  importAllJSON,
   MAX_WATCHLISTS,
   type SavedWatchlist,
 } from "@/lib/storage";
@@ -84,22 +88,20 @@ function Index() {
   const [saveOpen, setSaveOpen] = useState(false);
   const [loadedName, setLoadedName] = useState<string | null>(null);
   const [diff, setDiff] = useState<DiffData | null>(null);
+  const [paletteOpen, setPaletteOpen] = useState(false);
   const shareCardRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Load saved watchlists
   useEffect(() => {
     setSaved(loadWatchlists());
   }, []);
 
-  // Prefill from ?t=
   useEffect(() => {
     if (search.t && typeof search.t === "string") {
       setInput(search.t.replace(/,/g, "\n"));
     }
   }, [search.t]);
 
-  // Autofocus on mount
   useEffect(() => {
     if (!search.t) {
       setTimeout(() => textareaRef.current?.focus(), 50);
@@ -107,8 +109,29 @@ function Index() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const tickers = useMemo(() => parseTickers(input), [input]);
+  const analysis = useMemo(() => analyzeInput(input), [input]);
+  const tickers = analysis.valid;
   const output = useMemo(() => formatTickers(tickers, format), [tickers, format]);
+
+  // Undo helper
+  const updateSaved = (
+    next: SavedWatchlist[],
+    undoSnapshot: SavedWatchlist[],
+    message: string,
+  ) => {
+    setSaved(next);
+    saveWatchlists(next);
+    toast(message, {
+      action: {
+        label: "Undo",
+        onClick: () => {
+          setSaved(undoSnapshot);
+          saveWatchlists(undoSnapshot);
+        },
+      },
+      duration: 5000,
+    });
+  };
 
   const handleCopy = async (silent = false) => {
     if (!output) return;
@@ -141,6 +164,9 @@ function Index() {
       name,
       tickers,
       savedAt: Date.now(),
+      pinned: false,
+      tags: [],
+      lastUsedAt: Date.now(),
     };
     const next = [entry, ...saved];
     setSaved(next);
@@ -160,10 +186,9 @@ function Index() {
   };
 
   const handleDelete = (id: string) => {
+    const snapshot = saved;
     const next = saved.filter((w) => w.id !== id);
-    setSaved(next);
-    saveWatchlists(next);
-    toast.success("Deleted");
+    updateSaved(next, snapshot, "Deleted");
   };
 
   const handleRename = (id: string, name: string) => {
@@ -173,6 +198,55 @@ function Index() {
     setSaved(next);
     saveWatchlists(next);
     toast.success("Renamed");
+  };
+
+  const handleTogglePin = (id: string) => {
+    const next = saved.map((w) =>
+      w.id === id ? { ...w, pinned: !w.pinned } : w,
+    );
+    setSaved(next);
+    saveWatchlists(next);
+  };
+
+  const handleSetTags = (id: string, tags: string[]) => {
+    const next = saved.map((w) => (w.id === id ? { ...w, tags } : w));
+    setSaved(next);
+    saveWatchlists(next);
+    toast.success("Tags updated");
+  };
+
+  const handleExport = () => {
+    const json = exportAllJSON(saved);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `watchlistkit-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success(`Exported ${saved.length} watchlist${saved.length === 1 ? "" : "s"}`);
+  };
+
+  const handleImport = async (file: File) => {
+    try {
+      const text = await file.text();
+      const snapshot = saved;
+      const { merged, added, skipped } = importAllJSON(saved, text);
+      setSaved(merged);
+      saveWatchlists(merged);
+      toast(`Imported ${added}${skipped ? `, skipped ${skipped}` : ""}`, {
+        action: {
+          label: "Undo",
+          onClick: () => {
+            setSaved(snapshot);
+            saveWatchlists(snapshot);
+          },
+        },
+        duration: 5000,
+      });
+    } catch {
+      toast.error("Invalid JSON file");
+    }
   };
 
   const handleMerge = (ids: string[]) => {
@@ -186,6 +260,9 @@ function Index() {
       name: `Merged (${ids.length})`,
       tickers: merged,
       savedAt: Date.now(),
+      pinned: false,
+      tags: [],
+      lastUsedAt: Date.now(),
     };
     const next = [entry, ...saved];
     setSaved(next);
@@ -204,7 +281,27 @@ function Index() {
   const handleLoad = (item: SavedWatchlist) => {
     setInput(item.tickers.join("\n"));
     setLoadedName(item.name);
+    const next = saved.map((w) =>
+      w.id === item.id ? { ...w, lastUsedAt: Date.now() } : w,
+    );
+    setSaved(next);
+    saveWatchlists(next);
     toast.success(`Loaded "${item.name}"`);
+  };
+
+  const handleSample = (sample: string[]) => {
+    setInput(sample.join("\n"));
+    textareaRef.current?.focus();
+  };
+
+  const handleClearInput = () => {
+    if (!input) return;
+    const snapshot = input;
+    setInput("");
+    toast("Cleared", {
+      action: { label: "Undo", onClick: () => setInput(snapshot) },
+      duration: 5000,
+    });
   };
 
   const handleDownload = () => {
@@ -283,6 +380,11 @@ function Index() {
       }
       if (mod && !e.shiftKey && e.key.toLowerCase() === "k") {
         e.preventDefault();
+        setPaletteOpen((o) => !o);
+        return;
+      }
+      if (mod && e.key === "/") {
+        e.preventDefault();
         textareaRef.current?.focus();
         textareaRef.current?.select();
         return;
@@ -298,7 +400,6 @@ function Index() {
         return;
       }
       if (mod && !inField && e.key.toLowerCase() === "v") {
-        // focus textarea so native paste lands there
         textareaRef.current?.focus();
       }
       if (mod && (e.key === "1" || e.key === "2" || e.key === "3")) {
@@ -319,7 +420,7 @@ function Index() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [output, tickers.length, saved.length]);
+  }, [output, tickers.length, saved.length, input]);
 
   const dateStr = new Date().toLocaleDateString("en-GB", {
     day: "2-digit",
@@ -340,8 +441,18 @@ function Index() {
 
           <div className="flex flex-col gap-4">
             <TickerInput ref={textareaRef} value={input} onChange={setInput} />
+            <InputStats
+              validCount={tickers.length}
+              duplicates={analysis.duplicates}
+              invalid={analysis.invalid}
+            />
             <FormatTabs value={format} onChange={handleFormatChange} />
-            <OutputBlock output={output} count={tickers.length} format={format} />
+            <OutputBlock
+              output={output}
+              count={tickers.length}
+              format={format}
+              onSample={handleSample}
+            />
             <ActionButtons
               disabled={tickers.length === 0}
               onCopy={() => handleCopy()}
@@ -361,6 +472,10 @@ function Index() {
               onRename={handleRename}
               onMerge={handleMerge}
               onCompare={handleCompare}
+              onTogglePin={handleTogglePin}
+              onSetTags={handleSetTags}
+              onExport={handleExport}
+              onImport={handleImport}
             />
           </div>
         </div>
@@ -375,12 +490,25 @@ function Index() {
         tickerCount={tickers.length}
       />
 
+      <CommandPalette
+        open={paletteOpen}
+        onOpenChange={setPaletteOpen}
+        saved={saved}
+        onCopy={() => handleCopy()}
+        onDownload={handleDownload}
+        onSave={handleOpenSave}
+        onShare={handleShare}
+        onClear={handleClearInput}
+        onSetFormat={handleFormatChange}
+        onLoad={handleLoad}
+      />
+
       <Dialog open={!!diff} onOpenChange={(o) => !o && setDiff(null)}>
         <DialogContent className="rounded-2xl sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>Compare watchlists</DialogTitle>
             <DialogDescription>
-              <span className="font-medium">{diff?.a.name}</span> → {" "}
+              <span className="font-medium">{diff?.a.name}</span> →{" "}
               <span className="font-medium">{diff?.b.name}</span>
             </DialogDescription>
           </DialogHeader>
@@ -394,7 +522,6 @@ function Index() {
         </DialogContent>
       </Dialog>
 
-      {/* Off-screen card for PNG export */}
       <div style={{ position: "fixed", top: -10000, left: -10000, pointerEvents: "none" }}>
         <ShareCard
           ref={shareCardRef}
@@ -471,6 +598,10 @@ function ShortcutHint() {
     <div className="mt-1 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[11px] text-muted-foreground">
       <span className="inline-flex items-center gap-1">
         <Kbd>{mod}</Kbd>
+        <Kbd>K</Kbd> palette
+      </span>
+      <span className="inline-flex items-center gap-1">
+        <Kbd>{mod}</Kbd>
         <Kbd>↵</Kbd> copy
       </span>
       <span className="inline-flex items-center gap-1">
@@ -486,9 +617,6 @@ function ShortcutHint() {
         <Kbd>1</Kbd>
         <Kbd>2</Kbd>
         <Kbd>3</Kbd> format
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <Kbd>Esc</Kbd> clear
       </span>
     </div>
   );
