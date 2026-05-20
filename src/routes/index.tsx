@@ -12,6 +12,7 @@ import { ActionButtons } from "@/components/watchlist/ActionButtons";
 import { SaveDialog } from "@/components/watchlist/SaveDialog";
 import { SavedWatchlists } from "@/components/watchlist/SavedWatchlists";
 import { ShareCard } from "@/components/watchlist/ShareCard";
+import { ShareImageDialog } from "@/components/watchlist/ShareImageDialog";
 import { InputStats } from "@/components/watchlist/InputStats";
 import { CommandPalette } from "@/components/watchlist/CommandPalette";
 import {
@@ -89,6 +90,8 @@ function Index() {
   const [loadedName, setLoadedName] = useState<string | null>(null);
   const [diff, setDiff] = useState<DiffData | null>(null);
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [shareImageOpen, setShareImageOpen] = useState(false);
+  const [shareImageData, setShareImageData] = useState<string | null>(null);
   const shareCardRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -342,20 +345,20 @@ function Index() {
 
   const handleImage = async () => {
     if (!shareCardRef.current || tickers.length === 0) return;
+    setShareImageData(null);
+    setShareImageOpen(true);
     try {
       const dataUrl = await toPng(shareCardRef.current, {
         pixelRatio: 2,
         cacheBust: true,
       });
-      const link = document.createElement("a");
-      link.download = `watchlistkit-${Date.now()}.png`;
-      link.href = dataUrl;
-      link.click();
-      toast.success("Image downloaded");
+      setShareImageData(dataUrl);
     } catch {
+      setShareImageOpen(false);
       toast.error("Failed to generate image");
     }
   };
+
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -531,9 +534,25 @@ function Index() {
           date={dateStr}
         />
       </div>
+
+      <ShareImageDialog
+        open={shareImageOpen}
+        onOpenChange={setShareImageOpen}
+        dataUrl={shareImageData}
+        name={loadedName || "My Watchlist"}
+        shareText={`${tickers.length} IDX tickers · made with WatchlistKit`}
+        shareUrl={
+          tickers.length
+            ? `${typeof window !== "undefined" ? window.location.origin : ""}/?t=${tickers.join(",")}`
+            : typeof window !== "undefined"
+              ? window.location.origin
+              : ""
+        }
+      />
     </div>
   );
 }
+
 
 function DiffSection({
   label,
