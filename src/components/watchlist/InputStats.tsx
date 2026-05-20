@@ -72,7 +72,9 @@ export function InputStats({
                 <TooltipContent>
                   {t.reason === "length"
                     ? "Must be exactly 4 letters"
-                    : "Contains invalid characters"}
+                    : t.reason === "chars"
+                      ? "Contains invalid characters"
+                      : "Not a listed IDX ticker"}
                 </TooltipContent>
               </Tooltip>
             ))}
