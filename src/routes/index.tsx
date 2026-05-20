@@ -90,6 +90,8 @@ function Index() {
   const [loadedName, setLoadedName] = useState<string | null>(null);
   const [diff, setDiff] = useState<DiffData | null>(null);
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [shareImageOpen, setShareImageOpen] = useState(false);
+  const [shareImageData, setShareImageData] = useState<string | null>(null);
   const shareCardRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
