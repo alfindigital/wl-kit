@@ -345,20 +345,20 @@ function Index() {
 
   const handleImage = async () => {
     if (!shareCardRef.current || tickers.length === 0) return;
+    setShareImageData(null);
+    setShareImageOpen(true);
     try {
       const dataUrl = await toPng(shareCardRef.current, {
         pixelRatio: 2,
         cacheBust: true,
       });
-      const link = document.createElement("a");
-      link.download = `watchlistkit-${Date.now()}.png`;
-      link.href = dataUrl;
-      link.click();
-      toast.success("Image downloaded");
+      setShareImageData(dataUrl);
     } catch {
+      setShareImageOpen(false);
       toast.error("Failed to generate image");
     }
   };
+
 
   // Keyboard shortcuts
   useEffect(() => {
