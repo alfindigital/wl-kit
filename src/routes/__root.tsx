@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -8,6 +9,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { Toaster } from "@/components/ui/sonner";
+import { registerServiceWorker } from "@/lib/register-sw";
 
 import appCss from "../styles.css?url";
 
