@@ -1,6 +1,8 @@
+import { IDX_TICKERS } from "./idx-tickers";
+
 export type OutputFormat = "tradingview" | "plain" | "newline";
 
-export type InvalidToken = { token: string; reason: "length" | "chars" };
+export type InvalidToken = { token: string; reason: "length" | "chars" | "unknown" };
 export type Delimiter = "tab" | "comma" | "semicolon" | "newline" | "space" | "mixed";
 
 export type InputAnalysis = {
@@ -30,10 +32,12 @@ export function analyzeInput(raw: string): InputAnalysis {
   else if (hasNl) delimiter = "newline";
   else if (hasSpace) delimiter = "space";
 
-  // Tokenize
+
+  // Tokenize: split on anything that's not A-Z or 0-9 (after uppercasing).
+  // This catches mangled input like "AMMN;;.;KIJA.;.;JPFA" cleanly.
   const tokens = raw
     .toUpperCase()
-    .split(/[\s,;]+/)
+    .split(/[^A-Z0-9]+/)
     .map((t) => t.trim())
     .filter(Boolean);
 
@@ -43,22 +47,23 @@ export function analyzeInput(raw: string): InputAnalysis {
   const dupSet = new Set<string>();
 
   for (const token of tokens) {
-    // Strip prefixes like IDX:
-    const clean = token.replace(/^[A-Z]+:/, "");
-    if (!/^[A-Z0-9]+$/.test(clean)) {
-      invalid.push({ token, reason: "chars" });
+    if (!/^[A-Z]{4}$/.test(token)) {
+      invalid.push({
+        token,
+        reason: /^[A-Z0-9]+$/.test(token) && token.length !== 4 ? "length" : "chars",
+      });
       continue;
     }
-    if (!/^[A-Z]{4}$/.test(clean)) {
-      invalid.push({ token, reason: clean.length === 4 ? "chars" : "length" });
+    if (!IDX_TICKERS.has(token)) {
+      invalid.push({ token, reason: "unknown" });
       continue;
     }
-    if (seen.has(clean)) {
-      dupSet.add(clean);
+    if (seen.has(token)) {
+      dupSet.add(token);
       continue;
     }
-    seen.add(clean);
-    valid.push(clean);
+    seen.add(token);
+    valid.push(token);
   }
 
   return { valid, invalid, duplicates: Array.from(dupSet), delimiter };
