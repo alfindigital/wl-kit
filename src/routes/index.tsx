@@ -534,9 +534,25 @@ function Index() {
           date={dateStr}
         />
       </div>
+
+      <ShareImageDialog
+        open={shareImageOpen}
+        onOpenChange={setShareImageOpen}
+        dataUrl={shareImageData}
+        name={loadedName || "My Watchlist"}
+        shareText={`${tickers.length} IDX tickers · made with WatchlistKit`}
+        shareUrl={
+          tickers.length
+            ? `${typeof window !== "undefined" ? window.location.origin : ""}/?t=${tickers.join(",")}`
+            : typeof window !== "undefined"
+              ? window.location.origin
+              : ""
+        }
+      />
     </div>
   );
 }
+
 
 function DiffSection({
   label,
