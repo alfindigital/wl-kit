@@ -1,6 +1,8 @@
+import { IDX_TICKERS } from "./idx-tickers";
+
 export type OutputFormat = "tradingview" | "plain" | "newline";
 
-export type InvalidToken = { token: string; reason: "length" | "chars" };
+export type InvalidToken = { token: string; reason: "length" | "chars" | "unknown" };
 export type Delimiter = "tab" | "comma" | "semicolon" | "newline" | "space" | "mixed";
 
 export type InputAnalysis = {
