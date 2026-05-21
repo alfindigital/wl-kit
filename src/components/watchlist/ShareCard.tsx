@@ -3,7 +3,7 @@ import { forwardRef } from "react";
 export const ShareCard = forwardRef<
   HTMLDivElement,
   { name: string; output: string; count: number; date: string }
->(function ShareCard({ name, output, count, date }, ref) {
+>(function ShareCard({ output }, ref) {
   return (
     <div
       ref={ref}
@@ -30,16 +30,8 @@ export const ShareCard = forwardRef<
         </span>
       </div>
 
-      <div style={{ marginBottom: 8 }}>
-        <div style={{ fontSize: 28, fontWeight: 700, letterSpacing: -0.5 }}>{name}</div>
-        <div style={{ fontSize: 14, color: "#94a3b8", marginTop: 4 }}>
-          {count} {count === 1 ? "ticker" : "tickers"} · {date}
-        </div>
-      </div>
-
       <div
         style={{
-          marginTop: 24,
           padding: 20,
           background: "rgba(255,255,255,0.05)",
           border: "1px solid rgba(255,255,255,0.08)",
@@ -53,19 +45,6 @@ export const ShareCard = forwardRef<
         }}
       >
         {output || "—"}
-      </div>
-
-      <div
-        style={{
-          marginTop: 28,
-          paddingTop: 20,
-          borderTop: "1px solid rgba(255,255,255,0.08)",
-          fontSize: 12,
-          color: "#94a3b8",
-          textAlign: "center",
-        }}
-      >
-        @alfindigital
       </div>
     </div>
   );

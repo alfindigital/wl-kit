@@ -7,7 +7,6 @@ export function Footer() {
       style={{ paddingBottom: "calc(1rem + env(safe-area-inset-bottom))" }}
     >
       <div className="mx-auto flex max-w-3xl flex-col items-center justify-center gap-2 px-4 text-xs text-muted-foreground sm:flex-row sm:gap-4">
-        <span>by alfindigital</span>
         <div className="flex items-center gap-3">
           <a
             href="https://alfindigital.com"
