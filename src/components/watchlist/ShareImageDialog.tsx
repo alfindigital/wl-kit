@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Copy, Download, Send, MessageCircle, Share2, Check } from "lucide-react";
+import { Download, Send, MessageCircle, Share2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
