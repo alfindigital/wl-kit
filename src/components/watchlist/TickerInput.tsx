@@ -126,30 +126,35 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
             Drop file to import
           </div>
         )}
-        <div className="absolute right-2 top-2 flex items-center gap-1">
+        <div className="pointer-events-none absolute inset-x-2 bottom-2 flex items-center justify-between">
+          {hasClipboard ? (
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              onClick={handlePaste}
+              className="pointer-events-auto h-7 gap-1.5 rounded-full bg-background/80 px-2.5 text-xs text-muted-foreground shadow-sm backdrop-blur hover:bg-primary/10 hover:text-primary"
+              aria-label="Paste"
+              title="Paste from clipboard"
+            >
+              <ClipboardPaste className="h-3.5 w-3.5" />
+              Paste
+            </Button>
+          ) : (
+            <span />
+          )}
           {value && (
             <Button
               type="button"
-              size="icon"
+              size="sm"
               variant="ghost"
               onClick={handleClear}
-              className="h-7 w-7 rounded-full text-muted-foreground hover:text-primary"
-              aria-label="Clear"
+              className="pointer-events-auto h-7 gap-1.5 rounded-full bg-background/80 px-2.5 text-xs text-muted-foreground shadow-sm backdrop-blur hover:bg-destructive/10 hover:text-destructive"
+              aria-label="Clear all"
+              title="Clear all"
             >
-              <X className="h-4 w-4" />
-            </Button>
-          )}
-          {hasClipboard && (
-            <Button
-              type="button"
-              size="icon"
-              variant="ghost"
-              onClick={handlePaste}
-              className="h-7 w-7 rounded-full text-muted-foreground hover:text-primary"
-              aria-label="Paste"
-              title="Paste"
-            >
-              <ClipboardPaste className="h-4 w-4" />
+              <X className="h-3.5 w-3.5" />
+              Clear
             </Button>
           )}
         </div>
