@@ -3,19 +3,22 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { X, ClipboardPaste } from "lucide-react";
 import { toast } from "sonner";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type Props = {
   value: string;
   onChange: (v: string) => void;
 };
 
-const ONBOARDED_KEY = "watchlistkit.onboarded";
-
 export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
   function TickerInput({ value, onChange }, ref) {
     const innerRef = useRef<HTMLTextAreaElement | null>(null);
     const [isDragging, setIsDragging] = useState(false);
-    const [showOnboard, setShowOnboard] = useState(false);
 
     const setRefs = (el: HTMLTextAreaElement | null) => {
       innerRef.current = el;
@@ -23,7 +26,6 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
       else if (ref) (ref as React.MutableRefObject<HTMLTextAreaElement | null>).current = el;
     };
 
-    // Auto-grow
     useEffect(() => {
       const el = innerRef.current;
       if (!el) return;
@@ -31,24 +33,6 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
       const next = Math.min(el.scrollHeight, 360);
       el.style.height = next + "px";
     }, [value]);
-
-    // First-visit onboarding hint
-    useEffect(() => {
-      if (typeof window === "undefined") return;
-      if (!localStorage.getItem(ONBOARDED_KEY)) setShowOnboard(true);
-    }, []);
-
-    useEffect(() => {
-      if (showOnboard && value) dismissOnboard();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [value]);
-
-    const dismissOnboard = () => {
-      setShowOnboard(false);
-      try {
-        localStorage.setItem(ONBOARDED_KEY, "1");
-      } catch {}
-    };
 
     const handlePaste = async () => {
       try {
@@ -117,7 +101,7 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
           onChange={(e) => onChange(e.target.value)}
           aria-label="Ticker input"
           placeholder="Paste your tickers here... (any format) — or drop a .txt / .csv file"
-          className={`min-h-[120px] resize-none overflow-hidden rounded-2xl border-border/80 bg-card p-4 pb-12 text-base shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-primary sm:min-h-[160px] ${
+          className={`min-h-[120px] resize-none overflow-hidden rounded-2xl border-border/80 bg-card p-4 pr-20 text-base shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-primary sm:min-h-[160px] ${
             isDragging ? "border-primary bg-primary/5 ring-2 ring-primary" : ""
           }`}
         />
@@ -126,52 +110,44 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
             Drop file to import
           </div>
         )}
-        <div className="pointer-events-none absolute inset-x-2 bottom-2 flex items-center justify-between">
-          {hasClipboard ? (
-            <Button
-              type="button"
-              size="sm"
-              variant="ghost"
-              onClick={handlePaste}
-              className="pointer-events-auto h-7 gap-1.5 rounded-full bg-background/80 px-2.5 text-xs text-muted-foreground shadow-sm backdrop-blur hover:bg-primary/10 hover:text-primary"
-              aria-label="Paste"
-              title="Paste from clipboard"
-            >
-              <ClipboardPaste className="h-3.5 w-3.5" />
-              Paste
-            </Button>
-          ) : (
-            <span />
-          )}
-          {value && (
-            <Button
-              type="button"
-              size="sm"
-              variant="ghost"
-              onClick={handleClear}
-              className="pointer-events-auto h-7 gap-1.5 rounded-full bg-background/80 px-2.5 text-xs text-muted-foreground shadow-sm backdrop-blur hover:bg-destructive/10 hover:text-destructive"
-              aria-label="Clear all"
-              title="Clear all"
-            >
-              <X className="h-3.5 w-3.5" />
-              Clear
-            </Button>
-          )}
-        </div>
-        {showOnboard && !value && (
-          <div className="absolute -bottom-2 right-3 translate-y-full rounded-lg border border-primary/30 bg-primary/5 px-3 py-2 text-xs shadow-sm">
-            <div className="flex items-center gap-2">
-              <span className="text-foreground">👋 Paste your tickers here to start</span>
-              <button
-                type="button"
-                onClick={dismissOnboard}
-                className="font-medium text-primary hover:underline"
-              >
-                Got it
-              </button>
-            </div>
+        <TooltipProvider delayDuration={200}>
+          <div className="absolute right-2 top-2 flex items-center gap-1">
+            {hasClipboard && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="ghost"
+                    onClick={handlePaste}
+                    className="h-8 w-8 rounded-full text-muted-foreground hover:bg-primary/10 hover:text-primary"
+                    aria-label="Paste from clipboard"
+                  >
+                    <ClipboardPaste className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Paste</TooltipContent>
+              </Tooltip>
+            )}
+            {value && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="ghost"
+                    onClick={handleClear}
+                    className="h-8 w-8 rounded-full text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                    aria-label="Clear all"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Clear</TooltipContent>
+              </Tooltip>
+            )}
           </div>
-        )}
+        </TooltipProvider>
       </div>
     );
   },

@@ -1,12 +1,11 @@
 import { Badge } from "@/components/ui/badge";
 import type { OutputFormat } from "@/lib/tickers";
-import { SAMPLES } from "@/lib/samples";
+
 
 export function OutputBlock({
   output,
   count,
   format,
-  onSample,
 }: {
   output: string;
   count: number;
@@ -26,21 +25,9 @@ export function OutputBlock({
       </div>
       <div className="min-h-[80px] max-h-[280px] overflow-auto p-4 font-mono text-sm leading-relaxed text-foreground">
         {!output && (
-          <div className="space-y-2 font-sans">
-            <p className="text-sm text-muted-foreground">Paste tickers above, or try a sample:</p>
-            <div className="flex flex-wrap gap-1.5">
-              {SAMPLES.map((s) => (
-                <button
-                  key={s.label}
-                  type="button"
-                  onClick={() => onSample?.(s.tickers)}
-                  className="rounded-full border border-border bg-background px-2.5 py-1 text-xs text-foreground transition-colors hover:border-primary hover:text-primary"
-                >
-                  {s.label}
-                </button>
-              ))}
-            </div>
-          </div>
+          <p className="font-sans text-sm text-muted-foreground">
+            Paste tickers above to see formatted output.
+          </p>
         )}
         {output && showLineNumbers && (
           <div className="grid grid-cols-[auto_1fr] gap-x-3">
@@ -61,3 +48,4 @@ export function OutputBlock({
     </div>
   );
 }
+
