@@ -36,7 +36,6 @@ export function ShareImageDialog({
   shareText,
   shareUrl,
 }: Props) {
-  const [copied, setCopied] = useState(false);
   const [canNativeShareFile, setCanNativeShareFile] = useState(false);
 
   useEffect(() => {
@@ -51,25 +50,7 @@ export function ShareImageDialog({
     }
   }, []);
 
-  useEffect(() => {
-    if (!open) setCopied(false);
-  }, [open]);
-
   const fileName = `${(name || "watchlistkit").replace(/[^a-z0-9-_]+/gi, "-")}.png`;
-
-  const handleCopyImage = async () => {
-    if (!dataUrl) return;
-    try {
-      const blob = await dataUrlToBlob(dataUrl);
-      // ClipboardItem with image/png — supported in Chromium, Safari 16.4+.
-      await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
-      setCopied(true);
-      toast.success("Image copied to clipboard");
-      setTimeout(() => setCopied(false), 1500);
-    } catch {
-      toast.error("Couldn't copy image — try Download instead");
-    }
-  };
 
   const handleDownload = () => {
     if (!dataUrl) return;
