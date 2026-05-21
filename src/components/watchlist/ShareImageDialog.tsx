@@ -143,20 +143,6 @@ export function ShareImageDialog({
           <Button
             type="button"
             variant="outline"
-            onClick={handleCopyImage}
-            disabled={!dataUrl}
-            className="justify-start"
-          >
-            {copied ? (
-              <Check className="mr-2 h-4 w-4 text-primary" />
-            ) : (
-              <Copy className="mr-2 h-4 w-4" />
-            )}
-            Copy image
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
             onClick={handleDownload}
             disabled={!dataUrl}
             className="justify-start"
