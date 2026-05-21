@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import type { OutputFormat } from "@/lib/tickers";
-import { SAMPLES } from "@/lib/samples";
+
 
 export function OutputBlock({
   output,
