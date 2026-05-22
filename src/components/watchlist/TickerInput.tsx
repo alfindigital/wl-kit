@@ -101,7 +101,7 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
           onChange={(e) => onChange(e.target.value)}
           aria-label="Ticker input"
           placeholder="Paste your tickers here... (any format) — or drop a .txt / .csv file"
-          className={`min-h-[120px] resize-none overflow-hidden rounded-2xl border-border/80 bg-card p-4 pr-20 text-base shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-primary sm:min-h-[160px] ${
+          className={`min-h-[120px] resize-none overflow-hidden rounded-2xl border-border/80 bg-card p-4 pr-14 text-base shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-primary sm:min-h-[160px] ${
             isDragging ? "border-primary bg-primary/5 ring-2 ring-primary" : ""
           }`}
         />
@@ -111,7 +111,7 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
           </div>
         )}
         <TooltipProvider delayDuration={200}>
-          <div className="absolute right-2 top-2 flex items-center gap-1">
+          <div className="absolute right-3 top-3 flex items-center gap-1.5">
             {hasClipboard && (
               <Tooltip>
                 <TooltipTrigger asChild>
