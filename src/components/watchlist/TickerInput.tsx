@@ -99,6 +99,14 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
           autoFocus
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.ctrlKey && e.key === "Backspace") {
+              e.preventDefault();
+              if (!value) return;
+              toast("Cleared", { duration: 1200 });
+              onChange("");
+            }
+          }}
           aria-label="Ticker input"
           placeholder="Paste your tickers here... (any format) — or drop a .txt / .csv file"
           className={`min-h-[120px] resize-none overflow-hidden rounded-2xl border-border/80 bg-card p-4 pr-14 text-base shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-primary sm:min-h-[160px] ${
