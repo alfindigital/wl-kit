@@ -129,12 +129,12 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
                     variant="ghost"
                     onClick={handlePaste}
                     className="h-8 w-8 rounded-full text-muted-foreground hover:bg-primary/10 hover:text-primary"
-                    aria-label="Paste from clipboard"
+                    aria-label="Paste"
                   >
                     <ClipboardPaste className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>Paste</TooltipContent>
+                <TooltipContent side="top">Paste</TooltipContent>
               </Tooltip>
             )}
             {value && (
@@ -146,12 +146,12 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
                     variant="ghost"
                     onClick={handleClear}
                     className="h-8 w-8 rounded-full text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-                    aria-label="Clear all"
+                    aria-label="Clear"
                   >
                     <X className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>Clear</TooltipContent>
+                <TooltipContent side="top">Clear</TooltipContent>
               </Tooltip>
             )}
           </div>
