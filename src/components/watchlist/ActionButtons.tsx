@@ -19,9 +19,9 @@ export function ActionButtons({
 }) {
   const actions = [
     { label: "Save", icon: Save, onClick: onSave },
-    { label: "Download .txt", icon: Download, onClick: onDownload },
-    { label: "Share as image", icon: ImageDown, onClick: onImage },
-    { label: "Share link", icon: Share2, onClick: onShare },
+    { label: "Download", icon: Download, onClick: onDownload },
+    { label: "Image", icon: ImageDown, onClick: onImage },
+    { label: "Share", icon: Share2, onClick: onShare },
   ];
 
   return (
