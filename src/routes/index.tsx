@@ -147,9 +147,11 @@ function Index() {
   };
 
   const handleFormatChange = (f: OutputFormat) => {
+    if (f === format) return;
     setFormat(f);
     if (tickers.length > 0) {
       const next = formatTickers(tickers, f);
+      if (next === output) return;
       navigator.clipboard.writeText(next).then(
         () => toast.success(`Copied as ${labelFor(f)}`),
         () => {},
