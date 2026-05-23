@@ -41,7 +41,7 @@ export function ActionButtons({
               onClick={onClick}
               disabled={disabled}
               variant="outline"
-              className="h-11 rounded-xl hover:text-primary"
+              className="h-11 rounded-xl hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               aria-label={label}
               onContextMenu={
                 isTouch

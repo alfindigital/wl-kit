@@ -138,7 +138,7 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
                           }
                         : undefined
                     }
-                    className="h-8 w-8 rounded-full text-muted-foreground hover:bg-primary/10 hover:text-primary"
+                    className="h-8 w-8 rounded-full text-muted-foreground hover:bg-primary/10 hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                     aria-label="Paste"
                   >
                     <ClipboardPaste className="h-4 w-4" />
@@ -168,7 +168,7 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
                           }
                         : undefined
                     }
-                    className="h-8 w-8 rounded-full text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                    className="h-8 w-8 rounded-full text-muted-foreground hover:bg-destructive/10 hover:text-destructive focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2"
                     aria-label="Clear"
                   >
                     <X className="h-4 w-4" />
