@@ -161,36 +161,45 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
                   </Tooltip>
                 );
               })()}
-          {value &&
-            (() => {
-              const btn = (
-                <Button
-                  type="button"
-                  size="icon"
-                  variant="ghost"
-                  onClick={handleClear}
-                  onContextMenu={
-                    isTouch
-                      ? (e) => {
-                          e.preventDefault();
-                          toast("Clear", { duration: 1200 });
-                        }
-                      : undefined
-                  }
-                  className="h-8 w-8 rounded-full text-muted-foreground hover:bg-destructive/10 hover:text-destructive focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2"
-                  aria-label="Clear"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              );
-              if (isTouch) return btn;
-              return (
-                <Tooltip>
-                  <TooltipTrigger asChild>{btn}</TooltipTrigger>
-                  <TooltipContent side="top">Clear</TooltipContent>
-                </Tooltip>
-              );
-            })()}
+            {value &&
+              (() => {
+                const tooltipId = getTooltipId("clear");
+                const btn = (
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="ghost"
+                    onClick={handleClear}
+                    onContextMenu={
+                      isTouch
+                        ? (e) => {
+                            e.preventDefault();
+                            toast("Clear", { duration: 1200 });
+                          }
+                        : undefined
+                    }
+                    className="h-8 w-8 rounded-full text-muted-foreground hover:bg-destructive/10 hover:text-destructive focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2"
+                    aria-label="Clear"
+                    aria-describedby={isTouch ? tooltipId : undefined}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                );
+                if (isTouch) {
+                  return (
+                    <div key="clear">
+                      {btn}
+                      <span id={tooltipId} className="sr-only">Clear</span>
+                    </div>
+                  );
+                }
+                return (
+                  <Tooltip>
+                    <TooltipTrigger asChild>{btn}</TooltipTrigger>
+                    <TooltipContent side="top">Clear</TooltipContent>
+                  </Tooltip>
+                );
+              })()}
         </div>
       </div>
     );
