@@ -56,8 +56,12 @@ export function SaveDialog({
           value={name}
           onChange={(e) => setName(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter") handleSave();
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleSave();
+            }
           }}
+
           className="rounded-xl"
         />
         <DialogFooter>
