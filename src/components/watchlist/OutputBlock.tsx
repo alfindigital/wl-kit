@@ -1,8 +1,8 @@
+import { useRef, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Copy } from "lucide-react";
 import type { OutputFormat } from "@/lib/tickers";
-
 
 export function OutputBlock({
   output,
@@ -18,6 +18,13 @@ export function OutputBlock({
 }) {
   const lines = output ? output.split("\n") : [];
   const showLineNumbers = format === "newline" && lines.length > 0;
+  const liveRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (liveRef.current && output) {
+      liveRef.current.setAttribute("aria-label", `Output updated: ${count} tickers`);
+    }
+  }, [output, count]);
 
   return (
     <div className="relative rounded-2xl border border-border/80 bg-card shadow-sm">
@@ -41,7 +48,14 @@ export function OutputBlock({
           )}
         </div>
       </div>
-      <div className="min-h-[80px] max-h-[280px] overflow-auto p-4 font-mono text-sm leading-relaxed text-foreground">
+      <div
+        ref={liveRef}
+        tabIndex={0}
+        aria-label="Formatted watchlist output"
+        aria-live="polite"
+        aria-atomic="true"
+        className="min-h-[80px] max-h-[280px] overflow-auto p-4 font-mono text-sm leading-relaxed text-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset focus-visible:rounded-b-2xl transition-shadow"
+      >
         {!output && (
           <p className="font-sans text-sm text-muted-foreground">
             Paste tickers above to see formatted output.
