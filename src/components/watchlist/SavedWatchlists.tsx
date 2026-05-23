@@ -373,9 +373,9 @@ export function SavedWatchlists({
       >
         <CollapsibleTrigger asChild>
           <button className="flex w-full items-center justify-between px-4 py-3 text-left">
-            <span className="text-sm font-medium">
+            <span className="text-sm font-semibold text-primary">
               Saved Watchlists{" "}
-              <span className="ml-1 text-muted-foreground">({items.length})</span>
+              <span className="ml-1 font-normal text-muted-foreground">({items.length})</span>
             </span>
             <ChevronDown
               className={`h-4 w-4 text-muted-foreground transition-transform ${
