@@ -6,7 +6,6 @@ import { toast } from "sonner";
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useIsTouch } from "@/hooks/use-touch";
@@ -121,70 +120,68 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
             Drop file to import
           </div>
         )}
-        <TooltipProvider delayDuration={200}>
-          <div className="absolute right-3 top-3 flex items-center gap-1.5">
-            {hasClipboard &&
-              (() => {
-                const btn = (
-                  <Button
-                    type="button"
-                    size="icon"
-                    variant="ghost"
-                    onClick={handlePaste}
-                    onContextMenu={
-                      isTouch
-                        ? (e) => {
-                            e.preventDefault();
-                            toast("Paste", { duration: 1200 });
-                          }
-                        : undefined
-                    }
-                    className="h-8 w-8 rounded-full text-muted-foreground hover:bg-primary/10 hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                    aria-label="Paste"
-                  >
-                    <ClipboardPaste className="h-4 w-4" />
-                  </Button>
-                );
-                if (isTouch) return btn;
-                return (
-                  <Tooltip>
-                    <TooltipTrigger asChild>{btn}</TooltipTrigger>
-                    <TooltipContent side="top">Paste</TooltipContent>
-                  </Tooltip>
-                );
-              })()}
-            {value &&
-              (() => {
-                const btn = (
-                  <Button
-                    type="button"
-                    size="icon"
-                    variant="ghost"
-                    onClick={handleClear}
-                    onContextMenu={
-                      isTouch
-                        ? (e) => {
-                            e.preventDefault();
-                            toast("Clear", { duration: 1200 });
-                          }
-                        : undefined
-                    }
-                    className="h-8 w-8 rounded-full text-muted-foreground hover:bg-destructive/10 hover:text-destructive focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2"
-                    aria-label="Clear"
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                );
-                if (isTouch) return btn;
-                return (
-                  <Tooltip>
-                    <TooltipTrigger asChild>{btn}</TooltipTrigger>
-                    <TooltipContent side="top">Clear</TooltipContent>
-                  </Tooltip>
-                );
-              })()}
-          </div>
-        </TooltipProvider>
+        <div className="absolute right-3 top-3 flex items-center gap-1.5">
+          {hasClipboard &&
+            (() => {
+              const btn = (
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="ghost"
+                  onClick={handlePaste}
+                  onContextMenu={
+                    isTouch
+                      ? (e) => {
+                          e.preventDefault();
+                          toast("Paste", { duration: 1200 });
+                        }
+                      : undefined
+                  }
+                  className="h-8 w-8 rounded-full text-muted-foreground hover:bg-primary/10 hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                  aria-label="Paste"
+                >
+                  <ClipboardPaste className="h-4 w-4" />
+                </Button>
+              );
+              if (isTouch) return btn;
+              return (
+                <Tooltip>
+                  <TooltipTrigger asChild>{btn}</TooltipTrigger>
+                  <TooltipContent side="top">Paste</TooltipContent>
+                </Tooltip>
+              );
+            })()}
+          {value &&
+            (() => {
+              const btn = (
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="ghost"
+                  onClick={handleClear}
+                  onContextMenu={
+                    isTouch
+                      ? (e) => {
+                          e.preventDefault();
+                          toast("Clear", { duration: 1200 });
+                        }
+                      : undefined
+                  }
+                  className="h-8 w-8 rounded-full text-muted-foreground hover:bg-destructive/10 hover:text-destructive focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2"
+                  aria-label="Clear"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              );
+              if (isTouch) return btn;
+              return (
+                <Tooltip>
+                  <TooltipTrigger asChild>{btn}</TooltipTrigger>
+                  <TooltipContent side="top">Clear</TooltipContent>
+                </Tooltip>
+              );
+            })()}
+        </div>
       </div>
     );
   },
