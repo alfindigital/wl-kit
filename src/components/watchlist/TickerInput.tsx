@@ -9,6 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useIsTouch } from "@/hooks/use-touch";
 
 type Props = {
   value: string;
