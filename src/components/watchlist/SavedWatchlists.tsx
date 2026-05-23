@@ -157,12 +157,15 @@ export function SavedWatchlists({
       <li key={item.id} className="relative overflow-hidden rounded-xl">
         <div className="absolute inset-y-0 right-0 flex w-20 items-center justify-center bg-destructive text-destructive-foreground">
           <button
+            type="button"
             onClick={() => {
               setPendingDelete(item);
               setSwipedId(null);
             }}
             className="flex h-full w-full items-center justify-center"
-            aria-label="Delete"
+            aria-label={`Delete ${item.name}`}
+            tabIndex={isSwiped ? 0 : -1}
+            aria-hidden={!isSwiped}
           >
             <Trash2 className="h-4 w-4" />
           </button>
@@ -170,6 +173,12 @@ export function SavedWatchlists({
         <div
           onTouchStart={(e) => handleTouchStart(e, item.id)}
           onTouchEnd={(e) => handleTouchEnd(e, item.id)}
+          onKeyDown={(e) => {
+            if (e.key === "Escape" && isSwiped) {
+              e.stopPropagation();
+              setSwipedId(null);
+            }
+          }}
           className="group flex items-center gap-2 bg-card px-3 py-2 transition-transform hover:bg-muted"
           style={{ transform: isSwiped ? "translateX(-80px)" : "translateX(0)" }}
         >
@@ -189,13 +198,19 @@ export function SavedWatchlists({
                 onChange={(e) => setEditName(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && editName.trim()) {
+                    e.preventDefault();
                     onRename(item.id, editName.trim());
                     setEditingId(null);
-                  } else if (e.key === "Escape") setEditingId(null);
+                  } else if (e.key === "Escape") {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setEditingId(null);
+                  }
                 }}
                 className="h-8 rounded-lg text-sm"
               />
               <Button
+                type="button"
                 size="icon"
                 variant="ghost"
                 className="h-8 w-8"
@@ -210,6 +225,7 @@ export function SavedWatchlists({
                 <Check className="h-4 w-4" />
               </Button>
               <Button
+                type="button"
                 size="icon"
                 variant="ghost"
                 className="h-8 w-8"
@@ -221,50 +237,57 @@ export function SavedWatchlists({
             </div>
           ) : (
             <>
-              <button
-                onClick={() => {
-                  if (selectMode) toggleSelect(item.id);
-                  else onLoad(item);
-                }}
-                className="min-w-0 flex-1 text-left"
-              >
-                <div className="flex items-center gap-1.5 text-sm font-medium">
-                  {item.pinned && <Pin className="h-3 w-3 text-primary" aria-hidden="true" />}
-                  <span className="truncate">{item.name}</span>
-                </div>
-                <div className="text-xs text-muted-foreground">
-                  {item.tickers.length} tickers ·{" "}
-                  {new Date(item.savedAt).toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                  })}
-                </div>
+              <div className="min-w-0 flex-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (selectMode) toggleSelect(item.id);
+                    else onLoad(item);
+                  }}
+                  className="block w-full text-left"
+                  aria-label={selectMode ? `Toggle selection ${item.name}` : `Load ${item.name}`}
+                >
+                  <div className="flex items-center gap-1.5 text-sm font-medium">
+                    {item.pinned && <Pin className="h-3 w-3 text-primary" aria-hidden="true" />}
+                    <span className="truncate">{item.name}</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    {item.tickers.length} tickers ·{" "}
+                    {new Date(item.savedAt).toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </div>
+                </button>
                 {(item.tags ?? []).length > 0 && (
                   <div className="mt-1 flex flex-wrap gap-1">
                     {(item.tags ?? []).map((t) => (
-                      <span
+                      <button
                         key={t}
+                        type="button"
                         onClick={(e) => {
                           e.stopPropagation();
                           setTagFilter(t);
                         }}
-                        className="cursor-pointer rounded-full bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground hover:bg-primary/10 hover:text-primary"
+                        className="cursor-pointer rounded-full bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                        aria-label={`Filter by tag ${t}`}
                       >
                         #{t}
-                      </span>
+                      </button>
                     ))}
                   </div>
                 )}
-              </button>
+              </div>
               {!selectMode && (
                 <>
                   <Button
+                    type="button"
                     variant="ghost"
                     size="icon"
                     onClick={() => onTogglePin(item.id)}
-                    className="rounded-full text-muted-foreground hover:text-primary"
-                    aria-label={item.pinned ? "Unpin" : "Pin"}
+                    className="rounded-full text-muted-foreground hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                    aria-label={item.pinned ? `Unpin ${item.name}` : `Pin ${item.name}`}
                   >
                     {item.pinned ? <PinOff className="h-4 w-4" /> : <Pin className="h-4 w-4" />}
                   </Button>
@@ -281,10 +304,11 @@ export function SavedWatchlists({
                   >
                     <PopoverTrigger asChild>
                       <Button
+                        type="button"
                         variant="ghost"
                         size="icon"
-                        className="rounded-full text-muted-foreground hover:text-primary"
-                        aria-label="Edit tags"
+                        className="rounded-full text-muted-foreground hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                        aria-label={`Edit tags for ${item.name}`}
                       >
                         <Tags className="h-4 w-4" />
                       </Button>
@@ -295,23 +319,30 @@ export function SavedWatchlists({
                       </p>
                       <Input
                         autoFocus
+                        aria-label="Tags"
                         value={tagDraft}
                         onChange={(e) => setTagDraft(e.target.value)}
                         placeholder="banking, lq45"
                         className="h-8 rounded-lg text-xs"
                         onKeyDown={(e) => {
                           if (e.key === "Enter") {
+                            e.preventDefault();
                             const tags = tagDraft
                               .split(",")
                               .map((t) => t.trim().toLowerCase())
                               .filter(Boolean);
                             onSetTags(item.id, tags);
                             setTagEditId(null);
+                          } else if (e.key === "Escape") {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setTagEditId(null);
                           }
                         }}
                       />
                       <div className="mt-2 flex justify-end">
                         <Button
+                          type="button"
                           size="sm"
                           className="h-7 rounded-lg text-xs"
                           onClick={() => {
@@ -329,23 +360,25 @@ export function SavedWatchlists({
                     </PopoverContent>
                   </Popover>
                   <Button
+                    type="button"
                     variant="ghost"
                     size="icon"
                     onClick={() => {
                       setEditingId(item.id);
                       setEditName(item.name);
                     }}
-                    className="rounded-full text-muted-foreground hover:text-primary"
-                    aria-label="Rename"
+                    className="rounded-full text-muted-foreground hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                    aria-label={`Rename ${item.name}`}
                   >
                     <Pencil className="h-4 w-4" />
                   </Button>
                   <Button
+                    type="button"
                     variant="ghost"
                     size="icon"
                     onClick={() => setPendingDelete(item)}
-                    className="rounded-full text-muted-foreground hover:text-destructive"
-                    aria-label="Delete"
+                    className="rounded-full text-muted-foreground hover:text-destructive focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2"
+                    aria-label={`Delete ${item.name}`}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -357,6 +390,7 @@ export function SavedWatchlists({
       </li>
     );
   };
+
 
   const sectionHeader = (label: string) => (
     <div className="px-3 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
