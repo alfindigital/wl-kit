@@ -406,7 +406,11 @@ export function SavedWatchlists({
         className="rounded-2xl border border-border/80 bg-card shadow-sm"
       >
         <CollapsibleTrigger asChild>
-          <button className="flex w-full items-center justify-between px-4 py-3 text-left">
+          <button
+            type="button"
+            className="flex w-full items-center justify-between px-4 py-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            aria-expanded={open}
+          >
             <span className="text-sm font-semibold text-primary">
               Saved Watchlists{" "}
               <span className="ml-1 font-normal text-muted-foreground">({items.length})</span>
@@ -419,6 +423,7 @@ export function SavedWatchlists({
             />
           </button>
         </CollapsibleTrigger>
+
         <CollapsibleContent>
           <div className="border-t border-border/60 px-2 py-2">
             {items.length > 0 && (
