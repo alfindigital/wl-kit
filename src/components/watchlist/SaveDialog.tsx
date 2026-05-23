@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Dialog,
   DialogContent,
@@ -22,9 +22,16 @@ export function SaveDialog({
   tickerCount: number;
 }) {
   const [name, setName] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (open) setName("");
+    if (open) {
+      setName("");
+      // Managed focus: move focus to the input after dialog opens so screen
+      // readers announce the dialog title first, then the editable field.
+      const timer = setTimeout(() => inputRef.current?.focus(), 0);
+      return () => clearTimeout(timer);
+    }
   }, [open]);
 
   const handleSave = () => {
@@ -43,7 +50,7 @@ export function SaveDialog({
           </DialogDescription>
         </DialogHeader>
         <Input
-          autoFocus
+          ref={inputRef}
           aria-label="Watchlist name"
           placeholder="My watchlist name"
           value={name}
