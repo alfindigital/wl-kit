@@ -24,7 +24,11 @@ export function InputStats({
 
   return (
     <div className="flex flex-col gap-1.5 text-xs text-muted-foreground">
-      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+      <div
+        className="flex flex-wrap items-center gap-x-2 gap-y-1"
+        aria-live="polite"
+        aria-atomic="false"
+      >
         <span>
           <span className="font-semibold text-foreground">{validCount}</span>{" "}
           {validCount === 1 ? "ticker" : "tickers"}
