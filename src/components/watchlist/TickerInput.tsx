@@ -20,6 +20,7 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
   function TickerInput({ value, onChange }, ref) {
     const innerRef = useRef<HTMLTextAreaElement | null>(null);
     const [isDragging, setIsDragging] = useState(false);
+    const isTouch = useIsTouch();
 
     const setRefs = (el: HTMLTextAreaElement | null) => {
       innerRef.current = el;
