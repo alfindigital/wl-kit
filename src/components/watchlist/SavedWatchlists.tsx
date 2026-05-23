@@ -229,7 +229,7 @@ export function SavedWatchlists({
                 className="min-w-0 flex-1 text-left"
               >
                 <div className="flex items-center gap-1.5 text-sm font-medium">
-                  {item.pinned && <Pin className="h-3 w-3 text-primary" />}
+                  {item.pinned && <Pin className="h-3 w-3 text-primary" aria-hidden="true" />}
                   <span className="truncate">{item.name}</span>
                 </div>
                 <div className="text-xs text-muted-foreground">
