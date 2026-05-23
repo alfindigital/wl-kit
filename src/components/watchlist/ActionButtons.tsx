@@ -37,6 +37,7 @@ export function ActionButtons({
   return (
     <div className="grid grid-cols-4 gap-2">
       {actions.map(({ label, icon: Icon, onClick }) => {
+        const tooltipId = getTooltipId(label);
         const button = (
           <Button
             onClick={onClick}
@@ -44,6 +45,7 @@ export function ActionButtons({
             variant="outline"
             className="h-11 rounded-xl hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             aria-label={label}
+            aria-describedby={isTouch ? tooltipId : undefined}
             onContextMenu={
               isTouch
                 ? (e) => {
@@ -57,7 +59,14 @@ export function ActionButtons({
           </Button>
         );
 
-        if (isTouch) return <div key={label}>{button}</div>;
+        if (isTouch) {
+          return (
+            <div key={label}>
+              {button}
+              <span id={tooltipId} className="sr-only">{label}</span>
+            </div>
+          );
+        }
 
         return (
           <Tooltip key={label}>
