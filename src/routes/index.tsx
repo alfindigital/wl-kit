@@ -453,12 +453,24 @@ function Index() {
               duplicates={analysis.duplicates}
               invalid={analysis.invalid}
             />
-            <FormatTabs value={format} onChange={handleFormatChange} />
+            <FormatTabs
+              value={format}
+              onChange={handleFormatChange}
+              onSelect={(f) => {
+                if (f === "tradingview" && f === format && tickers.length > 0) {
+                  navigator.clipboard.writeText(formatTickers(tickers, f)).then(
+                    () => toast.success("Copied as TradingView"),
+                    () => {},
+                  );
+                }
+              }}
+            />
             <OutputBlock
               output={output}
               count={tickers.length}
               format={format}
               onSample={handleSample}
+              onCopy={() => handleCopy()}
             />
             <ActionButtons
               disabled={tickers.length === 0}
@@ -468,7 +480,6 @@ function Index() {
               onImage={handleImage}
               onShare={handleShare}
             />
-            <ShortcutHint />
           </div>
 
           <div className="mt-10">
@@ -484,6 +495,10 @@ function Index() {
               onExport={handleExport}
               onImport={handleImport}
             />
+          </div>
+
+          <div className="mt-10">
+            <ShortcutHint />
           </div>
         </div>
       </main>
