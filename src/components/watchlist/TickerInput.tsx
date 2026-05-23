@@ -42,6 +42,7 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
         if (!text) return;
         onChange(value ? value + (value.endsWith("\n") ? "" : "\n") + text : text);
         innerRef.current?.focus();
+        toast.success("Pasted");
       } catch {
         toast.error("Clipboard access denied");
       }
