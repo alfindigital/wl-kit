@@ -122,36 +122,45 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
           </div>
         )}
         <div className="absolute right-3 top-3 flex items-center gap-1.5">
-          {hasClipboard &&
-            (() => {
-              const btn = (
-                <Button
-                  type="button"
-                  size="icon"
-                  variant="ghost"
-                  onClick={handlePaste}
-                  onContextMenu={
-                    isTouch
-                      ? (e) => {
-                          e.preventDefault();
-                          toast("Paste", { duration: 1200 });
-                        }
-                      : undefined
-                  }
-                  className="h-8 w-8 rounded-full text-muted-foreground hover:bg-primary/10 hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                  aria-label="Paste"
-                >
-                  <ClipboardPaste className="h-4 w-4" />
-                </Button>
-              );
-              if (isTouch) return btn;
-              return (
-                <Tooltip>
-                  <TooltipTrigger asChild>{btn}</TooltipTrigger>
-                  <TooltipContent side="top">Paste</TooltipContent>
-                </Tooltip>
-              );
-            })()}
+            {hasClipboard &&
+              (() => {
+                const tooltipId = getTooltipId("paste");
+                const btn = (
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="ghost"
+                    onClick={handlePaste}
+                    onContextMenu={
+                      isTouch
+                        ? (e) => {
+                            e.preventDefault();
+                            toast("Paste", { duration: 1200 });
+                          }
+                        : undefined
+                    }
+                    className="h-8 w-8 rounded-full text-muted-foreground hover:bg-primary/10 hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                    aria-label="Paste"
+                    aria-describedby={isTouch ? tooltipId : undefined}
+                  >
+                    <ClipboardPaste className="h-4 w-4" />
+                  </Button>
+                );
+                if (isTouch) {
+                  return (
+                    <div key="paste">
+                      {btn}
+                      <span id={tooltipId} className="sr-only">Paste</span>
+                    </div>
+                  );
+                }
+                return (
+                  <Tooltip>
+                    <TooltipTrigger asChild>{btn}</TooltipTrigger>
+                    <TooltipContent side="top">Paste</TooltipContent>
+                  </Tooltip>
+                );
+              })()}
           {value &&
             (() => {
               const btn = (
