@@ -83,6 +83,8 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
       setHasClipboard(typeof navigator !== "undefined" && !!navigator.clipboard?.readText);
     }, []);
 
+    const inputHelpId = "ticker-input-help";
+
     return (
       <div
         className="relative"
@@ -97,6 +99,10 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
         }}
         onDrop={handleDrop}
       >
+        <span id={inputHelpId} className="sr-only">
+          Supports any format: comma, space, tab, semicolon, or newline separated.
+          Four-letter IDX ticker codes are recognized automatically.
+        </span>
         <Textarea
           ref={setRefs}
           autoFocus
@@ -111,6 +117,7 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
             }
           }}
           aria-label="Ticker input"
+          aria-describedby={inputHelpId}
           placeholder="Paste your tickers here... (any format) — or drop a .txt / .csv file"
           className={`min-h-[120px] resize-none overflow-hidden rounded-2xl border-border/80 bg-card p-4 pr-14 text-base shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-primary sm:min-h-[160px] ${
             isDragging ? "border-primary bg-primary/5 ring-2 ring-primary" : ""
