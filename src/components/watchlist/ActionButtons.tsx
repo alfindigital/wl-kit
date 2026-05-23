@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Save, ImageDown, Share2, Download } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useIsTouch } from "@/hooks/use-touch";
 import { toast } from "sonner";
 
@@ -33,39 +33,37 @@ export function ActionButtons({
   };
 
   return (
-    <TooltipProvider delayDuration={200}>
-      <div className="grid grid-cols-4 gap-2">
-        {actions.map(({ label, icon: Icon, onClick }) => {
-          const button = (
-            <Button
-              onClick={onClick}
-              disabled={disabled}
-              variant="outline"
-              className="h-11 rounded-xl hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-              aria-label={label}
-              onContextMenu={
-                isTouch
-                  ? (e) => {
-                      e.preventDefault();
-                      handleLongPress(label);
-                    }
-                  : undefined
-              }
-            >
-              <Icon className="h-4 w-4" />
-            </Button>
-          );
+    <div className="grid grid-cols-4 gap-2">
+      {actions.map(({ label, icon: Icon, onClick }) => {
+        const button = (
+          <Button
+            onClick={onClick}
+            disabled={disabled}
+            variant="outline"
+            className="h-11 rounded-xl hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            aria-label={label}
+            onContextMenu={
+              isTouch
+                ? (e) => {
+                    e.preventDefault();
+                    handleLongPress(label);
+                  }
+                : undefined
+            }
+          >
+            <Icon className="h-4 w-4" />
+          </Button>
+        );
 
-          if (isTouch) return <div key={label}>{button}</div>;
+        if (isTouch) return <div key={label}>{button}</div>;
 
-          return (
-            <Tooltip key={label}>
-              <TooltipTrigger asChild>{button}</TooltipTrigger>
-              <TooltipContent>{label}</TooltipContent>
-            </Tooltip>
-          );
-        })}
-      </div>
-    </TooltipProvider>
+        return (
+          <Tooltip key={label}>
+            <TooltipTrigger asChild>{button}</TooltipTrigger>
+            <TooltipContent>{label}</TooltipContent>
+          </Tooltip>
+        );
+      })}
+    </div>
   );
 }
