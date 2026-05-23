@@ -50,7 +50,7 @@ export function SaveDialog({
           </DialogDescription>
         </DialogHeader>
         <Input
-          autoFocus
+          ref={inputRef}
           aria-label="Watchlist name"
           placeholder="My watchlist name"
           value={name}
