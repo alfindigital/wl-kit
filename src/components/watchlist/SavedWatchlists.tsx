@@ -505,7 +505,7 @@ export function SavedWatchlists({
                     className="h-7 rounded-lg text-[11px] text-muted-foreground hover:text-primary"
                     onClick={onExport}
                   >
-                    <Download className="mr-1 h-3 w-3" /> Export all
+                    <Download className="mr-1 h-3 w-3" /> Export
                   </Button>
                   <Button
                     variant="ghost"
