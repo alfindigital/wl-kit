@@ -331,6 +331,7 @@ function Index() {
           text: output,
           url,
         });
+        toast.success("Shared");
         return;
       } catch (e) {
         const err = e as DOMException;
@@ -355,6 +356,7 @@ function Index() {
         cacheBust: true,
       });
       setShareImageData(dataUrl);
+      toast.success("Image ready");
     } catch {
       setShareImageOpen(false);
       toast.error("Failed to generate image");
