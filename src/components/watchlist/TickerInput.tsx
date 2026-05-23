@@ -20,6 +20,7 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
     const innerRef = useRef<HTMLTextAreaElement | null>(null);
     const [isDragging, setIsDragging] = useState(false);
     const isTouch = useIsTouch();
+    const getTooltipId = (label: string) => `tt-${label.toLowerCase()}`;
 
     const setRefs = (el: HTMLTextAreaElement | null) => {
       innerRef.current = el;
