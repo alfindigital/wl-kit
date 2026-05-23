@@ -229,7 +229,7 @@ export function SavedWatchlists({
                 className="min-w-0 flex-1 text-left"
               >
                 <div className="flex items-center gap-1.5 text-sm font-medium">
-                  {item.pinned && <Pin className="h-3 w-3 text-primary" />}
+                  {item.pinned && <Pin className="h-3 w-3 text-primary" aria-hidden="true" />}
                   <span className="truncate">{item.name}</span>
                 </div>
                 <div className="text-xs text-muted-foreground">
@@ -381,6 +381,7 @@ export function SavedWatchlists({
               className={`h-4 w-4 text-muted-foreground transition-transform ${
                 open ? "rotate-180" : ""
               }`}
+              aria-hidden="true"
             />
           </button>
         </CollapsibleTrigger>
@@ -391,7 +392,7 @@ export function SavedWatchlists({
                 <div className="flex flex-col gap-2 px-2 pb-2 pt-1 sm:flex-row sm:items-center">
                   {items.length > 5 && (
                     <div className="relative flex-1">
-                      <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+                      <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
                       <Input
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
