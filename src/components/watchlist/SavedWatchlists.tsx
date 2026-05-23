@@ -403,8 +403,20 @@ export function SavedWatchlists({
       <Collapsible
         open={open}
         onOpenChange={setOpen}
+        onKeyDown={(e) => {
+          if (e.key === "Escape") {
+            if (selectMode) {
+              e.stopPropagation();
+              exitSelectMode();
+            } else if (swipedId) {
+              e.stopPropagation();
+              setSwipedId(null);
+            }
+          }
+        }}
         className="rounded-2xl border border-border/80 bg-card shadow-sm"
       >
+
         <CollapsibleTrigger asChild>
           <button
             type="button"
