@@ -21,6 +21,8 @@ export function ActionButtons({
 }) {
   const isTouch = useIsTouch();
 
+  const getTooltipId = (label: string) => `tt-${label.toLowerCase()}`;
+
   const actions = [
     { label: "Save", icon: Save, onClick: onSave },
     { label: "Download", icon: Download, onClick: onDownload },
