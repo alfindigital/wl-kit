@@ -46,6 +46,30 @@ export const ShareCard = forwardRef<
       >
         {output || "—"}
       </div>
+
+      <div
+        style={{
+          marginTop: 28,
+          paddingTop: 16,
+          borderTop: "1px solid rgba(255,255,255,0.08)",
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 12,
+          fontSize: 12,
+          color: "#94a3b8",
+        }}
+      >
+        <span>
+          Built with{" "}
+          <span style={{ color: "#ea580c", fontWeight: 600 }}>WatchlistKit</span>
+        </span>
+        <span style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          <span style={{ color: "#ea580c" }}>alfindigital.com</span>
+          <span style={{ color: "#ea580c" }}>@AlfIDX</span>
+        </span>
+      </div>
     </div>
   );
 });

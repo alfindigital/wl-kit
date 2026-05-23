@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Download, Send, MessageCircle, Share2 } from "lucide-react";
+import { Download, Share2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -13,13 +13,9 @@ import { Button } from "@/components/ui/button";
 type Props = {
   open: boolean;
   onOpenChange: (v: boolean) => void;
-  /** PNG data URL of the rendered share card, or null while generating. */
   dataUrl: string | null;
-  /** Used for file name + share text. */
   name: string;
-  /** Text caption to send alongside the image (e.g. share URL + output). */
   shareText: string;
-  /** Share URL appended to the caption on WhatsApp/Telegram. */
   shareUrl: string;
 };
 
@@ -78,31 +74,13 @@ export function ShareImageDialog({
     }
   };
 
-  const caption = encodeURIComponent(`${name}\n${shareText}\n${shareUrl}`);
-  const waHref = `https://wa.me/?text=${caption}`;
-  const tgHref = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(`${name}\n${shareText}`)}`;
-
-  const openExternal = async (href: string, platform: string) => {
-    // Pre-copy the image to clipboard so the user can paste it in the chat.
-    if (dataUrl) {
-      try {
-        const blob = await dataUrlToBlob(dataUrl);
-        await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
-        toast.success(`Image copied — paste it in ${platform}`);
-      } catch {
-        toast(`Opening ${platform}… image not auto-copied, use Download`);
-      }
-    }
-    window.open(href, "_blank", "noopener,noreferrer");
-  };
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Share as image</DialogTitle>
           <DialogDescription>
-            Download, copy, or send a branded preview of your watchlist.
+            Download a branded preview of your watchlist.
           </DialogDescription>
         </DialogHeader>
 
@@ -120,42 +98,20 @@ export function ShareImageDialog({
           )}
         </div>
 
-        <div className="grid grid-cols-2 gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleDownload}
-            disabled={!dataUrl}
-            className="justify-start"
-          >
-            <Download className="mr-2 h-4 w-4" />
-            Download
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => openExternal(waHref, "WhatsApp")}
-            disabled={!dataUrl}
-            className="justify-start"
-          >
-            <MessageCircle className="mr-2 h-4 w-4 text-[#25D366]" />
-            WhatsApp
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => openExternal(tgHref, "Telegram")}
-            disabled={!dataUrl}
-            className="justify-start"
-          >
-            <Send className="mr-2 h-4 w-4 text-[#229ED9]" />
-            Telegram
-          </Button>
-        </div>
+        <Button
+          type="button"
+          onClick={handleDownload}
+          disabled={!dataUrl}
+          className="w-full"
+        >
+          <Download className="mr-2 h-4 w-4" />
+          Download
+        </Button>
 
         {canNativeShareFile && (
           <Button
             type="button"
+            variant="outline"
             onClick={handleNativeShare}
             disabled={!dataUrl}
             className="w-full"
@@ -164,11 +120,6 @@ export function ShareImageDialog({
             Share via device…
           </Button>
         )}
-
-        <p className="text-center text-[11px] text-muted-foreground">
-          WhatsApp & Telegram web links can't auto-attach images — the image is
-          copied to your clipboard so you can paste it in the chat.
-        </p>
       </DialogContent>
     </Dialog>
   );

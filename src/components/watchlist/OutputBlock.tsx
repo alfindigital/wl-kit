@@ -1,4 +1,6 @@
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Copy } from "lucide-react";
 import type { OutputFormat } from "@/lib/tickers";
 
 
@@ -6,11 +8,13 @@ export function OutputBlock({
   output,
   count,
   format,
+  onCopy,
 }: {
   output: string;
   count: number;
   format: OutputFormat;
   onSample?: (tickers: string[]) => void;
+  onCopy?: () => void;
 }) {
   const lines = output ? output.split("\n") : [];
   const showLineNumbers = format === "newline" && lines.length > 0;
@@ -19,9 +23,23 @@ export function OutputBlock({
     <div className="relative rounded-2xl border border-border/80 bg-card shadow-sm">
       <div className="flex items-center justify-between border-b border-border/60 px-4 py-2">
         <span className="text-xs font-medium text-muted-foreground">Output</span>
-        <Badge variant="secondary" className="rounded-full text-xs">
-          {count} {count === 1 ? "ticker" : "tickers"}
-        </Badge>
+        <div className="flex items-center gap-2">
+          <Badge variant="secondary" className="rounded-full text-xs">
+            {count} {count === 1 ? "ticker" : "tickers"}
+          </Badge>
+          {onCopy && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 rounded-lg text-muted-foreground hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              onClick={onCopy}
+              disabled={!output}
+              aria-label="Copy output"
+            >
+              <Copy className="h-3.5 w-3.5" />
+            </Button>
+          )}
+        </div>
       </div>
       <div className="min-h-[80px] max-h-[280px] overflow-auto p-4 font-mono text-sm leading-relaxed text-foreground">
         {!output && (
@@ -48,4 +66,3 @@ export function OutputBlock({
     </div>
   );
 }
-
