@@ -467,7 +467,10 @@ function Index() {
               onSelect={(f) => {
                 if (f === "tradingview" && f === format && tickers.length > 0) {
                   navigator.clipboard.writeText(formatTickers(tickers, f)).then(
-                    () => toast.success("Copied as TradingView"),
+                    () => {
+                      toast.success("Copied as TradingView");
+                      setCopyStatus("Copied as TradingView");
+                    },
                     () => {},
                   );
                 }
