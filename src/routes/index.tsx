@@ -461,18 +461,40 @@ function Index() {
   });
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      <main className="flex-1">
+    <div className="flex min-h-dvh flex-col bg-background">
+      {/* Mobile sticky compact header */}
+      <header className="sticky top-0 z-30 border-b border-border/60 bg-background/85 pt-safe backdrop-blur supports-[backdrop-filter]:bg-background/70 sm:hidden">
+        <div className="mx-auto flex max-w-2xl items-center justify-between gap-2 px-4 py-2.5">
+          <span className="font-display text-base italic text-primary">WatchlistKit</span>
+          {tickers.length > 0 && (
+            <Badge
+              variant="secondary"
+              className="rounded-full text-[11px]"
+              role="status"
+              aria-label={`${tickers.length} valid tickers`}
+            >
+              {tickers.length} {tickers.length === 1 ? "ticker" : "tickers"}
+            </Badge>
+          )}
+        </div>
+      </header>
+
+      <main className="flex-1 pb-[calc(80px+env(safe-area-inset-bottom))] sm:pb-0">
         <div className="mx-auto w-full max-w-2xl px-4 pb-10 pt-6 sm:px-6 sm:pt-10">
-          <div className="mb-5 text-center sm:mb-6">
+          <div className="mb-4 text-center sm:mb-6">
             <h1 className="font-display text-2xl leading-tight tracking-tight sm:text-3xl">
               Format your IDX watchlist{" "}
               <em className="italic text-primary">in seconds.</em>
             </h1>
           </div>
 
-          <div className="flex flex-col gap-4">
-            <TickerInput ref={textareaRef} value={input} onChange={setInput} />
+          <div className="flex flex-col gap-4 sm:gap-5">
+            <TickerInput
+              ref={textareaRef}
+              value={input}
+              onChange={setInput}
+              onSample={handleSample}
+            />
             <InputStats
               validCount={tickers.length}
               duplicates={analysis.duplicates}
