@@ -602,10 +602,11 @@ function Index() {
           count={tickers.length}
           date={dateStr}
         />
+      </div>
+
       <div aria-live="polite" aria-atomic="true" className="sr-only">
         {liveStatus}
       </div>
-    </div>
 
       <ShareImageDialog
         open={shareImageOpen}
