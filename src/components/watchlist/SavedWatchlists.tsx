@@ -290,7 +290,7 @@ export function SavedWatchlists({
                   </div>
                 )}
               </div>
-              {!selectMode && (
+              {!selectMode && !isMobile && (
                 <>
                   <Button
                     type="button"
@@ -394,6 +394,21 @@ export function SavedWatchlists({
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </>
+              )}
+              {!selectMode && isMobile && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setDrawerId(item.id);
+                  }}
+                  className="h-10 w-10 rounded-full text-muted-foreground hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                  aria-label={`More actions for ${item.name}`}
+                >
+                  <MoreVertical className="h-5 w-5" />
+                </Button>
               )}
             </>
           )}
