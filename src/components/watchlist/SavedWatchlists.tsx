@@ -658,6 +658,142 @@ export function SavedWatchlists({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <Drawer open={!!drawerItem} onOpenChange={(o) => !o && setDrawerId(null)}>
+        <DrawerContent className="pb-safe">
+          {drawerItem && (
+            <>
+              <DrawerHeader className="text-left">
+                <DrawerTitle className="flex items-center gap-2 text-base">
+                  {drawerItem.pinned && (
+                    <Pin className="h-4 w-4 text-primary" aria-hidden="true" />
+                  )}
+                  <span className="truncate">{drawerItem.name}</span>
+                </DrawerTitle>
+                <p className="text-xs text-muted-foreground">
+                  {drawerItem.tickers.length} tickers
+                </p>
+              </DrawerHeader>
+              <div className="flex flex-col px-2 pb-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    onTogglePin(drawerItem.id);
+                    setDrawerId(null);
+                  }}
+                  className="flex min-h-[48px] items-center gap-3 rounded-lg px-3 text-left text-sm hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  {drawerItem.pinned ? (
+                    <PinOff className="h-5 w-5 text-muted-foreground" />
+                  ) : (
+                    <Pin className="h-5 w-5 text-muted-foreground" />
+                  )}
+                  {drawerItem.pinned ? "Unpin" : "Pin to top"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingId(drawerItem.id);
+                    setEditName(drawerItem.name);
+                    setDrawerId(null);
+                  }}
+                  className="flex min-h-[48px] items-center gap-3 rounded-lg px-3 text-left text-sm hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  <Pencil className="h-5 w-5 text-muted-foreground" />
+                  Rename
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTagEditId(drawerItem.id);
+                    setTagDraft((drawerItem.tags ?? []).join(", "));
+                    setDrawerId(null);
+                  }}
+                  className="flex min-h-[48px] items-center gap-3 rounded-lg px-3 text-left text-sm hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  <Tags className="h-5 w-5 text-muted-foreground" />
+                  Edit tags
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectMode(true);
+                    setSelected([drawerItem.id]);
+                    setDrawerId(null);
+                  }}
+                  className="flex min-h-[48px] items-center gap-3 rounded-lg px-3 text-left text-sm hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  <GitCompare className="h-5 w-5 text-muted-foreground" />
+                  Compare with…
+                </button>
+                <div className="my-1 h-px bg-border" />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPendingDelete(drawerItem);
+                    setDrawerId(null);
+                  }}
+                  className="flex min-h-[48px] items-center gap-3 rounded-lg px-3 text-left text-sm text-destructive hover:bg-destructive/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive"
+                >
+                  <Trash2 className="h-5 w-5" />
+                  Delete
+                </button>
+              </div>
+            </>
+          )}
+        </DrawerContent>
+      </Drawer>
+
+      {/* Mobile tag editor (drawer-triggered uses same popover-less flow via AlertDialog-like sheet) */}
+      {tagEditId && isMobile && (
+        <Drawer
+          open={!!tagEditId}
+          onOpenChange={(o) => {
+            if (!o) setTagEditId(null);
+          }}
+        >
+          <DrawerContent className="pb-safe">
+            <DrawerHeader className="text-left">
+              <DrawerTitle className="text-base">Edit tags</DrawerTitle>
+              <p className="text-xs text-muted-foreground">Comma-separated tags</p>
+            </DrawerHeader>
+            <div className="flex flex-col gap-3 px-4 pb-4">
+              <Input
+                autoFocus
+                aria-label="Tags"
+                value={tagDraft}
+                onChange={(e) => setTagDraft(e.target.value)}
+                placeholder="banking, lq45"
+                className="h-11 rounded-lg text-sm"
+              />
+              <div className="flex justify-end gap-2">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="h-10 rounded-lg"
+                  onClick={() => setTagEditId(null)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="button"
+                  className="h-10 rounded-lg"
+                  onClick={() => {
+                    const tags = tagDraft
+                      .split(",")
+                      .map((t) => t.trim().toLowerCase())
+                      .filter(Boolean);
+                    if (tagEditId) onSetTags(tagEditId, tags);
+                    setTagEditId(null);
+                  }}
+                >
+                  Save
+                </Button>
+              </div>
+            </div>
+          </DrawerContent>
+        </Drawer>
+      )}
     </>
   );
 }
