@@ -33,6 +33,7 @@ import {
   ArrowUpDown,
   Download,
   Upload,
+  MoreVertical,
 } from "lucide-react";
 import type { SavedWatchlist } from "@/lib/storage";
 import {
@@ -45,6 +46,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type SortKey = "recent" | "name" | "count";
 
