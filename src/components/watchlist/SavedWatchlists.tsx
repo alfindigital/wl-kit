@@ -93,6 +93,9 @@ export function SavedWatchlists({
   const [tagDraft, setTagDraft] = useState("");
   const touchStart = useRef<{ x: number; id: string } | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const isMobile = useIsMobile();
+  const [drawerId, setDrawerId] = useState<string | null>(null);
+  const drawerItem = drawerId ? items.find((i) => i.id === drawerId) ?? null : null;
 
   const allTags = useMemo(() => {
     const s = new Set<string>();
