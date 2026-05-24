@@ -563,7 +563,10 @@ function Index() {
           count={tickers.length}
           date={dateStr}
         />
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        {copyStatus}
       </div>
+    </div>
 
       <ShareImageDialog
         open={shareImageOpen}
