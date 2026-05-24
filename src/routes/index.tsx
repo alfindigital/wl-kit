@@ -92,7 +92,7 @@ function Index() {
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [shareImageOpen, setShareImageOpen] = useState(false);
   const [shareImageData, setShareImageData] = useState<string | null>(null);
-  const [copyStatus, setCopyStatus] = useState("");
+  const [liveStatus, setLiveStatus] = useState("");
   const shareCardRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -125,6 +125,7 @@ function Index() {
   ) => {
     setSaved(next);
     saveWatchlists(next);
+    setLiveStatus(message);
     toast(message, {
       action: {
         label: "Undo",
@@ -143,11 +144,11 @@ function Index() {
       await navigator.clipboard.writeText(output);
       if (!silent) {
         toast.success("Copied!");
-        setCopyStatus("Copied to clipboard");
+        setLiveStatus("Copied to clipboard");
       }
     } catch {
       toast.error("Failed to copy");
-      setCopyStatus("Failed to copy");
+      setLiveStatus("Failed to copy");
     }
   };
 
@@ -160,7 +161,7 @@ function Index() {
       navigator.clipboard.writeText(next).then(
         () => {
           toast.success(`Copied as ${labelFor(f)}`);
-          setCopyStatus(`Copied as ${labelFor(f)}`);
+          setLiveStatus(`Copied as ${labelFor(f)}`);
         },
         () => {},
       );
@@ -170,6 +171,7 @@ function Index() {
   const handleSave = (name: string) => {
     if (saved.length >= MAX_WATCHLISTS) {
       toast.error(`Limit reached (${MAX_WATCHLISTS} watchlists max)`);
+      setLiveStatus(`Limit reached: ${MAX_WATCHLISTS} watchlists maximum`);
       return;
     }
     const entry: SavedWatchlist = {
@@ -186,6 +188,7 @@ function Index() {
     saveWatchlists(next);
     setSaveOpen(false);
     setLoadedName(name);
+    setLiveStatus(`Watchlist "${name}" saved`);
     toast.success("Watchlist saved");
   };
 
