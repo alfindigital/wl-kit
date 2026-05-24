@@ -213,21 +213,27 @@ function Index() {
     );
     setSaved(next);
     saveWatchlists(next);
+    setLiveStatus(`Renamed to "${name}"`);
     toast.success("Renamed");
   };
 
   const handleTogglePin = (id: string) => {
+    const item = saved.find((w) => w.id === id);
     const next = saved.map((w) =>
       w.id === id ? { ...w, pinned: !w.pinned } : w,
     );
     setSaved(next);
     saveWatchlists(next);
+    if (item) {
+      setLiveStatus(`${item.pinned ? "Unpinned" : "Pinned"} "${item.name}"`);
+    }
   };
 
   const handleSetTags = (id: string, tags: string[]) => {
     const next = saved.map((w) => (w.id === id ? { ...w, tags } : w));
     setSaved(next);
     saveWatchlists(next);
+    setLiveStatus("Tags updated");
     toast.success("Tags updated");
   };
 
@@ -240,7 +246,9 @@ function Index() {
     a.download = `watchlistkit-backup-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
-    toast.success(`Exported ${saved.length} watchlist${saved.length === 1 ? "" : "s"}`);
+    const msg = `Exported ${saved.length} watchlist${saved.length === 1 ? "" : "s"}`;
+    setLiveStatus(msg);
+    toast.success(msg);
   };
 
   const handleImport = async (file: File) => {
@@ -250,7 +258,9 @@ function Index() {
       const { merged, added, skipped } = importAllJSON(saved, text);
       setSaved(merged);
       saveWatchlists(merged);
-      toast(`Imported ${added}${skipped ? `, skipped ${skipped}` : ""}`, {
+      const msg = `Imported ${added}${skipped ? `, skipped ${skipped}` : ""}`;
+      setLiveStatus(msg);
+      toast(msg, {
         action: {
           label: "Undo",
           onClick: () => {
@@ -261,6 +271,7 @@ function Index() {
         duration: 5000,
       });
     } catch {
+      setLiveStatus("Invalid JSON file");
       toast.error("Invalid JSON file");
     }
   };
@@ -283,7 +294,9 @@ function Index() {
     const next = [entry, ...saved];
     setSaved(next);
     saveWatchlists(next);
-    toast.success(`Merged ${merged.length} unique tickers`);
+    const msg = `Merged ${merged.length} unique tickers`;
+    setLiveStatus(msg);
+    toast.success(msg);
   };
 
   const handleCompare = (idA: string, idB: string) => {
@@ -302,6 +315,7 @@ function Index() {
     );
     setSaved(next);
     saveWatchlists(next);
+    setLiveStatus(`Loaded "${item.name}"`);
     toast.success(`Loaded "${item.name}"`);
   };
 
