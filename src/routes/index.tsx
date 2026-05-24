@@ -158,7 +158,10 @@ function Index() {
       const next = formatTickers(tickers, f);
       if (next === output) return;
       navigator.clipboard.writeText(next).then(
-        () => toast.success(`Copied as ${labelFor(f)}`),
+        () => {
+          toast.success(`Copied as ${labelFor(f)}`);
+          setCopyStatus(`Copied as ${labelFor(f)}`);
+        },
         () => {},
       );
     }
