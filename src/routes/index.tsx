@@ -141,9 +141,13 @@ function Index() {
     if (!output) return;
     try {
       await navigator.clipboard.writeText(output);
-      if (!silent) toast.success("Copied!");
+      if (!silent) {
+        toast.success("Copied!");
+        setCopyStatus("Copied to clipboard");
+      }
     } catch {
       toast.error("Failed to copy");
+      setCopyStatus("Failed to copy");
     }
   };
 
