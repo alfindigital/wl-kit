@@ -92,6 +92,7 @@ function Index() {
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [shareImageOpen, setShareImageOpen] = useState(false);
   const [shareImageData, setShareImageData] = useState<string | null>(null);
+  const [copyStatus, setCopyStatus] = useState("");
   const shareCardRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
