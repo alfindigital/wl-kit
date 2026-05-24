@@ -59,7 +59,7 @@ export function OutputBlock({
         aria-label="Formatted watchlist output"
         aria-live="polite"
         aria-atomic="true"
-        className="min-h-[80px] max-h-[280px] overflow-auto p-4 font-mono text-sm leading-relaxed text-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset focus-visible:rounded-b-2xl transition-shadow"
+        className="min-h-[80px] max-h-[280px] overflow-auto p-4 font-mono text-[15px] leading-relaxed text-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset focus-visible:rounded-b-2xl transition-shadow sm:text-sm"
       >
         {!output && (
           <p className="font-sans text-sm text-muted-foreground">
