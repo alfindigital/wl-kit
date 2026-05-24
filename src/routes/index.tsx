@@ -472,7 +472,7 @@ function Index() {
                   navigator.clipboard.writeText(formatTickers(tickers, f)).then(
                     () => {
                       toast.success("Copied as TradingView");
-                      setCopyStatus("Copied as TradingView");
+                      setLiveStatus("Copied as TradingView");
                     },
                     () => {},
                   );
@@ -567,7 +567,7 @@ function Index() {
           date={dateStr}
         />
       <div aria-live="polite" aria-atomic="true" className="sr-only">
-        {copyStatus}
+        {liveStatus}
       </div>
     </div>
 
