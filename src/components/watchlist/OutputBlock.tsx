@@ -31,7 +31,12 @@ export function OutputBlock({
       <div className="flex items-center justify-between border-b border-border/60 px-4 py-2">
         <span className="text-xs font-medium text-muted-foreground">Output</span>
         <div className="flex items-center gap-2">
-          <Badge variant="secondary" className="rounded-full text-xs">
+          <Badge
+            variant="secondary"
+            className="rounded-full text-xs"
+            role="status"
+            aria-label={`${count} ${count === 1 ? "ticker" : "tickers"} in output`}
+          >
             {count} {count === 1 ? "ticker" : "tickers"}
           </Badge>
           {onCopy && (
