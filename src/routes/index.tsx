@@ -92,6 +92,7 @@ function Index() {
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [shareImageOpen, setShareImageOpen] = useState(false);
   const [shareImageData, setShareImageData] = useState<string | null>(null);
+  const [copyStatus, setCopyStatus] = useState("");
   const shareCardRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -140,9 +141,13 @@ function Index() {
     if (!output) return;
     try {
       await navigator.clipboard.writeText(output);
-      if (!silent) toast.success("Copied!");
+      if (!silent) {
+        toast.success("Copied!");
+        setCopyStatus("Copied to clipboard");
+      }
     } catch {
       toast.error("Failed to copy");
+      setCopyStatus("Failed to copy");
     }
   };
 
@@ -153,7 +158,10 @@ function Index() {
       const next = formatTickers(tickers, f);
       if (next === output) return;
       navigator.clipboard.writeText(next).then(
-        () => toast.success(`Copied as ${labelFor(f)}`),
+        () => {
+          toast.success(`Copied as ${labelFor(f)}`);
+          setCopyStatus(`Copied as ${labelFor(f)}`);
+        },
         () => {},
       );
     }
@@ -459,7 +467,10 @@ function Index() {
               onSelect={(f) => {
                 if (f === "tradingview" && f === format && tickers.length > 0) {
                   navigator.clipboard.writeText(formatTickers(tickers, f)).then(
-                    () => toast.success("Copied as TradingView"),
+                    () => {
+                      toast.success("Copied as TradingView");
+                      setCopyStatus("Copied as TradingView");
+                    },
                     () => {},
                   );
                 }
@@ -552,7 +563,10 @@ function Index() {
           count={tickers.length}
           date={dateStr}
         />
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        {copyStatus}
       </div>
+    </div>
 
       <ShareImageDialog
         open={shareImageOpen}
