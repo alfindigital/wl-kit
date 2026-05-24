@@ -140,7 +140,7 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
                 aria-label="Paste from clipboard"
               >
                 <ClipboardPaste className="h-4 w-4" />
-                <span className="hidden xs:inline sm:inline">Paste</span>
+                <span>Paste</span>
               </Button>
             )}
             {onSample && (
