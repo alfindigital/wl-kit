@@ -100,7 +100,23 @@ function Index() {
   const [shareImageData, setShareImageData] = useState<string | null>(null);
   const [liveStatus, setLiveStatus] = useState("");
   const [shortcutOpen, setShortcutOpen] = useState(false);
-  const [onboardingForceOpen, setOnboardingForceOpen] = useState(false);
+  const [onboardingActive, setOnboardingActive] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const done = localStorage.getItem("wlkit-onboarded");
+    if (!done) setOnboardingActive(true);
+  }, []);
+
+  const dismissOnboarding = () => {
+    localStorage.setItem("wlkit-onboarded", "1");
+    setOnboardingActive(false);
+  };
+  const reopenOnboarding = () => {
+    localStorage.removeItem("wlkit-onboarded");
+    setOnboardingActive(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
   const shareCardRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
