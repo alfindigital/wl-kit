@@ -664,6 +664,17 @@ function Index() {
               : ""
         }
       />
+
+      <ScrollToInputFab targetRef={textareaRef} />
+      <OnboardingDialog
+        forceOpen={onboardingForceOpen}
+        onClose={() => setOnboardingForceOpen(false)}
+      />
+      <ShortcutOverlay
+        open={shortcutOpen}
+        onOpenChange={setShortcutOpen}
+        onShowOnboarding={() => setOnboardingForceOpen(true)}
+      />
     </div>
   );
 }
