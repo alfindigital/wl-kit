@@ -16,7 +16,7 @@ import { ShareImageDialog } from "@/components/watchlist/ShareImageDialog";
 import { InputStats } from "@/components/watchlist/InputStats";
 import { CommandPalette } from "@/components/watchlist/CommandPalette";
 import { ThemeToggle } from "@/components/watchlist/ThemeToggle";
-import { OnboardingDialog } from "@/components/watchlist/OnboardingDialog";
+import { OnboardingHint } from "@/components/watchlist/OnboardingHint";
 import { ShortcutOverlay } from "@/components/watchlist/ShortcutOverlay";
 import { ScrollToInputFab } from "@/components/watchlist/ScrollToInputFab";
 import {
