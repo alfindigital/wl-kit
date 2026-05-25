@@ -15,6 +15,10 @@ import { ShareCard } from "@/components/watchlist/ShareCard";
 import { ShareImageDialog } from "@/components/watchlist/ShareImageDialog";
 import { InputStats } from "@/components/watchlist/InputStats";
 import { CommandPalette } from "@/components/watchlist/CommandPalette";
+import { ThemeToggle } from "@/components/watchlist/ThemeToggle";
+import { OnboardingDialog } from "@/components/watchlist/OnboardingDialog";
+import { ShortcutOverlay } from "@/components/watchlist/ShortcutOverlay";
+import { ScrollToInputFab } from "@/components/watchlist/ScrollToInputFab";
 import {
   Dialog,
   DialogContent,
@@ -23,6 +27,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { HelpCircle } from "lucide-react";
 
 import {
   analyzeInput,
@@ -93,6 +99,8 @@ function Index() {
   const [shareImageOpen, setShareImageOpen] = useState(false);
   const [shareImageData, setShareImageData] = useState<string | null>(null);
   const [liveStatus, setLiveStatus] = useState("");
+  const [shortcutOpen, setShortcutOpen] = useState(false);
+  const [onboardingForceOpen, setOnboardingForceOpen] = useState(false);
   const shareCardRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
