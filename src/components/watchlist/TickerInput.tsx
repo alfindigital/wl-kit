@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { X, ClipboardPaste, Sparkles } from "lucide-react";
+import { X, ClipboardPaste, Sparkles, CaseSensitive } from "lucide-react";
 import { toast } from "sonner";
 import {
   DropdownMenu,
@@ -9,7 +9,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { SAMPLES } from "@/lib/samples";
+import { haptic } from "@/lib/haptics";
+import { analyzeInput } from "@/lib/tickers";
+
+const UPPERCASE_KEY = "wlkit-auto-uppercase";
+const CLEAR_THRESHOLD = 20;
 
 type Props = {
   value: string;
@@ -21,6 +36,13 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
   function TickerInput({ value, onChange, onSample }, ref) {
     const innerRef = useRef<HTMLTextAreaElement | null>(null);
     const [isDragging, setIsDragging] = useState(false);
+    const [autoUpper, setAutoUpper] = useState(true);
+    const [confirmOpen, setConfirmOpen] = useState(false);
+
+    useEffect(() => {
+      const stored = localStorage.getItem(UPPERCASE_KEY);
+      if (stored !== null) setAutoUpper(stored === "1");
+    }, []);
 
     const setRefs = (el: HTMLTextAreaElement | null) => {
       innerRef.current = el;
@@ -36,11 +58,37 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
       el.style.height = next + "px";
     }, [value]);
 
+    const emit = (next: string) => {
+      if (!autoUpper) {
+        onChange(next);
+        return;
+      }
+      const upper = next.toUpperCase();
+      if (upper === next) {
+        onChange(next);
+        return;
+      }
+      const el = innerRef.current;
+      const selStart = el?.selectionStart ?? null;
+      const selEnd = el?.selectionEnd ?? null;
+      onChange(upper);
+      if (el && selStart !== null && selEnd !== null) {
+        requestAnimationFrame(() => {
+          try {
+            el.setSelectionRange(selStart, selEnd);
+          } catch {
+            // ignore
+          }
+        });
+      }
+    };
+
     const handlePaste = async () => {
       try {
         const text = await navigator.clipboard.readText();
         if (!text) return;
-        onChange(value ? value + (value.endsWith("\n") ? "" : "\n") + text : text);
+        const combined = value ? value + (value.endsWith("\n") ? "" : "\n") + text : text;
+        emit(combined);
         innerRef.current?.focus();
         toast.success("Pasted");
       } catch {
@@ -48,9 +96,27 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
       }
     };
 
-    const handleClear = () => {
+    const tryClear = () => {
+      if (!value) return;
+      const count = analyzeInput(value).valid.length;
+      if (count > CLEAR_THRESHOLD) {
+        setConfirmOpen(true);
+        return;
+      }
+      doClear();
+    };
+
+    const doClear = () => {
+      haptic(12);
       onChange("");
       innerRef.current?.focus();
+    };
+
+    const toggleUpper = () => {
+      const next = !autoUpper;
+      setAutoUpper(next);
+      localStorage.setItem(UPPERCASE_KEY, next ? "1" : "0");
+      toast(next ? "Auto-UPPERCASE on" : "Auto-UPPERCASE off", { duration: 1500 });
     };
 
     const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
@@ -70,7 +136,7 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
       }
       try {
         const text = await file.text();
-        onChange(value ? value + (value.endsWith("\n") ? "" : "\n") + text : text);
+        emit(value ? value + (value.endsWith("\n") ? "" : "\n") + text : text);
         innerRef.current?.focus();
         toast.success(`Loaded ${file.name}`);
       } catch {
@@ -107,13 +173,11 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
           ref={setRefs}
           autoFocus
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => emit(e.target.value)}
           onKeyDown={(e) => {
             if (e.ctrlKey && e.key === "Backspace") {
               e.preventDefault();
-              if (!value) return;
-              toast("Cleared", { duration: 1200 });
-              onChange("");
+              tryClear();
             }
           }}
           aria-label="Ticker input"
@@ -173,13 +237,30 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
                 </DropdownMenuContent>
               </DropdownMenu>
             )}
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              onClick={toggleUpper}
+              aria-pressed={autoUpper}
+              aria-label={`Auto uppercase ${autoUpper ? "on" : "off"}`}
+              title={`Auto-UPPERCASE: ${autoUpper ? "on" : "off"}`}
+              className={`h-9 gap-1.5 rounded-lg px-2.5 text-xs focus-visible:ring-2 focus-visible:ring-primary ${
+                autoUpper
+                  ? "text-primary hover:bg-primary/10"
+                  : "text-muted-foreground hover:bg-primary/10 hover:text-primary"
+              }`}
+            >
+              <CaseSensitive className="h-4 w-4" />
+              <span className="hidden sm:inline">{autoUpper ? "AA" : "Aa"}</span>
+            </Button>
           </div>
           {value && (
             <Button
               type="button"
               size="sm"
               variant="ghost"
-              onClick={handleClear}
+              onClick={tryClear}
               className="h-9 gap-1.5 rounded-lg px-2.5 text-xs text-muted-foreground hover:bg-destructive/10 hover:text-destructive focus-visible:ring-2 focus-visible:ring-destructive"
               aria-label="Clear input"
             >
@@ -188,6 +269,30 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
             </Button>
           )}
         </div>
+
+        <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+          <AlertDialogContent className="rounded-2xl">
+            <AlertDialogHeader>
+              <AlertDialogTitle>Clear input?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Anda akan menghapus {analyzeInput(value).valid.length} ticker.
+                Tindakan ini bisa di-undo lewat toast setelahnya.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => {
+                  setConfirmOpen(false);
+                  doClear();
+                }}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                Clear
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     );
   },
