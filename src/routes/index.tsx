@@ -16,7 +16,7 @@ import { ShareImageDialog } from "@/components/watchlist/ShareImageDialog";
 import { InputStats } from "@/components/watchlist/InputStats";
 import { CommandPalette } from "@/components/watchlist/CommandPalette";
 import { ThemeToggle } from "@/components/watchlist/ThemeToggle";
-import { OnboardingDialog } from "@/components/watchlist/OnboardingDialog";
+import { OnboardingHint } from "@/components/watchlist/OnboardingHint";
 import { ShortcutOverlay } from "@/components/watchlist/ShortcutOverlay";
 import { ScrollToInputFab } from "@/components/watchlist/ScrollToInputFab";
 import {
@@ -100,7 +100,23 @@ function Index() {
   const [shareImageData, setShareImageData] = useState<string | null>(null);
   const [liveStatus, setLiveStatus] = useState("");
   const [shortcutOpen, setShortcutOpen] = useState(false);
-  const [onboardingForceOpen, setOnboardingForceOpen] = useState(false);
+  const [onboardingActive, setOnboardingActive] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const done = localStorage.getItem("wlkit-onboarded");
+    if (!done) setOnboardingActive(true);
+  }, []);
+
+  const dismissOnboarding = () => {
+    localStorage.setItem("wlkit-onboarded", "1");
+    setOnboardingActive(false);
+  };
+  const reopenOnboarding = () => {
+    localStorage.removeItem("wlkit-onboarded");
+    setOnboardingActive(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
   const shareCardRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -531,6 +547,14 @@ function Index() {
           </div>
 
           <div className="flex flex-col gap-4 sm:gap-5">
+            {onboardingActive && (
+              <OnboardingHint
+                step={1}
+                title="Tempel ticker di sini"
+                body="Format apa saja: koma, spasi, baris baru, atau drag-drop file .txt/.csv. Atau coba tombol Sample di bawah textarea."
+                onDismiss={dismissOnboarding}
+              />
+            )}
             <TickerInput
               ref={textareaRef}
               value={input}
@@ -542,6 +566,14 @@ function Index() {
               duplicates={analysis.duplicates}
               invalid={analysis.invalid}
             />
+            {onboardingActive && (
+              <OnboardingHint
+                step={2}
+                title="Pilih format & lihat hasilnya"
+                body="Switch antara TradingView, Plain, atau Newline. Tap tab yang aktif untuk langsung copy."
+                onDismiss={dismissOnboarding}
+              />
+            )}
             <FormatTabs
               value={format}
               onChange={handleFormatChange}
@@ -564,6 +596,14 @@ function Index() {
               onSample={handleSample}
               onCopy={() => handleCopy()}
             />
+            {onboardingActive && (
+              <OnboardingHint
+                step={3}
+                title="Copy, simpan, atau share"
+                body="Pakai bar aksi di bawah untuk copy ke clipboard, simpan watchlist, download .txt, atau share link/gambar."
+                onDismiss={dismissOnboarding}
+              />
+            )}
             <ActionButtons
               disabled={tickers.length === 0}
               onCopy={() => handleCopy()}
@@ -666,14 +706,10 @@ function Index() {
       />
 
       <ScrollToInputFab targetRef={textareaRef} />
-      <OnboardingDialog
-        forceOpen={onboardingForceOpen}
-        onClose={() => setOnboardingForceOpen(false)}
-      />
       <ShortcutOverlay
         open={shortcutOpen}
         onOpenChange={setShortcutOpen}
-        onShowOnboarding={() => setOnboardingForceOpen(true)}
+        onShowOnboarding={reopenOnboarding}
       />
     </div>
   );
