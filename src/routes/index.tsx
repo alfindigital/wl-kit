@@ -547,6 +547,14 @@ function Index() {
           </div>
 
           <div className="flex flex-col gap-4 sm:gap-5">
+            {onboardingActive && (
+              <OnboardingHint
+                step={1}
+                title="Tempel ticker di sini"
+                body="Format apa saja: koma, spasi, baris baru, atau drag-drop file .txt/.csv. Atau coba tombol Sample di bawah textarea."
+                onDismiss={dismissOnboarding}
+              />
+            )}
             <TickerInput
               ref={textareaRef}
               value={input}
@@ -558,6 +566,14 @@ function Index() {
               duplicates={analysis.duplicates}
               invalid={analysis.invalid}
             />
+            {onboardingActive && (
+              <OnboardingHint
+                step={2}
+                title="Pilih format & lihat hasilnya"
+                body="Switch antara TradingView, Plain, atau Newline. Tap tab yang aktif untuk langsung copy."
+                onDismiss={dismissOnboarding}
+              />
+            )}
             <FormatTabs
               value={format}
               onChange={handleFormatChange}
@@ -580,6 +596,14 @@ function Index() {
               onSample={handleSample}
               onCopy={() => handleCopy()}
             />
+            {onboardingActive && (
+              <OnboardingHint
+                step={3}
+                title="Copy, simpan, atau share"
+                body="Pakai bar aksi di bawah untuk copy ke clipboard, simpan watchlist, download .txt, atau share link/gambar."
+                onDismiss={dismissOnboarding}
+              />
+            )}
             <ActionButtons
               disabled={tickers.length === 0}
               onCopy={() => handleCopy()}
