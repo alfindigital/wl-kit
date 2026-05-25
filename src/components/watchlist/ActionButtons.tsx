@@ -4,6 +4,12 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { useIsTouch } from "@/hooks/use-touch";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { toast } from "sonner";
+import { haptic } from "@/lib/haptics";
+
+const withHaptic = (fn: () => void | Promise<void>) => () => {
+  haptic(10);
+  return fn();
+};
 
 type Action = {
   label: string;
@@ -32,11 +38,11 @@ export function ActionButtons({
   const getTooltipId = (label: string) => `tt-${label.toLowerCase()}`;
 
   const mobileActions: Action[] = [
-    { label: "Copy", icon: Copy, onClick: onCopy },
-    { label: "Save", icon: Save, onClick: onSave },
-    { label: "Download", icon: Download, onClick: onDownload },
-    { label: "Image", icon: ImageDown, onClick: onImage },
-    { label: "Share", icon: Share2, onClick: onShare },
+    { label: "Copy", icon: Copy, onClick: withHaptic(onCopy) },
+    { label: "Save", icon: Save, onClick: withHaptic(onSave) },
+    { label: "Download", icon: Download, onClick: withHaptic(onDownload) },
+    { label: "Image", icon: ImageDown, onClick: withHaptic(onImage) },
+    { label: "Share", icon: Share2, onClick: withHaptic(onShare) },
   ];
 
   const desktopActions: Action[] = [

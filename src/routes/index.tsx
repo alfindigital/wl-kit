@@ -15,6 +15,10 @@ import { ShareCard } from "@/components/watchlist/ShareCard";
 import { ShareImageDialog } from "@/components/watchlist/ShareImageDialog";
 import { InputStats } from "@/components/watchlist/InputStats";
 import { CommandPalette } from "@/components/watchlist/CommandPalette";
+import { ThemeToggle } from "@/components/watchlist/ThemeToggle";
+import { OnboardingDialog } from "@/components/watchlist/OnboardingDialog";
+import { ShortcutOverlay } from "@/components/watchlist/ShortcutOverlay";
+import { ScrollToInputFab } from "@/components/watchlist/ScrollToInputFab";
 import {
   Dialog,
   DialogContent,
@@ -23,6 +27,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { HelpCircle } from "lucide-react";
 
 import {
   analyzeInput,
@@ -93,6 +99,8 @@ function Index() {
   const [shareImageOpen, setShareImageOpen] = useState(false);
   const [shareImageData, setShareImageData] = useState<string | null>(null);
   const [liveStatus, setLiveStatus] = useState("");
+  const [shortcutOpen, setShortcutOpen] = useState(false);
+  const [onboardingForceOpen, setOnboardingForceOpen] = useState(false);
   const shareCardRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -448,6 +456,10 @@ function Index() {
         e.preventDefault();
         setInput("");
       }
+      if (e.key === "?" && !inField && !mod) {
+        e.preventDefault();
+        setShortcutOpen((o) => !o);
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -464,20 +476,50 @@ function Index() {
     <div className="flex min-h-dvh flex-col bg-background">
       {/* Mobile sticky compact header */}
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/85 pt-safe backdrop-blur supports-[backdrop-filter]:bg-background/70 sm:hidden">
-        <div className="mx-auto flex max-w-2xl items-center justify-between gap-2 px-4 py-2.5">
+        <div className="mx-auto flex max-w-2xl items-center justify-between gap-2 px-4 py-2">
           <span className="font-display text-base italic text-primary">WatchlistKit</span>
-          {tickers.length > 0 && (
-            <Badge
-              variant="secondary"
-              className="rounded-full text-[11px]"
-              role="status"
-              aria-label={`${tickers.length} valid tickers`}
+          <div className="flex items-center gap-1">
+            {tickers.length > 0 && (
+              <Badge
+                variant="secondary"
+                className="rounded-full text-[11px]"
+                role="status"
+                aria-label={`${tickers.length} valid tickers`}
+              >
+                {tickers.length} {tickers.length === 1 ? "ticker" : "tickers"}
+              </Badge>
+            )}
+            <ThemeToggle />
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={() => setShortcutOpen(true)}
+              className="h-9 w-9 rounded-full text-muted-foreground hover:text-primary"
+              aria-label="Keyboard shortcuts"
             >
-              {tickers.length} {tickers.length === 1 ? "ticker" : "tickers"}
-            </Badge>
-          )}
+              <HelpCircle className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </header>
+
+      {/* Desktop floating controls */}
+      <div className="pointer-events-none fixed right-4 top-4 z-30 hidden items-center gap-1 sm:flex">
+        <div className="pointer-events-auto flex items-center gap-1 rounded-full border border-border/60 bg-card/80 px-1 py-1 shadow-sm backdrop-blur">
+          <ThemeToggle />
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={() => setShortcutOpen(true)}
+            className="h-9 w-9 rounded-full text-muted-foreground hover:text-primary"
+            aria-label="Keyboard shortcuts"
+          >
+            <HelpCircle className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
 
       <main className="flex-1 pb-[calc(80px+env(safe-area-inset-bottom))] sm:pb-0">
         <div className="mx-auto w-full max-w-2xl px-4 pb-10 pt-6 sm:px-6 sm:pt-10">
@@ -621,6 +663,17 @@ function Index() {
               ? window.location.origin
               : ""
         }
+      />
+
+      <ScrollToInputFab targetRef={textareaRef} />
+      <OnboardingDialog
+        forceOpen={onboardingForceOpen}
+        onClose={() => setOnboardingForceOpen(false)}
+      />
+      <ShortcutOverlay
+        open={shortcutOpen}
+        onOpenChange={setShortcutOpen}
+        onShowOnboarding={() => setOnboardingForceOpen(true)}
       />
     </div>
   );

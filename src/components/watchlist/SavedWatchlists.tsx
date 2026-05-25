@@ -649,7 +649,10 @@ export function SavedWatchlists({
             <AlertDialogAction
               className="rounded-xl bg-destructive text-destructive-foreground hover:bg-destructive/90"
               onClick={() => {
-                if (pendingDelete) onDelete(pendingDelete.id);
+                if (pendingDelete) {
+                  import("@/lib/haptics").then(({ haptic }) => haptic([20, 40]));
+                  onDelete(pendingDelete.id);
+                }
                 setPendingDelete(null);
               }}
             >
