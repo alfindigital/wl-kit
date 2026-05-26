@@ -29,7 +29,7 @@ export function OutputBlock({
   return (
     <div className="relative rounded-2xl border border-border/80 bg-card shadow-sm">
       <div className="flex items-center justify-between border-b border-border/60 px-4 py-2">
-        <span className="text-xs font-medium text-muted-foreground">Output</span>
+        <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Output</span>
         <div className="flex items-center gap-2">
           <Badge
             variant="secondary"
