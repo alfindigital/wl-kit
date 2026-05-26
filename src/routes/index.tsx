@@ -559,7 +559,6 @@ function Index() {
               ref={textareaRef}
               value={input}
               onChange={setInput}
-              onSample={handleSample}
             />
             <InputStats
               validCount={tickers.length}
