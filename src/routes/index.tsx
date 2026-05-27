@@ -701,18 +701,18 @@ function Index() {
         steps={[
           {
             ref: inputStepRef,
-            title: "Tempel ticker di sini",
-            body: "Format apa saja: koma, spasi, baris baru, atau drag-drop file .txt/.csv.",
+            title: "Paste your tickers here",
+            body: "Any format works: comma, space, newline — or drop a .txt / .csv file.",
           },
           {
             ref: formatStepRef,
-            title: "Pilih format & lihat hasilnya",
-            body: "Switch antara TradingView, Plain, atau Newline. Tap tab aktif untuk langsung copy.",
+            title: "Pick a format & preview the output",
+            body: "Switch between TradingView, Plain, or Newline. Tap the active tab to copy instantly.",
           },
           {
             ref: actionStepRef,
-            title: "Copy, simpan, atau share",
-            body: "Pakai bar aksi untuk copy, simpan watchlist, download .txt, atau share link/gambar.",
+            title: "Copy, save, or share",
+            body: "Use the action bar to copy, save the watchlist, download .txt, or share a link/image.",
             placement: "top",
           },
         ]}
