@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 
 export type TourStep = {
-  ref: RefObject<HTMLElement>;
+  ref: RefObject<HTMLElement | null>;
   title: string;
   body: string;
   placement?: "top" | "bottom";
