@@ -16,7 +16,7 @@ import { ShareImageDialog } from "@/components/watchlist/ShareImageDialog";
 import { InputStats } from "@/components/watchlist/InputStats";
 import { CommandPalette } from "@/components/watchlist/CommandPalette";
 import { ThemeToggle } from "@/components/watchlist/ThemeToggle";
-import { OnboardingHint } from "@/components/watchlist/OnboardingHint";
+import { OnboardingTour, type TourStep } from "@/components/watchlist/OnboardingTour";
 import { ShortcutOverlay } from "@/components/watchlist/ShortcutOverlay";
 import { ScrollToInputFab } from "@/components/watchlist/ScrollToInputFab";
 import {
@@ -119,6 +119,9 @@ function Index() {
   };
   const shareCardRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const inputStepRef = useRef<HTMLDivElement>(null);
+  const formatStepRef = useRef<HTMLDivElement>(null);
+  const actionStepRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setSaved(loadWatchlists());
@@ -547,70 +550,52 @@ function Index() {
           </div>
 
           <div className="flex flex-col gap-4 sm:gap-5">
-            {onboardingActive && (
-              <OnboardingHint
-                step={1}
-                title="Tempel ticker di sini"
-                body="Format apa saja: koma, spasi, baris baru, atau drag-drop file .txt/.csv. Atau coba tombol Sample di bawah textarea."
-                onDismiss={dismissOnboarding}
+            <div ref={inputStepRef}>
+              <TickerInput
+                ref={textareaRef}
+                value={input}
+                onChange={setInput}
               />
-            )}
-            <TickerInput
-              ref={textareaRef}
-              value={input}
-              onChange={setInput}
-            />
+            </div>
             <InputStats
               validCount={tickers.length}
               duplicates={analysis.duplicates}
               invalid={analysis.invalid}
             />
-            {onboardingActive && (
-              <OnboardingHint
-                step={2}
-                title="Pilih format & lihat hasilnya"
-                body="Switch antara TradingView, Plain, atau Newline. Tap tab yang aktif untuk langsung copy."
-                onDismiss={dismissOnboarding}
+            <div ref={formatStepRef} className="flex flex-col gap-4 sm:gap-5">
+              <FormatTabs
+                value={format}
+                onChange={handleFormatChange}
+                onSelect={(f) => {
+                  if (f === "tradingview" && f === format && tickers.length > 0) {
+                    navigator.clipboard.writeText(formatTickers(tickers, f)).then(
+                      () => {
+                        toast.success("Copied as TradingView");
+                        setLiveStatus("Copied as TradingView");
+                      },
+                      () => {},
+                    );
+                  }
+                }}
               />
-            )}
-            <FormatTabs
-              value={format}
-              onChange={handleFormatChange}
-              onSelect={(f) => {
-                if (f === "tradingview" && f === format && tickers.length > 0) {
-                  navigator.clipboard.writeText(formatTickers(tickers, f)).then(
-                    () => {
-                      toast.success("Copied as TradingView");
-                      setLiveStatus("Copied as TradingView");
-                    },
-                    () => {},
-                  );
-                }
-              }}
-            />
-            <OutputBlock
-              output={output}
-              count={tickers.length}
-              format={format}
-              onSample={handleSample}
-              onCopy={() => handleCopy()}
-            />
-            {onboardingActive && (
-              <OnboardingHint
-                step={3}
-                title="Copy, simpan, atau share"
-                body="Pakai bar aksi di bawah untuk copy ke clipboard, simpan watchlist, download .txt, atau share link/gambar."
-                onDismiss={dismissOnboarding}
+              <OutputBlock
+                output={output}
+                count={tickers.length}
+                format={format}
+                onSample={handleSample}
+                onCopy={() => handleCopy()}
               />
-            )}
-            <ActionButtons
-              disabled={tickers.length === 0}
-              onCopy={() => handleCopy()}
-              onSave={handleOpenSave}
-              onDownload={handleDownload}
-              onImage={handleImage}
-              onShare={handleShare}
-            />
+            </div>
+            <div ref={actionStepRef}>
+              <ActionButtons
+                disabled={tickers.length === 0}
+                onCopy={() => handleCopy()}
+                onSave={handleOpenSave}
+                onDownload={handleDownload}
+                onImage={handleImage}
+                onShare={handleShare}
+              />
+            </div>
           </div>
 
           <div className="mt-10">
