@@ -695,6 +695,28 @@ function Index() {
         onOpenChange={setShortcutOpen}
         onShowOnboarding={reopenOnboarding}
       />
+      <OnboardingTour
+        open={onboardingActive}
+        onClose={dismissOnboarding}
+        steps={[
+          {
+            ref: inputStepRef,
+            title: "Tempel ticker di sini",
+            body: "Format apa saja: koma, spasi, baris baru, atau drag-drop file .txt/.csv.",
+          },
+          {
+            ref: formatStepRef,
+            title: "Pilih format & lihat hasilnya",
+            body: "Switch antara TradingView, Plain, atau Newline. Tap tab aktif untuk langsung copy.",
+          },
+          {
+            ref: actionStepRef,
+            title: "Copy, simpan, atau share",
+            body: "Pakai bar aksi untuk copy, simpan watchlist, download .txt, atau share link/gambar.",
+            placement: "top",
+          },
+        ]}
+      />
     </div>
   );
 }
