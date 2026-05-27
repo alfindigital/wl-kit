@@ -166,35 +166,36 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
             placeholder="Paste your tickers here... (any format) — or drop a .txt / .csv file"
             className="min-h-[120px] resize-none overflow-hidden rounded-none border-0 bg-transparent p-4 text-base shadow-none focus-visible:ring-0 sm:min-h-[160px]"
           />
-          <div className="flex items-center justify-between gap-2 border-t border-border/60 px-2 py-1.5">
-            <div className="flex items-center gap-1">
+          <div className="flex items-center justify-between gap-2 border-t border-border/60 px-4 py-2">
+            <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Input
+            </span>
+            <div className="flex items-center gap-2">
               {hasClipboard && (
                 <Button
                   type="button"
-                  size="sm"
                   variant="ghost"
+                  size="icon"
                   onClick={handlePaste}
-                  className="h-9 gap-1.5 rounded-lg px-2.5 text-xs text-muted-foreground hover:bg-primary/10 hover:text-primary focus-visible:ring-2 focus-visible:ring-primary"
+                  className="h-7 w-7 rounded-lg text-muted-foreground hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                   aria-label="Paste from clipboard"
                 >
-                  <ClipboardPaste className="h-4 w-4" />
-                  <span>Paste</span>
+                  <ClipboardPaste className="h-3.5 w-3.5" />
+                </Button>
+              )}
+              {value && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={tryClear}
+                  className="h-7 w-7 rounded-lg text-muted-foreground hover:text-destructive focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2"
+                  aria-label="Clear input"
+                >
+                  <X className="h-3.5 w-3.5" />
                 </Button>
               )}
             </div>
-            {value && (
-              <Button
-                type="button"
-                size="sm"
-                variant="ghost"
-                onClick={tryClear}
-                className="h-9 gap-1.5 rounded-lg px-2.5 text-xs text-muted-foreground hover:bg-destructive/10 hover:text-destructive focus-visible:ring-2 focus-visible:ring-destructive"
-                aria-label="Clear input"
-              >
-                <X className="h-4 w-4" />
-                <span>Clear</span>
-              </Button>
-            )}
           </div>
         </div>
         {isDragging && (
