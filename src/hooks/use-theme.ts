@@ -17,10 +17,10 @@ function applyTheme(theme: Theme) {
 }
 
 export function useTheme() {
-  const [theme, setThemeState] = useState<Theme>("system");
+  const [theme, setThemeState] = useState<Theme>("light");
 
   useEffect(() => {
-    const stored = (localStorage.getItem(STORAGE_KEY) as Theme | null) ?? "system";
+    const stored = (localStorage.getItem(STORAGE_KEY) as Theme | null) ?? "light";
     setThemeState(stored);
     applyTheme(stored);
   }, []);
