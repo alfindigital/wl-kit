@@ -208,8 +208,8 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
             <AlertDialogHeader>
               <AlertDialogTitle>Clear input?</AlertDialogTitle>
               <AlertDialogDescription>
-                Anda akan menghapus {analyzeInput(value).valid.length} ticker.
-                Tindakan ini bisa di-undo lewat toast setelahnya.
+                You're about to remove {analyzeInput(value).valid.length} tickers.
+                You can undo this from the toast right after.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
