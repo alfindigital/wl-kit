@@ -446,19 +446,28 @@ export function SavedWatchlists({
         <CollapsibleTrigger asChild>
           <button
             type="button"
-            className="flex w-full items-center justify-between px-4 py-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            className="flex w-full items-center justify-between px-4 py-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             aria-expanded={open}
           >
             <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Saved Watchlists{" "}
-              <span className="ml-1 font-normal normal-case tracking-normal text-muted-foreground/70">({items.length})</span>
+              Saved Watchlists
             </span>
-            <ChevronDown
-              className={`h-4 w-4 text-muted-foreground transition-transform ${
-                open ? "rotate-180" : ""
-              }`}
-              aria-hidden="true"
-            />
+            <div className="flex items-center gap-2">
+              <Badge
+                variant="secondary"
+                className="rounded-full text-xs"
+                role="status"
+                aria-label={`${items.length} saved ${items.length === 1 ? "watchlist" : "watchlists"}`}
+              >
+                {items.length} {items.length === 1 ? "saved" : "saved"}
+              </Badge>
+              <ChevronDown
+                className={`h-4 w-4 text-muted-foreground transition-transform ${
+                  open ? "rotate-180" : ""
+                }`}
+                aria-hidden="true"
+              />
+            </div>
           </button>
         </CollapsibleTrigger>
 
