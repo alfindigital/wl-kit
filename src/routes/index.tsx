@@ -723,6 +723,17 @@ function Index() {
             body: "Use the action bar to copy, save the watchlist, download .txt, or share a link/image.",
             placement: "top",
           },
+          {
+            ref: savedStepRef,
+            title: "Your saved watchlists live here",
+            body: "Save, pin, tag, merge, and compare lists. Everything stays on your device.",
+            placement: "top",
+          },
+          {
+            ref: helpStepRef,
+            title: "Need a hand? Open shortcuts anytime",
+            body: "Press ? or tap this button to see every keyboard shortcut and replay this tour.",
+          },
         ]}
       />
     </div>
