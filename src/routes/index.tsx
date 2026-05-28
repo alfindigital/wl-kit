@@ -7,7 +7,7 @@ import { z } from "zod";
 import { Footer } from "@/components/watchlist/Footer";
 import { TickerInput } from "@/components/watchlist/TickerInput";
 import { FormatTabs } from "@/components/watchlist/FormatTabs";
-import { OutputBlock } from "@/components/watchlist/OutputBlock";
+import { OutputBlock, type SortMode } from "@/components/watchlist/OutputBlock";
 import { ActionButtons } from "@/components/watchlist/ActionButtons";
 import { SaveDialog } from "@/components/watchlist/SaveDialog";
 import { SavedWatchlists } from "@/components/watchlist/SavedWatchlists";
@@ -101,6 +101,7 @@ function Index() {
   const [liveStatus, setLiveStatus] = useState("");
   const [shortcutOpen, setShortcutOpen] = useState(false);
   const [onboardingActive, setOnboardingActive] = useState(false);
+  const [sortMode, setSortMode] = useState<SortMode>("none");
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -122,6 +123,8 @@ function Index() {
   const inputStepRef = useRef<HTMLDivElement>(null);
   const formatStepRef = useRef<HTMLDivElement>(null);
   const actionStepRef = useRef<HTMLDivElement>(null);
+  const savedStepRef = useRef<HTMLDivElement>(null);
+  const helpStepRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setSaved(loadWatchlists());
@@ -141,7 +144,12 @@ function Index() {
   }, []);
 
   const analysis = useMemo(() => analyzeInput(input), [input]);
-  const tickers = analysis.valid;
+  const tickers = useMemo(() => {
+    const base = analysis.valid;
+    if (sortMode === "asc") return [...base].sort();
+    if (sortMode === "desc") return [...base].sort().reverse();
+    return base;
+  }, [analysis.valid, sortMode]);
   const output = useMemo(() => formatTickers(tickers, format), [tickers, format]);
 
   // Undo helper
@@ -525,7 +533,10 @@ function Index() {
 
       {/* Desktop floating controls */}
       <div className="pointer-events-none fixed right-4 top-4 z-30 hidden items-center gap-1 sm:flex">
-        <div className="pointer-events-auto flex items-center gap-1 rounded-full border border-border/60 bg-card/80 px-1 py-1 shadow-sm backdrop-blur">
+        <div
+          ref={helpStepRef}
+          className="pointer-events-auto flex items-center gap-1 rounded-full border border-border/60 bg-card/80 px-1 py-1 shadow-sm backdrop-blur"
+        >
           <ThemeToggle />
           <Button
             type="button"
@@ -560,7 +571,6 @@ function Index() {
             <InputStats
               validCount={tickers.length}
               duplicates={analysis.duplicates}
-              invalid={analysis.invalid}
             />
             <div ref={formatStepRef} className="flex flex-col gap-4 sm:gap-5">
               <FormatTabs
@@ -584,6 +594,8 @@ function Index() {
                 format={format}
                 onSample={handleSample}
                 onCopy={() => handleCopy()}
+                sortMode={sortMode}
+                onSortChange={setSortMode}
               />
             </div>
             <div ref={actionStepRef}>
@@ -598,7 +610,7 @@ function Index() {
             </div>
           </div>
 
-          <div className="mt-10">
+          <div ref={savedStepRef} className="mt-10">
             <SavedWatchlists
               items={saved}
               onLoad={handleLoad}
@@ -611,10 +623,6 @@ function Index() {
               onExport={handleExport}
               onImport={handleImport}
             />
-          </div>
-
-          <div className="mt-10">
-            <ShortcutHint />
           </div>
         </div>
       </main>
@@ -715,6 +723,17 @@ function Index() {
             body: "Use the action bar to copy, save the watchlist, download .txt, or share a link/image.",
             placement: "top",
           },
+          {
+            ref: savedStepRef,
+            title: "Your saved watchlists live here",
+            body: "Save, pin, tag, merge, and compare lists. Everything stays on your device.",
+            placement: "top",
+          },
+          {
+            ref: helpStepRef,
+            title: "Need a hand? Open shortcuts anytime",
+            body: "Press ? or tap this button to see every keyboard shortcut and replay this tour.",
+          },
         ]}
       />
     </div>
@@ -769,42 +788,3 @@ function labelFor(f: OutputFormat): string {
   return f === "tradingview" ? "TradingView" : f === "plain" ? "Plain" : "Newline";
 }
 
-function Kbd({ children }: { children: React.ReactNode }) {
-  return (
-    <kbd className="rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] font-medium text-muted-foreground">
-      {children}
-    </kbd>
-  );
-}
-
-function ShortcutHint() {
-  const isMac =
-    typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform);
-  const mod = isMac ? "⌘" : "Ctrl";
-  return (
-    <div className="mt-1 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[11px] text-muted-foreground">
-      <span className="inline-flex items-center gap-1">
-        <Kbd>{mod}</Kbd>
-        <Kbd>K</Kbd> palette
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <Kbd>{mod}</Kbd>
-        <Kbd>↵</Kbd> copy
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <Kbd>{mod}</Kbd>
-        <Kbd>S</Kbd> save
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <Kbd>{mod}</Kbd>
-        <Kbd>D</Kbd> download
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <Kbd>{mod}</Kbd>
-        <Kbd>1</Kbd>
-        <Kbd>2</Kbd>
-        <Kbd>3</Kbd> format
-      </span>
-    </div>
-  );
-}
