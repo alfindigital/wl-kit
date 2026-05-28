@@ -7,7 +7,7 @@ import { z } from "zod";
 import { Footer } from "@/components/watchlist/Footer";
 import { TickerInput } from "@/components/watchlist/TickerInput";
 import { FormatTabs } from "@/components/watchlist/FormatTabs";
-import { OutputBlock } from "@/components/watchlist/OutputBlock";
+import { OutputBlock, type SortMode } from "@/components/watchlist/OutputBlock";
 import { ActionButtons } from "@/components/watchlist/ActionButtons";
 import { SaveDialog } from "@/components/watchlist/SaveDialog";
 import { SavedWatchlists } from "@/components/watchlist/SavedWatchlists";
@@ -101,6 +101,7 @@ function Index() {
   const [liveStatus, setLiveStatus] = useState("");
   const [shortcutOpen, setShortcutOpen] = useState(false);
   const [onboardingActive, setOnboardingActive] = useState(false);
+  const [sortMode, setSortMode] = useState<SortMode>("none");
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -122,6 +123,8 @@ function Index() {
   const inputStepRef = useRef<HTMLDivElement>(null);
   const formatStepRef = useRef<HTMLDivElement>(null);
   const actionStepRef = useRef<HTMLDivElement>(null);
+  const savedStepRef = useRef<HTMLDivElement>(null);
+  const helpStepRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setSaved(loadWatchlists());
@@ -141,7 +144,12 @@ function Index() {
   }, []);
 
   const analysis = useMemo(() => analyzeInput(input), [input]);
-  const tickers = analysis.valid;
+  const tickers = useMemo(() => {
+    const base = analysis.valid;
+    if (sortMode === "asc") return [...base].sort();
+    if (sortMode === "desc") return [...base].sort().reverse();
+    return base;
+  }, [analysis.valid, sortMode]);
   const output = useMemo(() => formatTickers(tickers, format), [tickers, format]);
 
   // Undo helper
