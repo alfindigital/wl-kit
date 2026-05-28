@@ -1,20 +1,27 @@
 import { useRef, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Copy } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Copy, ArrowUpDown, ArrowDownAZ, ArrowUpAZ, RotateCcw, Check } from "lucide-react";
 import type { OutputFormat } from "@/lib/tickers";
+
+export type SortMode = "none" | "asc" | "desc";
 
 export function OutputBlock({
   output,
   count,
   format,
   onCopy,
+  sortMode = "none",
+  onSortChange,
 }: {
   output: string;
   count: number;
   format: OutputFormat;
   onSample?: (tickers: string[]) => void;
   onCopy?: () => void;
+  sortMode?: SortMode;
+  onSortChange?: (mode: SortMode) => void;
 }) {
   const lines = output ? output.split("\n") : [];
   const showLineNumbers = format === "newline" && lines.length > 0;
@@ -28,30 +35,62 @@ export function OutputBlock({
 
   return (
     <div className="relative rounded-2xl border border-border/80 bg-card shadow-sm">
-      <div className="flex items-center justify-between border-b border-border/60 px-4 py-2">
-        <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Output</span>
-        <div className="flex items-center gap-2">
-          <Badge
-            variant="secondary"
-            className="rounded-full text-xs"
-            role="status"
-            aria-label={`${count} ${count === 1 ? "ticker" : "tickers"} in output`}
+      <div className="flex items-center justify-end gap-2 border-b border-border/60 px-3 py-1.5">
+        <Badge
+          variant="secondary"
+          className="rounded-full text-xs"
+          role="status"
+          aria-label={`${count} ${count === 1 ? "ticker" : "tickers"} in output`}
+        >
+          {count} {count === 1 ? "ticker" : "tickers"}
+        </Badge>
+        {onSortChange && (
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className={`h-7 w-7 rounded-lg ${sortMode === "none" ? "text-muted-foreground" : "text-primary"} hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2`}
+                aria-label="Sort tickers"
+                disabled={!output}
+              >
+                <ArrowUpDown className="h-3.5 w-3.5" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent align="end" className="w-44 p-1">
+              <SortItem
+                active={sortMode === "asc"}
+                onClick={() => onSortChange("asc")}
+                icon={<ArrowDownAZ className="h-3.5 w-3.5" />}
+                label="A → Z"
+              />
+              <SortItem
+                active={sortMode === "desc"}
+                onClick={() => onSortChange("desc")}
+                icon={<ArrowUpAZ className="h-3.5 w-3.5" />}
+                label="Z → A"
+              />
+              <SortItem
+                active={sortMode === "none"}
+                onClick={() => onSortChange("none")}
+                icon={<RotateCcw className="h-3.5 w-3.5" />}
+                label="Original"
+              />
+            </PopoverContent>
+          </Popover>
+        )}
+        {onCopy && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7 rounded-lg text-muted-foreground hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            onClick={onCopy}
+            disabled={!output}
+            aria-label="Copy output"
           >
-            {count} {count === 1 ? "ticker" : "tickers"}
-          </Badge>
-          {onCopy && (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7 rounded-lg text-muted-foreground hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-              onClick={onCopy}
-              disabled={!output}
-              aria-label="Copy output"
-            >
-              <Copy className="h-3.5 w-3.5" />
-            </Button>
-          )}
-        </div>
+            <Copy className="h-3.5 w-3.5" />
+          </Button>
+        )}
       </div>
       <div
         ref={liveRef}
@@ -83,5 +122,31 @@ export function OutputBlock({
         )}
       </div>
     </div>
+  );
+}
+
+function SortItem({
+  active,
+  onClick,
+  icon,
+  label,
+}: {
+  active: boolean;
+  onClick: () => void;
+  icon: React.ReactNode;
+  label: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex w-full items-center justify-between gap-2 rounded-md px-2 py-1.5 text-xs text-foreground hover:bg-muted"
+    >
+      <span className="flex items-center gap-2">
+        <span className="text-muted-foreground">{icon}</span>
+        {label}
+      </span>
+      {active && <Check className="h-3.5 w-3.5 text-primary" />}
+    </button>
   );
 }
