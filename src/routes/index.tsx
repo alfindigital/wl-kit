@@ -533,7 +533,10 @@ function Index() {
 
       {/* Desktop floating controls */}
       <div className="pointer-events-none fixed right-4 top-4 z-30 hidden items-center gap-1 sm:flex">
-        <div className="pointer-events-auto flex items-center gap-1 rounded-full border border-border/60 bg-card/80 px-1 py-1 shadow-sm backdrop-blur">
+        <div
+          ref={helpStepRef}
+          className="pointer-events-auto flex items-center gap-1 rounded-full border border-border/60 bg-card/80 px-1 py-1 shadow-sm backdrop-blur"
+        >
           <ThemeToggle />
           <Button
             type="button"
@@ -568,7 +571,6 @@ function Index() {
             <InputStats
               validCount={tickers.length}
               duplicates={analysis.duplicates}
-              invalid={analysis.invalid}
             />
             <div ref={formatStepRef} className="flex flex-col gap-4 sm:gap-5">
               <FormatTabs
@@ -592,6 +594,8 @@ function Index() {
                 format={format}
                 onSample={handleSample}
                 onCopy={() => handleCopy()}
+                sortMode={sortMode}
+                onSortChange={setSortMode}
               />
             </div>
             <div ref={actionStepRef}>
@@ -606,7 +610,7 @@ function Index() {
             </div>
           </div>
 
-          <div className="mt-10">
+          <div ref={savedStepRef} className="mt-10">
             <SavedWatchlists
               items={saved}
               onLoad={handleLoad}
@@ -619,10 +623,6 @@ function Index() {
               onExport={handleExport}
               onImport={handleImport}
             />
-          </div>
-
-          <div className="mt-10">
-            <ShortcutHint />
           </div>
         </div>
       </main>
