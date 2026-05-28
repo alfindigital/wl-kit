@@ -164,12 +164,9 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(
             aria-label="Ticker input"
             aria-describedby={inputHelpId}
             placeholder="Paste your tickers here... (any format) — or drop a .txt / .csv file"
-            className="min-h-[120px] resize-none overflow-hidden rounded-none border-0 bg-transparent p-4 text-base shadow-none focus-visible:ring-0 sm:min-h-[160px]"
+            className="min-h-[88px] resize-none overflow-hidden rounded-none border-0 bg-transparent p-4 text-base shadow-none focus-visible:ring-0 sm:min-h-[104px]"
           />
-          <div className="flex items-center justify-between gap-2 border-t border-border/60 px-4 py-2">
-            <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Input
-            </span>
+          <div className="flex items-center justify-end gap-2 border-t border-border/60 px-3 py-1.5">
             <div className="flex items-center gap-2">
               {hasClipboard && (
                 <Button
