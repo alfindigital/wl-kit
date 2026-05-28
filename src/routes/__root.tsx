@@ -13,6 +13,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { registerServiceWorker } from "@/lib/register-sw";
 
 import appCss from "../styles.css?url";
+import ogImage from "@/assets/og-image.jpg";
+
+const OG_IMAGE_URL = `https://wlkit.lovable.app${ogImage}`;
 
 function NotFoundComponent() {
   return (
@@ -91,10 +94,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:title", content: "WatchlistKit — Free IDX Watchlist Formatter" },
       { property: "og:description", content: "Format your IDX watchlist in seconds. Paste tickers in any format, auto-prefix with IDX:, and export to TradingView, plain text, or lists. Save, merge & share." },
       { name: "twitter:description", content: "Format your IDX watchlist in seconds. Paste tickers in any format, auto-prefix with IDX:, and export to TradingView, plain text, or lists. Save, merge & share." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/2a892bf6-446b-4970-bddb-a7e6b913153e/id-preview-5aca8ba8--516b6643-21e0-4189-b5eb-524eee3a2886.lovable.app-1778940106352.png" },
-      { property: "og:image:alt", content: "WatchlistKit — IDX watchlist formatter preview" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/2a892bf6-446b-4970-bddb-a7e6b913153e/id-preview-5aca8ba8--516b6643-21e0-4189-b5eb-524eee3a2886.lovable.app-1778940106352.png" },
-      { name: "twitter:image:alt", content: "WatchlistKit — IDX watchlist formatter preview" },
+      { property: "og:image", content: OG_IMAGE_URL },
+      { property: "og:image:alt", content: "WatchlistKit — Free IDX Watchlist Formatter" },
+      { name: "twitter:image", content: OG_IMAGE_URL },
+      { name: "twitter:image:alt", content: "WatchlistKit — Free IDX Watchlist Formatter" },
       { name: "theme-color", content: "#ea580c" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-title", content: "WatchlistKit" },
