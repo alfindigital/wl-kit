@@ -388,7 +388,10 @@ function Index() {
 
   const handleShare = async () => {
     if (tickers.length === 0) return;
-    const url = `${window.location.origin}/?t=${tickers.join(",")}`;
+    const params = new URLSearchParams();
+    params.set("t", tickers.join(","));
+    if (format !== "tradingview") params.set("f", format);
+    const url = `${window.location.origin}/?${params.toString()}`;
     if (typeof navigator !== "undefined" && (navigator as Navigator).share) {
       try {
         await (navigator as Navigator).share({
