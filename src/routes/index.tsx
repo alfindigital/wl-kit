@@ -1,4 +1,4 @@
-import { createFileRoute, useSearch } from "@tanstack/react-router";
+import { createFileRoute, useSearch, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { toPng } from "html-to-image";
@@ -48,6 +48,7 @@ import {
 
 const searchSchema = z.object({
   t: z.string().optional(),
+  f: z.enum(["tradingview", "plain", "newline"]).optional(),
 });
 
 export const Route = createFileRoute("/")({
@@ -89,6 +90,7 @@ type DiffData = {
 
 function Index() {
   const search = useSearch({ from: "/" });
+  const navigate = useNavigate({ from: "/" });
   const [input, setInput] = useState("");
   const [format, setFormat] = useState<OutputFormat>("tradingview");
   const [saved, setSaved] = useState<SavedWatchlist[]>([]);
@@ -102,7 +104,6 @@ function Index() {
   const [shortcutOpen, setShortcutOpen] = useState(false);
   const [onboardingActive, setOnboardingActive] = useState(false);
   const [sortMode, setSortMode] = useState<SortMode>("none");
-
   useEffect(() => {
     if (typeof window === "undefined") return;
     const done = localStorage.getItem("wlkit-onboarded");
@@ -134,7 +135,10 @@ function Index() {
     if (search.t && typeof search.t === "string") {
       setInput(search.t.replace(/,/g, "\n"));
     }
-  }, [search.t]);
+    if (search.f && ["tradingview", "plain", "newline"].includes(search.f)) {
+      setFormat(search.f);
+    }
+  }, [search.t, search.f]);
 
   useEffect(() => {
     if (!search.t) {
@@ -190,6 +194,7 @@ function Index() {
   const handleFormatChange = (f: OutputFormat) => {
     if (f === format) return;
     setFormat(f);
+    navigate({ search: (prev: any) => ({ ...prev, f }) });
     if (tickers.length > 0) {
       const next = formatTickers(tickers, f);
       if (next === output) return;
@@ -383,7 +388,10 @@ function Index() {
 
   const handleShare = async () => {
     if (tickers.length === 0) return;
-    const url = `${window.location.origin}/?t=${tickers.join(",")}`;
+    const params = new URLSearchParams();
+    params.set("t", tickers.join(","));
+    if (format !== "tradingview") params.set("f", format);
+    const url = `${window.location.origin}/?${params.toString()}`;
     if (typeof navigator !== "undefined" && (navigator as Navigator).share) {
       try {
         await (navigator as Navigator).share({
