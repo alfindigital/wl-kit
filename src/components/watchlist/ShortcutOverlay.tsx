@@ -137,6 +137,40 @@ export function ShortcutOverlay({
             <>
               <Kbd>{mod}</Kbd>
               <Kbd>Shift</Kbd>
+              <Kbd>Z</Kbd>
+            </>
+          ),
+          label: "Sort Z → A",
+        },
+        {
+          keys: (
+            <>
+              <Kbd>{mod}</Kbd>
+              <Kbd>Shift</Kbd>
+              <Kbd>O</Kbd>
+            </>
+          ),
+          label: "Original order",
+        },
+      ],
+    },
+    {
+      title: "Edit",
+      rows: [
+        {
+          keys: (
+            <>
+              <Kbd>Ctrl</Kbd>
+              <Kbd>⌫</Kbd>
+            </>
+          ),
+          label: "Clear input",
+        },
+        { keys: <Kbd>Esc</Kbd>, label: "Clear (in textarea)" },
+      ],
+    },
+  ];
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="rounded-2xl sm:max-w-xl">
@@ -178,40 +212,6 @@ export function ShortcutOverlay({
               className="text-xs text-muted-foreground"
             >
               Show onboarding again
-            </Button>
-          </div>
-        )}
-      </DialogContent>
-    </Dialog>
-  );
-                {s.title}
-              </h3>
-              <ul className="space-y-2">
-                {s.rows.map((r, i) => (
-                  <li
-                    key={i}
-                    className="flex items-center justify-between gap-3 text-sm"
-                  >
-                    <span className="text-foreground">{r.label}</span>
-                    <span className="flex items-center gap-1">{r.keys}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-        {onShowOnboarding && (
-          <div className="mt-2 flex justify-end border-t border-border pt-3">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                onOpenChange(false);
-                onShowOnboarding();
-              }}
-              className="text-xs text-muted-foreground"
-            >
-              Tampilkan onboarding lagi
             </Button>
           </div>
         )}
