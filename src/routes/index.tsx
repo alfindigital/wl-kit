@@ -48,6 +48,7 @@ import {
 
 const searchSchema = z.object({
   t: z.string().optional(),
+  f: z.enum(["tradingview", "plain", "newline"]).optional(),
 });
 
 export const Route = createFileRoute("/")({
@@ -89,6 +90,7 @@ type DiffData = {
 
 function Index() {
   const search = useSearch({ from: "/" });
+  const navigate = useNavigate({ from: "/" });
   const [input, setInput] = useState("");
   const [format, setFormat] = useState<OutputFormat>("tradingview");
   const [saved, setSaved] = useState<SavedWatchlist[]>([]);
@@ -102,7 +104,6 @@ function Index() {
   const [shortcutOpen, setShortcutOpen] = useState(false);
   const [onboardingActive, setOnboardingActive] = useState(false);
   const [sortMode, setSortMode] = useState<SortMode>("none");
-
   useEffect(() => {
     if (typeof window === "undefined") return;
     const done = localStorage.getItem("wlkit-onboarded");
