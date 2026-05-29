@@ -208,6 +208,8 @@ function Index() {
       );
     }
   };
+
+  const handleSave = (name: string) => {
     if (saved.length >= MAX_WATCHLISTS) {
       toast.error(`Limit reached (${MAX_WATCHLISTS} watchlists max)`);
       setLiveStatus(`Limit reached: ${MAX_WATCHLISTS} watchlists maximum`);
