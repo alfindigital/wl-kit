@@ -120,6 +120,41 @@ export function ShortcutOverlay({
       ],
     },
     {
+      title: "Sort",
+      rows: [
+        {
+          keys: (
+            <>
+              <Kbd>{mod}</Kbd>
+              <Kbd>Shift</Kbd>
+              <Kbd>A</Kbd>
+            </>
+          ),
+          label: "Sort A → Z",
+        },
+        {
+          keys: (
+            <>
+              <Kbd>{mod}</Kbd>
+              <Kbd>Shift</Kbd>
+              <Kbd>Z</Kbd>
+            </>
+          ),
+          label: "Sort Z → A",
+        },
+        {
+          keys: (
+            <>
+              <Kbd>{mod}</Kbd>
+              <Kbd>Shift</Kbd>
+              <Kbd>O</Kbd>
+            </>
+          ),
+          label: "Original order",
+        },
+      ],
+    },
+    {
       title: "Edit",
       rows: [
         {
