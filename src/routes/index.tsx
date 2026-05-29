@@ -747,7 +747,7 @@ function Index() {
           {
             ref: savedStepRef,
             title: "Your saved watchlists live here",
-            body: "Save, pin, tag, merge, and compare lists. Everything stays on your device.",
+            body: "Tap any watchlist to load it back into the input. Long-press or use the menu to delete. You can save up to 20 watchlists — a warning appears when you're close to the limit.",
             placement: "top",
           },
           {
