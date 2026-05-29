@@ -135,7 +135,10 @@ function Index() {
     if (search.t && typeof search.t === "string") {
       setInput(search.t.replace(/,/g, "\n"));
     }
-  }, [search.t]);
+    if (search.f && ["tradingview", "plain", "newline"].includes(search.f)) {
+      setFormat(search.f);
+    }
+  }, [search.t, search.f]);
 
   useEffect(() => {
     if (!search.t) {
