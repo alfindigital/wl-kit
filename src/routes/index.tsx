@@ -192,8 +192,10 @@ function Index() {
   };
 
   const handleFormatChange = (f: OutputFormat) => {
+  const handleFormatChange = (f: OutputFormat) => {
     if (f === format) return;
     setFormat(f);
+    navigate({ search: (prev) => ({ ...prev, f }) });
     if (tickers.length > 0) {
       const next = formatTickers(tickers, f);
       if (next === output) return;
@@ -206,8 +208,6 @@ function Index() {
       );
     }
   };
-
-  const handleSave = (name: string) => {
     if (saved.length >= MAX_WATCHLISTS) {
       toast.error(`Limit reached (${MAX_WATCHLISTS} watchlists max)`);
       setLiveStatus(`Limit reached: ${MAX_WATCHLISTS} watchlists maximum`);
