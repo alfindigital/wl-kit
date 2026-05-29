@@ -445,6 +445,27 @@ function Index() {
         handleCopy();
         return;
       }
+      if (mod && e.shiftKey && e.key.toLowerCase() === "a") {
+        e.preventDefault();
+        setSortMode("asc");
+        setLiveStatus("Sorted A → Z");
+        toast.success("Sorted A → Z");
+        return;
+      }
+      if (mod && e.shiftKey && e.key.toLowerCase() === "z") {
+        e.preventDefault();
+        setSortMode("desc");
+        setLiveStatus("Sorted Z → A");
+        toast.success("Sorted Z → A");
+        return;
+      }
+      if (mod && e.shiftKey && e.key.toLowerCase() === "o") {
+        e.preventDefault();
+        setSortMode("none");
+        setLiveStatus("Original order");
+        toast.success("Original order");
+        return;
+      }
       if (mod && !e.shiftKey && e.key.toLowerCase() === "k") {
         e.preventDefault();
         setPaletteOpen((o) => !o);

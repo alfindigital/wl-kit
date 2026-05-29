@@ -120,6 +120,41 @@ export function ShortcutOverlay({
       ],
     },
     {
+      title: "Sort",
+      rows: [
+        {
+          keys: (
+            <>
+              <Kbd>{mod}</Kbd>
+              <Kbd>Shift</Kbd>
+              <Kbd>A</Kbd>
+            </>
+          ),
+          label: "Sort A → Z",
+        },
+        {
+          keys: (
+            <>
+              <Kbd>{mod}</Kbd>
+              <Kbd>Shift</Kbd>
+              <Kbd>Z</Kbd>
+            </>
+          ),
+          label: "Sort Z → A",
+        },
+        {
+          keys: (
+            <>
+              <Kbd>{mod}</Kbd>
+              <Kbd>Shift</Kbd>
+              <Kbd>O</Kbd>
+            </>
+          ),
+          label: "Original order",
+        },
+      ],
+    },
+    {
       title: "Edit",
       rows: [
         {
@@ -142,7 +177,7 @@ export function ShortcutOverlay({
         <DialogHeader>
           <DialogTitle>Keyboard shortcuts</DialogTitle>
           <DialogDescription>
-            Tekan <Kbd>?</Kbd> kapan saja untuk membuka panel ini.
+            Press <Kbd>?</Kbd> anytime to open this panel.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-5 sm:grid-cols-2">
@@ -176,7 +211,7 @@ export function ShortcutOverlay({
               }}
               className="text-xs text-muted-foreground"
             >
-              Tampilkan onboarding lagi
+              Show onboarding again
             </Button>
           </div>
         )}
