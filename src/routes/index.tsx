@@ -192,10 +192,9 @@ function Index() {
   };
 
   const handleFormatChange = (f: OutputFormat) => {
-  const handleFormatChange = (f: OutputFormat) => {
     if (f === format) return;
     setFormat(f);
-    navigate({ search: (prev) => ({ ...prev, f }) });
+    navigate({ search: (prev: any) => ({ ...prev, f }) });
     if (tickers.length > 0) {
       const next = formatTickers(tickers, f);
       if (next === output) return;
