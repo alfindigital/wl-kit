@@ -139,7 +139,10 @@ function Index() {
     if (search.f && ["tradingview", "plain", "newline"].includes(search.f)) {
       setFormat(search.f);
     }
-  }, [search.t, search.f]);
+    if (search.s && ["none", "asc", "desc"].includes(search.s)) {
+      setSortMode(search.s);
+    }
+  }, [search.t, search.f, search.s]);
 
   useEffect(() => {
     if (!search.t) {
