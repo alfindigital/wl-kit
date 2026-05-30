@@ -635,7 +635,7 @@ function Index() {
                 onSample={handleSample}
                 onCopy={() => handleCopy()}
                 sortMode={sortMode}
-                onSortChange={setSortMode}
+                onSortChange={handleSortChange}
               />
             </div>
             <div ref={actionStepRef}>
