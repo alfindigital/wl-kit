@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://watchlistkit.lovable.app/sitemap.xml
+Sitemap: https://wlkit.lovable.app/sitemap.xml
