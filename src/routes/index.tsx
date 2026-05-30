@@ -466,21 +466,21 @@ function Index() {
       }
       if (mod && e.shiftKey && e.key.toLowerCase() === "a") {
         e.preventDefault();
-        setSortMode("asc");
+        handleSortChange("asc");
         setLiveStatus("Sorted A → Z");
         toast.success("Sorted A → Z");
         return;
       }
       if (mod && e.shiftKey && e.key.toLowerCase() === "z") {
         e.preventDefault();
-        setSortMode("desc");
+        handleSortChange("desc");
         setLiveStatus("Sorted Z → A");
         toast.success("Sorted Z → A");
         return;
       }
       if (mod && e.shiftKey && e.key.toLowerCase() === "o") {
         e.preventDefault();
-        setSortMode("none");
+        handleSortChange("none");
         setLiveStatus("Original order");
         toast.success("Original order");
         return;
