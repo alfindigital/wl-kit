@@ -212,6 +212,12 @@ function Index() {
     }
   };
 
+  const handleSortChange = (s: SortMode) => {
+    if (s === sortMode) return;
+    setSortMode(s);
+    navigate({ search: (prev: any) => ({ ...prev, s }) });
+  };
+
   const handleSave = (name: string) => {
     if (saved.length >= MAX_WATCHLISTS) {
       toast.error(`Limit reached (${MAX_WATCHLISTS} watchlists max)`);
