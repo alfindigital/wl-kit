@@ -401,6 +401,7 @@ function Index() {
     const params = new URLSearchParams();
     params.set("t", tickers.join(","));
     if (format !== "tradingview") params.set("f", format);
+    if (sortMode !== "none") params.set("s", sortMode);
     const url = `${window.location.origin}/?${params.toString()}`;
     if (typeof navigator !== "undefined" && (navigator as Navigator).share) {
       try {
