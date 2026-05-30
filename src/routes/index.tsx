@@ -49,6 +49,7 @@ import {
 const searchSchema = z.object({
   t: z.string().optional(),
   f: z.enum(["tradingview", "plain", "newline"]).optional(),
+  s: z.enum(["none", "asc", "desc"]).optional(),
 });
 
 export const Route = createFileRoute("/")({
@@ -138,7 +139,10 @@ function Index() {
     if (search.f && ["tradingview", "plain", "newline"].includes(search.f)) {
       setFormat(search.f);
     }
-  }, [search.t, search.f]);
+    if (search.s && ["none", "asc", "desc"].includes(search.s)) {
+      setSortMode(search.s);
+    }
+  }, [search.t, search.f, search.s]);
 
   useEffect(() => {
     if (!search.t) {
@@ -206,6 +210,12 @@ function Index() {
         () => {},
       );
     }
+  };
+
+  const handleSortChange = (s: SortMode) => {
+    if (s === sortMode) return;
+    setSortMode(s);
+    navigate({ search: (prev: any) => ({ ...prev, s }) });
   };
 
   const handleSave = (name: string) => {
@@ -391,6 +401,7 @@ function Index() {
     const params = new URLSearchParams();
     params.set("t", tickers.join(","));
     if (format !== "tradingview") params.set("f", format);
+    if (sortMode !== "none") params.set("s", sortMode);
     const url = `${window.location.origin}/?${params.toString()}`;
     if (typeof navigator !== "undefined" && (navigator as Navigator).share) {
       try {
@@ -455,21 +466,21 @@ function Index() {
       }
       if (mod && e.shiftKey && e.key.toLowerCase() === "a") {
         e.preventDefault();
-        setSortMode("asc");
+        handleSortChange("asc");
         setLiveStatus("Sorted A → Z");
         toast.success("Sorted A → Z");
         return;
       }
       if (mod && e.shiftKey && e.key.toLowerCase() === "z") {
         e.preventDefault();
-        setSortMode("desc");
+        handleSortChange("desc");
         setLiveStatus("Sorted Z → A");
         toast.success("Sorted Z → A");
         return;
       }
       if (mod && e.shiftKey && e.key.toLowerCase() === "o") {
         e.preventDefault();
-        setSortMode("none");
+        handleSortChange("none");
         setLiveStatus("Original order");
         toast.success("Original order");
         return;
@@ -624,7 +635,7 @@ function Index() {
                 onSample={handleSample}
                 onCopy={() => handleCopy()}
                 sortMode={sortMode}
-                onSortChange={setSortMode}
+                onSortChange={handleSortChange}
               />
             </div>
             <div ref={actionStepRef}>
