@@ -49,6 +49,7 @@ import {
 const searchSchema = z.object({
   t: z.string().optional(),
   f: z.enum(["tradingview", "plain", "newline"]).optional(),
+  s: z.enum(["none", "asc", "desc"]).optional(),
 });
 
 export const Route = createFileRoute("/")({
