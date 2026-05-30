@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 
-const BASE_URL = "https://watchlistkit.lovable.app";
+const BASE_URL = "https://wlkit.lovable.app";
 
 interface SitemapEntry {
   path: string;
