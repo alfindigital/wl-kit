@@ -63,7 +63,7 @@ export const Route = createFileRoute("/")({
         content:
           "Format your IDX watchlist in seconds. Paste tickers in any format, auto-prefix with IDX:, and export to TradingView, plain text, or lists. Save, merge & share.",
       },
-      { property: "og:url", content: "https://watchlistkit.lovable.app/" },
+      { property: "og:url", content: "https://wlkit.lovable.app/" },
       { property: "og:title", content: "WatchlistKit — Free IDX Watchlist Formatter" },
       {
         property: "og:description",
@@ -77,7 +77,7 @@ export const Route = createFileRoute("/")({
           "Format your IDX watchlist in seconds. Paste tickers in any format, auto-prefix with IDX:, and export to TradingView, plain text, or lists. Save, merge & share.",
       },
     ],
-    links: [{ rel: "canonical", href: "https://watchlistkit.lovable.app/" }],
+    links: [{ rel: "canonical", href: "https://wlkit.lovable.app/" }],
   }),
 });
 
