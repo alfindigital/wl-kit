@@ -16,6 +16,7 @@ import appCss from "../styles.css?url";
 import ogImage from "@/assets/og-image.jpg";
 
 const OG_IMAGE_URL = `https://wlkit.lovable.app${ogImage}`;
+const WEBSITE_URL = "https://wlkit.lovable.app/";
 
 function NotFoundComponent() {
   return (
@@ -89,6 +90,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:site_name", content: "WatchlistKit" },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "en_US" },
+      { property: "og:url", content: WEBSITE_URL },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:title", content: "WatchlistKit — Free IDX Watchlist Formatter" },
       { name: "twitter:title", content: "WatchlistKit — Free IDX Watchlist Formatter" },
@@ -111,6 +113,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap",
+      },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "WatchlistKit",
+          url: WEBSITE_URL,
+          description:
+            "Format your IDX watchlist in seconds. Paste tickers in any format, auto-prefix with IDX:, and export to TradingView, plain text, or lists. Save, merge & share.",
+        }),
       },
     ],
   }),
