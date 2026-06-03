@@ -132,6 +132,37 @@ function Index() {
     setSaved(loadWatchlists());
   }, []);
 
+  // Restore last session (input/format/sort) from localStorage on mount.
+  // URL params (?t=…) take precedence and are handled in the effect below.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (search.t) return;
+    try {
+      const raw = localStorage.getItem("wlkit.session");
+      if (!raw) return;
+      const data = JSON.parse(raw);
+      if (typeof data?.input === "string") setInput(data.input);
+      if (["tradingview", "plain", "newline"].includes(data?.format)) setFormat(data.format);
+      if (["none", "asc", "desc"].includes(data?.sortMode)) setSortMode(data.sortMode);
+    } catch {
+      // ignore
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Persist session to localStorage whenever it changes.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      localStorage.setItem(
+        "wlkit.session",
+        JSON.stringify({ input, format, sortMode }),
+      );
+    } catch {
+      // ignore quota errors
+    }
+  }, [input, format, sortMode]);
+
   useEffect(() => {
     if (search.t && typeof search.t === "string") {
       setInput(search.t.replace(/,/g, "\n"));
@@ -150,6 +181,7 @@ function Index() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
 
   const analysis = useMemo(() => analyzeInput(input), [input]);
   const tickers = useMemo(() => {
