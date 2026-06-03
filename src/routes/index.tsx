@@ -327,14 +327,16 @@ function Index() {
   };
 
   const handleMerge = (ids: string[]) => {
-    const lists = ids
+    const sources = ids
       .map((id) => saved.find((w) => w.id === id))
-      .filter((x): x is SavedWatchlist => !!x)
-      .map((w) => w.tickers);
+      .filter((x): x is SavedWatchlist => !!x);
+    const lists = sources.map((w) => w.tickers);
     const merged = mergeTickers(lists);
+    const mergedName =
+      sources.map((w) => w.name).join(" + ") || `Merged (${ids.length})`;
     const entry: SavedWatchlist = {
       id: crypto.randomUUID(),
-      name: `Merged (${ids.length})`,
+      name: mergedName,
       tickers: merged,
       savedAt: Date.now(),
       pinned: false,
