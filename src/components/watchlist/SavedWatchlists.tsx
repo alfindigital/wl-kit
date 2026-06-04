@@ -230,11 +230,17 @@ export function SavedWatchlists({
     onRename(id, editName.trim());
     setEditingId(null);
     setRenameError(null);
+    const returnId = focusReturnIdRef.current ?? id;
+    focusReturnIdRef.current = null;
+    restoreFocus(returnId);
   };
 
   const cancelRename = () => {
+    const returnId = focusReturnIdRef.current ?? editingId;
     setEditingId(null);
     setRenameError(null);
+    focusReturnIdRef.current = null;
+    restoreFocus(returnId);
   };
 
   const renderItem = (item: SavedWatchlist) => {
