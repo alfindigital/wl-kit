@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useId, useMemo, useRef, useState } from "react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -55,7 +55,22 @@ import {
 } from "@/components/ui/drawer";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-type SortKey = "recent" | "name" | "count";
+type SortKey =
+  | "recent"
+  | "name"
+  | "name-desc"
+  | "created-new"
+  | "created-old"
+  | "count";
+
+const SORT_LABEL: Record<SortKey, string> = {
+  recent: "Recent",
+  name: "Name A–Z",
+  "name-desc": "Name Z–A",
+  "created-new": "Newest",
+  "created-old": "Oldest",
+  count: "Most tickers",
+};
 
 export function SavedWatchlists({
   items,
@@ -87,6 +102,8 @@ export function SavedWatchlists({
   const [selected, setSelected] = useState<string[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState("");
+  const [renameError, setRenameError] = useState<string | null>(null);
+  const renameErrorId = useId();
   const [swipedId, setSwipedId] = useState<string | null>(null);
   const [sortKey, setSortKey] = useState<SortKey>("recent");
   const [tagFilter, setTagFilter] = useState<string | null>(null);
@@ -121,6 +138,9 @@ export function SavedWatchlists({
 
   const sortFn = (a: SavedWatchlist, b: SavedWatchlist) => {
     if (sortKey === "name") return a.name.localeCompare(b.name);
+    if (sortKey === "name-desc") return b.name.localeCompare(a.name);
+    if (sortKey === "created-new") return b.savedAt - a.savedAt;
+    if (sortKey === "created-old") return a.savedAt - b.savedAt;
     if (sortKey === "count") return b.tickers.length - a.tickers.length;
     return (b.lastUsedAt ?? b.savedAt) - (a.lastUsedAt ?? a.savedAt);
   };
@@ -162,9 +182,48 @@ export function SavedWatchlists({
     touchStart.current = null;
   };
 
+  const validateRename = (
+    id: string,
+    value: string,
+  ): { ok: boolean; error: string | null } => {
+    const trimmed = value.trim();
+    if (!trimmed) return { ok: false, error: "Name cannot be empty." };
+    const lower = trimmed.toLowerCase();
+    const dup = items.some(
+      (w) => w.id !== id && w.name.trim().toLowerCase() === lower,
+    );
+    if (dup) {
+      return {
+        ok: false,
+        error: `A watchlist named “${trimmed}” already exists.`,
+      };
+    }
+    return { ok: true, error: null };
+  };
+
+  const commitRename = (id: string) => {
+    const { ok, error } = validateRename(id, editName);
+    if (!ok) {
+      setRenameError(error);
+      return;
+    }
+    onRename(id, editName.trim());
+    setEditingId(null);
+    setRenameError(null);
+  };
+
+  const cancelRename = () => {
+    setEditingId(null);
+    setRenameError(null);
+  };
+
   const renderItem = (item: SavedWatchlist) => {
     const isEditing = editingId === item.id;
     const isSwiped = swipedId === item.id;
+    const liveError = isEditing
+      ? validateRename(item.id, editName).error
+      : null;
+    const showError = isEditing && (renameError ?? (editName.trim() ? liveError : null));
     return (
       <li key={item.id} className="relative overflow-hidden rounded-xl">
         <div className="absolute inset-y-0 right-0 flex w-20 items-center justify-center bg-destructive text-destructive-foreground">
@@ -191,7 +250,7 @@ export function SavedWatchlists({
               setSwipedId(null);
             }
           }}
-          className="group flex items-center gap-2 bg-card px-3 py-2 transition-transform hover:bg-muted"
+          className="group flex items-start gap-2 bg-card px-3 py-2 transition-transform hover:bg-muted"
           style={{ transform: isSwiped ? "translateX(-80px)" : "translateX(0)" }}
         >
           {selectMode && (
@@ -202,50 +261,61 @@ export function SavedWatchlists({
             />
           )}
           {isEditing ? (
-            <div className="flex flex-1 items-center gap-1">
-              <Input
-                autoFocus
-                aria-label="Rename watchlist"
-                value={editName}
-                onChange={(e) => setEditName(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && editName.trim()) {
-                    e.preventDefault();
-                    onRename(item.id, editName.trim());
-                    setEditingId(null);
-                  } else if (e.key === "Escape") {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setEditingId(null);
-                  }
-                }}
-                className="h-8 rounded-lg text-sm"
-              />
-              <Button
-                type="button"
-                size="icon"
-                variant="ghost"
-                className="h-8 w-8"
-                aria-label="Confirm rename"
-                onClick={() => {
-                  if (editName.trim()) {
-                    onRename(item.id, editName.trim());
-                    setEditingId(null);
-                  }
-                }}
-              >
-                <Check className="h-4 w-4" />
-              </Button>
-              <Button
-                type="button"
-                size="icon"
-                variant="ghost"
-                className="h-8 w-8"
-                aria-label="Cancel rename"
-                onClick={() => setEditingId(null)}
-              >
-                <X className="h-4 w-4" />
-              </Button>
+            <div className="flex flex-1 flex-col gap-1">
+              <div className="flex items-center gap-1">
+                <Input
+                  autoFocus
+                  aria-label={`Rename watchlist ${item.name}`}
+                  aria-invalid={!!showError}
+                  aria-describedby={showError ? `${renameErrorId}-${item.id}` : undefined}
+                  value={editName}
+                  onChange={(e) => {
+                    setEditName(e.target.value);
+                    if (renameError) setRenameError(null);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      commitRename(item.id);
+                    } else if (e.key === "Escape") {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      cancelRename();
+                    }
+                  }}
+                  className="h-8 rounded-lg text-sm"
+                />
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="ghost"
+                  className="h-8 w-8"
+                  aria-label="Confirm rename"
+                  disabled={!!validateRename(item.id, editName).error}
+                  onClick={() => commitRename(item.id)}
+                >
+                  <Check className="h-4 w-4" />
+                </Button>
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="ghost"
+                  className="h-8 w-8"
+                  aria-label="Cancel rename"
+                  onClick={cancelRename}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+              {showError && (
+                <p
+                  id={`${renameErrorId}-${item.id}`}
+                  role="alert"
+                  className="text-xs text-destructive"
+                >
+                  {showError}
+                </p>
+              )}
             </div>
           ) : (
             <>
@@ -378,6 +448,7 @@ export function SavedWatchlists({
                     onClick={() => {
                       setEditingId(item.id);
                       setEditName(item.name);
+                      setRenameError(null);
                     }}
                     className="rounded-full text-muted-foreground hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                     aria-label={`Rename ${item.name}`}
@@ -495,13 +566,10 @@ export function SavedWatchlists({
                         variant="outline"
                         size="sm"
                         className="h-8 rounded-lg text-xs"
+                        aria-label={`Sort by ${SORT_LABEL[sortKey]}`}
                       >
                         <ArrowUpDown className="mr-1 h-3 w-3" />
-                        {sortKey === "recent"
-                          ? "Recent"
-                          : sortKey === "name"
-                            ? "Name"
-                            : "Count"}
+                        {SORT_LABEL[sortKey]}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -510,6 +578,15 @@ export function SavedWatchlists({
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => setSortKey("name")}>
                         Name A–Z
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setSortKey("name-desc")}>
+                        Name Z–A
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setSortKey("created-new")}>
+                        Date created — Newest
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setSortKey("created-old")}>
+                        Date created — Oldest
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => setSortKey("count")}>
                         Most tickers
@@ -708,6 +785,7 @@ export function SavedWatchlists({
                   onClick={() => {
                     setEditingId(drawerItem.id);
                     setEditName(drawerItem.name);
+                    setRenameError(null);
                     setDrawerId(null);
                   }}
                   className="flex min-h-[48px] items-center gap-3 rounded-lg px-3 text-left text-sm hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
