@@ -114,6 +114,26 @@ export function SavedWatchlists({
   const isMobile = useIsMobile();
   const [drawerId, setDrawerId] = useState<string | null>(null);
   const drawerItem = drawerId ? items.find((i) => i.id === drawerId) ?? null : null;
+  const triggerRefs = useRef(new Map<string, HTMLButtonElement | null>());
+  const focusReturnIdRef = useRef<string | null>(null);
+  const drawerReturnRef = useRef<HTMLElement | null>(null);
+
+  const restoreFocus = (id: string | null) => {
+    if (!id) return;
+    requestAnimationFrame(() => {
+      const el = triggerRefs.current.get(id);
+      if (el && document.contains(el)) el.focus();
+    });
+  };
+
+  // If the edited item disappears (deleted/filtered out) while editing, exit edit mode cleanly.
+  useEffect(() => {
+    if (editingId && !items.some((i) => i.id === editingId)) {
+      setEditingId(null);
+      setRenameError(null);
+      focusReturnIdRef.current = null;
+    }
+  }, [items, editingId]);
 
   const allTags = useMemo(() => {
     const s = new Set<string>();
