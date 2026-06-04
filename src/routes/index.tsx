@@ -256,9 +256,18 @@ function Index() {
       setLiveStatus(`Limit reached: ${MAX_WATCHLISTS} watchlists maximum`);
       return;
     }
+    const trimmed = name.trim();
+    const dup = saved.some(
+      (w) => w.name.trim().toLowerCase() === trimmed.toLowerCase(),
+    );
+    if (dup) {
+      toast.error(`A watchlist named "${trimmed}" already exists`);
+      setLiveStatus(`Save failed: "${trimmed}" already exists`);
+      return;
+    }
     const entry: SavedWatchlist = {
       id: crypto.randomUUID(),
-      name,
+      name: trimmed,
       tickers,
       savedAt: Date.now(),
       pinned: false,
@@ -269,8 +278,8 @@ function Index() {
     setSaved(next);
     saveWatchlists(next);
     setSaveOpen(false);
-    setLoadedName(name);
-    setLiveStatus(`Watchlist "${name}" saved`);
+    setLoadedName(trimmed);
+    setLiveStatus(`Watchlist "${trimmed}" saved`);
     toast.success("Watchlist saved");
   };
 
