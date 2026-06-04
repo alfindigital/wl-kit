@@ -468,10 +468,15 @@ export function SavedWatchlists({
                     </PopoverContent>
                   </Popover>
                   <Button
+                    ref={(el) => {
+                      if (el) triggerRefs.current.set(item.id, el);
+                      else triggerRefs.current.delete(item.id);
+                    }}
                     type="button"
                     variant="ghost"
                     size="icon"
                     onClick={() => {
+                      focusReturnIdRef.current = item.id;
                       setEditingId(item.id);
                       setEditName(item.name);
                       setRenameError(null);
