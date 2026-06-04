@@ -290,12 +290,25 @@ function Index() {
   };
 
   const handleRename = (id: string, name: string) => {
+    const trimmed = name.trim();
+    if (!trimmed) {
+      toast.error("Name cannot be empty");
+      return;
+    }
+    const dup = saved.some(
+      (w) => w.id !== id && w.name.trim().toLowerCase() === trimmed.toLowerCase(),
+    );
+    if (dup) {
+      toast.error(`A watchlist named "${trimmed}" already exists`);
+      setLiveStatus(`Rename failed: "${trimmed}" already exists`);
+      return;
+    }
     const next = saved.map((w) =>
-      w.id === id ? { ...w, name, savedAt: Date.now() } : w,
+      w.id === id ? { ...w, name: trimmed, savedAt: Date.now() } : w,
     );
     setSaved(next);
     saveWatchlists(next);
-    setLiveStatus(`Renamed to "${name}"`);
+    setLiveStatus(`Renamed to "${trimmed}"`);
     toast.success("Renamed");
   };
 
@@ -708,6 +721,7 @@ function Index() {
         onOpenChange={setSaveOpen}
         onSave={handleSave}
         tickerCount={tickers.length}
+        existingNames={saved.map((w) => w.name)}
       />
 
       <CommandPalette
