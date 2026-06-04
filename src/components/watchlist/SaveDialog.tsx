@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useId, useMemo } from "react";
 import {
   Dialog,
   DialogContent,
@@ -15,28 +15,36 @@ export function SaveDialog({
   onOpenChange,
   onSave,
   tickerCount,
+  existingNames = [],
 }: {
   open: boolean;
   onOpenChange: (o: boolean) => void;
   onSave: (name: string) => void;
   tickerCount: number;
+  existingNames?: string[];
 }) {
   const [name, setName] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const errorId = useId();
 
   useEffect(() => {
     if (open) {
       setName("");
-      // Managed focus: move focus to the input after dialog opens so screen
-      // readers announce the dialog title first, then the editable field.
       const timer = setTimeout(() => inputRef.current?.focus(), 0);
       return () => clearTimeout(timer);
     }
   }, [open]);
 
+  const normalized = useMemo(
+    () => new Set(existingNames.map((n) => n.trim().toLowerCase())),
+    [existingNames],
+  );
+  const trimmed = name.trim();
+  const isDuplicate = trimmed.length > 0 && normalized.has(trimmed.toLowerCase());
+  const canSave = trimmed.length > 0 && !isDuplicate;
+
   const handleSave = () => {
-    const trimmed = name.trim();
-    if (!trimmed) return;
+    if (!canSave) return;
     onSave(trimmed);
   };
 
@@ -52,6 +60,8 @@ export function SaveDialog({
         <Input
           ref={inputRef}
           aria-label="Watchlist name"
+          aria-invalid={isDuplicate}
+          aria-describedby={isDuplicate ? errorId : undefined}
           placeholder="My watchlist name"
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -61,14 +71,18 @@ export function SaveDialog({
               handleSave();
             }
           }}
-
           className="rounded-xl"
         />
+        {isDuplicate && (
+          <p id={errorId} role="alert" className="text-sm text-destructive">
+            A watchlist named “{trimmed}” already exists. Please choose a different name.
+          </p>
+        )}
         <DialogFooter>
           <Button variant="ghost" onClick={() => onOpenChange(false)} className="rounded-xl">
             Cancel
           </Button>
-          <Button onClick={handleSave} disabled={!name.trim()} className="rounded-xl">
+          <Button onClick={handleSave} disabled={!canSave} className="rounded-xl">
             Save
           </Button>
         </DialogFooter>
