@@ -116,7 +116,7 @@ export function SavedWatchlists({
   const drawerItem = drawerId ? items.find((i) => i.id === drawerId) ?? null : null;
   const triggerRefs = useRef(new Map<string, HTMLButtonElement | null>());
   const focusReturnIdRef = useRef<string | null>(null);
-  const drawerReturnRef = useRef<HTMLElement | null>(null);
+  
 
   const restoreFocus = (id: string | null) => {
     if (!id) return;
