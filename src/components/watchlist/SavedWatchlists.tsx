@@ -448,6 +448,7 @@ export function SavedWatchlists({
                     onClick={() => {
                       setEditingId(item.id);
                       setEditName(item.name);
+                      setRenameError(null);
                     }}
                     className="rounded-full text-muted-foreground hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                     aria-label={`Rename ${item.name}`}
@@ -565,13 +566,10 @@ export function SavedWatchlists({
                         variant="outline"
                         size="sm"
                         className="h-8 rounded-lg text-xs"
+                        aria-label={`Sort by ${SORT_LABEL[sortKey]}`}
                       >
                         <ArrowUpDown className="mr-1 h-3 w-3" />
-                        {sortKey === "recent"
-                          ? "Recent"
-                          : sortKey === "name"
-                            ? "Name"
-                            : "Count"}
+                        {SORT_LABEL[sortKey]}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -580,6 +578,15 @@ export function SavedWatchlists({
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => setSortKey("name")}>
                         Name A–Z
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setSortKey("name-desc")}>
+                        Name Z–A
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setSortKey("created-new")}>
+                        Date created — Newest
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setSortKey("created-old")}>
+                        Date created — Oldest
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => setSortKey("count")}>
                         Most tickers
@@ -778,6 +785,7 @@ export function SavedWatchlists({
                   onClick={() => {
                     setEditingId(drawerItem.id);
                     setEditName(drawerItem.name);
+                    setRenameError(null);
                     setDrawerId(null);
                   }}
                   className="flex min-h-[48px] items-center gap-3 rounded-lg px-3 text-left text-sm hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
