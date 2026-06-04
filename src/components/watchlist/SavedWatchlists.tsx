@@ -819,6 +819,7 @@ export function SavedWatchlists({
                 <button
                   type="button"
                   onClick={() => {
+                    focusReturnIdRef.current = drawerItem.id;
                     setEditingId(drawerItem.id);
                     setEditName(drawerItem.name);
                     setRenameError(null);
