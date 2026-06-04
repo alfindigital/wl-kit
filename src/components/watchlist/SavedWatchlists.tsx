@@ -500,6 +500,11 @@ export function SavedWatchlists({
               )}
               {!selectMode && isMobile && (
                 <Button
+                  ref={(el) => {
+                    if (el) triggerRefs.current.set(item.id, el);
+                    else if (triggerRefs.current.get(item.id) === el || !el)
+                      triggerRefs.current.delete(item.id);
+                  }}
                   type="button"
                   variant="ghost"
                   size="icon"
