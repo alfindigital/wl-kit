@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useId, useMemo, useRef, useState } from "react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -55,7 +55,22 @@ import {
 } from "@/components/ui/drawer";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-type SortKey = "recent" | "name" | "count";
+type SortKey =
+  | "recent"
+  | "name"
+  | "name-desc"
+  | "created-new"
+  | "created-old"
+  | "count";
+
+const SORT_LABEL: Record<SortKey, string> = {
+  recent: "Recent",
+  name: "Name A–Z",
+  "name-desc": "Name Z–A",
+  "created-new": "Newest",
+  "created-old": "Oldest",
+  count: "Most tickers",
+};
 
 export function SavedWatchlists({
   items,
@@ -87,6 +102,8 @@ export function SavedWatchlists({
   const [selected, setSelected] = useState<string[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState("");
+  const [renameError, setRenameError] = useState<string | null>(null);
+  const renameErrorId = useId();
   const [swipedId, setSwipedId] = useState<string | null>(null);
   const [sortKey, setSortKey] = useState<SortKey>("recent");
   const [tagFilter, setTagFilter] = useState<string | null>(null);
@@ -121,6 +138,9 @@ export function SavedWatchlists({
 
   const sortFn = (a: SavedWatchlist, b: SavedWatchlist) => {
     if (sortKey === "name") return a.name.localeCompare(b.name);
+    if (sortKey === "name-desc") return b.name.localeCompare(a.name);
+    if (sortKey === "created-new") return b.savedAt - a.savedAt;
+    if (sortKey === "created-old") return a.savedAt - b.savedAt;
     if (sortKey === "count") return b.tickers.length - a.tickers.length;
     return (b.lastUsedAt ?? b.savedAt) - (a.lastUsedAt ?? a.savedAt);
   };
