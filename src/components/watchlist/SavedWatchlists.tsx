@@ -1,4 +1,4 @@
-import { useId, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -114,6 +114,26 @@ export function SavedWatchlists({
   const isMobile = useIsMobile();
   const [drawerId, setDrawerId] = useState<string | null>(null);
   const drawerItem = drawerId ? items.find((i) => i.id === drawerId) ?? null : null;
+  const triggerRefs = useRef(new Map<string, HTMLButtonElement | null>());
+  const focusReturnIdRef = useRef<string | null>(null);
+  
+
+  const restoreFocus = (id: string | null) => {
+    if (!id) return;
+    requestAnimationFrame(() => {
+      const el = triggerRefs.current.get(id);
+      if (el && document.contains(el)) el.focus();
+    });
+  };
+
+  // If the edited item disappears (deleted/filtered out) while editing, exit edit mode cleanly.
+  useEffect(() => {
+    if (editingId && !items.some((i) => i.id === editingId)) {
+      setEditingId(null);
+      setRenameError(null);
+      focusReturnIdRef.current = null;
+    }
+  }, [items, editingId]);
 
   const allTags = useMemo(() => {
     const s = new Set<string>();
@@ -210,11 +230,17 @@ export function SavedWatchlists({
     onRename(id, editName.trim());
     setEditingId(null);
     setRenameError(null);
+    const returnId = focusReturnIdRef.current ?? id;
+    focusReturnIdRef.current = null;
+    restoreFocus(returnId);
   };
 
   const cancelRename = () => {
+    const returnId = focusReturnIdRef.current ?? editingId;
     setEditingId(null);
     setRenameError(null);
+    focusReturnIdRef.current = null;
+    restoreFocus(returnId);
   };
 
   const renderItem = (item: SavedWatchlist) => {
@@ -442,10 +468,15 @@ export function SavedWatchlists({
                     </PopoverContent>
                   </Popover>
                   <Button
+                    ref={(el) => {
+                      if (el) triggerRefs.current.set(item.id, el);
+                      else triggerRefs.current.delete(item.id);
+                    }}
                     type="button"
                     variant="ghost"
                     size="icon"
                     onClick={() => {
+                      focusReturnIdRef.current = item.id;
                       setEditingId(item.id);
                       setEditName(item.name);
                       setRenameError(null);
@@ -469,6 +500,11 @@ export function SavedWatchlists({
               )}
               {!selectMode && isMobile && (
                 <Button
+                  ref={(el) => {
+                    if (el) triggerRefs.current.set(item.id, el);
+                    else if (triggerRefs.current.get(item.id) === el || !el)
+                      triggerRefs.current.delete(item.id);
+                  }}
                   type="button"
                   variant="ghost"
                   size="icon"
@@ -783,6 +819,7 @@ export function SavedWatchlists({
                 <button
                   type="button"
                   onClick={() => {
+                    focusReturnIdRef.current = drawerItem.id;
                     setEditingId(drawerItem.id);
                     setEditName(drawerItem.name);
                     setRenameError(null);
