@@ -784,6 +784,13 @@ function Index() {
         }
       />
 
+      <ShareLinkDialog
+        open={shareLinkOpen}
+        onOpenChange={setShareLinkOpen}
+        url={shareLinkUrl}
+        tickerCount={tickers.length}
+      />
+
       <ScrollToInputFab targetRef={textareaRef} />
       <ShortcutOverlay
         open={shortcutOpen}
