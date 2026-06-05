@@ -13,6 +13,7 @@ import { SaveDialog } from "@/components/watchlist/SaveDialog";
 import { SavedWatchlists } from "@/components/watchlist/SavedWatchlists";
 import { ShareCard } from "@/components/watchlist/ShareCard";
 import { ShareImageDialog } from "@/components/watchlist/ShareImageDialog";
+import { ShareLinkDialog } from "@/components/watchlist/ShareLinkDialog";
 import { InputStats } from "@/components/watchlist/InputStats";
 import { CommandPalette } from "@/components/watchlist/CommandPalette";
 import { ThemeToggle } from "@/components/watchlist/ThemeToggle";
@@ -101,6 +102,8 @@ function Index() {
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [shareImageOpen, setShareImageOpen] = useState(false);
   const [shareImageData, setShareImageData] = useState<string | null>(null);
+  const [shareLinkOpen, setShareLinkOpen] = useState(false);
+  const [shareLinkUrl, setShareLinkUrl] = useState("");
   const [liveStatus, setLiveStatus] = useState("");
   const [shortcutOpen, setShortcutOpen] = useState(false);
   const [onboardingActive, setOnboardingActive] = useState(false);
@@ -452,34 +455,21 @@ function Index() {
     toast.success("Downloaded .txt");
   };
 
-  const handleShare = async () => {
-    if (tickers.length === 0) return;
+  const buildShareUrl = () => {
     const params = new URLSearchParams();
     params.set("t", tickers.join(","));
     if (format !== "tradingview") params.set("f", format);
     if (sortMode !== "none") params.set("s", sortMode);
-    const url = `${window.location.origin}/?${params.toString()}`;
-    if (typeof navigator !== "undefined" && (navigator as Navigator).share) {
-      try {
-        await (navigator as Navigator).share({
-          title: "WatchlistKit",
-          text: output,
-          url,
-        });
-        toast.success("Shared");
-        return;
-      } catch (e) {
-        const err = e as DOMException;
-        if (err?.name === "AbortError") return;
-      }
-    }
-    try {
-      await navigator.clipboard.writeText(url);
-      toast.success("Share link copied!");
-    } catch {
-      toast.error("Failed to share");
-    }
+    return `${window.location.origin}/?${params.toString()}`;
   };
+
+  const handleShare = async () => {
+    if (tickers.length === 0) return;
+    const url = buildShareUrl();
+    setShareLinkUrl(url);
+    setShareLinkOpen(true);
+  };
+
 
   const handleImage = async () => {
     if (!shareCardRef.current || tickers.length === 0) return;
@@ -792,6 +782,13 @@ function Index() {
               ? window.location.origin
               : ""
         }
+      />
+
+      <ShareLinkDialog
+        open={shareLinkOpen}
+        onOpenChange={setShareLinkOpen}
+        url={shareLinkUrl}
+        tickerCount={tickers.length}
       />
 
       <ScrollToInputFab targetRef={textareaRef} />
