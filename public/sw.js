@@ -5,21 +5,36 @@
 //   - Cross-origin (e.g. Google Fonts): cache-first with background refresh
 // Bumping CACHE_VERSION invalidates old caches on activate.
 
-const CACHE_VERSION = "v1";
+const CACHE_VERSION = "v2";
 const RUNTIME_CACHE = `wk-runtime-${CACHE_VERSION}`;
 const HTML_CACHE = `wk-html-${CACHE_VERSION}`;
 
 const OFFLINE_URL = "/";
 
+// Precached at install so the app shell + icons + manifest work fully offline.
+const PRECACHE_URLS = [
+  OFFLINE_URL,
+  "/manifest.webmanifest",
+  "/icon-192.png",
+  "/icon-512.png",
+  "/icon-maskable.png",
+];
+
 self.addEventListener("install", (event) => {
   event.waitUntil(
     (async () => {
-      const cache = await caches.open(HTML_CACHE);
+      const htmlCache = await caches.open(HTML_CACHE);
       try {
-        await cache.add(new Request(OFFLINE_URL, { cache: "reload" }));
+        await htmlCache.add(new Request(OFFLINE_URL, { cache: "reload" }));
       } catch {
         // ignore — offline shell will be populated on first successful nav
       }
+      const runtimeCache = await caches.open(RUNTIME_CACHE);
+      await Promise.allSettled(
+        PRECACHE_URLS.filter((u) => u !== OFFLINE_URL).map((u) =>
+          runtimeCache.add(new Request(u, { cache: "reload" })),
+        ),
+      );
       await self.skipWaiting();
     })(),
   );
