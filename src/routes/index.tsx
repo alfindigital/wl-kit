@@ -455,34 +455,21 @@ function Index() {
     toast.success("Downloaded .txt");
   };
 
-  const handleShare = async () => {
-    if (tickers.length === 0) return;
+  const buildShareUrl = () => {
     const params = new URLSearchParams();
     params.set("t", tickers.join(","));
     if (format !== "tradingview") params.set("f", format);
     if (sortMode !== "none") params.set("s", sortMode);
-    const url = `${window.location.origin}/?${params.toString()}`;
-    if (typeof navigator !== "undefined" && (navigator as Navigator).share) {
-      try {
-        await (navigator as Navigator).share({
-          title: "WatchlistKit",
-          text: output,
-          url,
-        });
-        toast.success("Shared");
-        return;
-      } catch (e) {
-        const err = e as DOMException;
-        if (err?.name === "AbortError") return;
-      }
-    }
-    try {
-      await navigator.clipboard.writeText(url);
-      toast.success("Share link copied!");
-    } catch {
-      toast.error("Failed to share");
-    }
+    return `${window.location.origin}/?${params.toString()}`;
   };
+
+  const handleShare = async () => {
+    if (tickers.length === 0) return;
+    const url = buildShareUrl();
+    setShareLinkUrl(url);
+    setShareLinkOpen(true);
+  };
+
 
   const handleImage = async () => {
     if (!shareCardRef.current || tickers.length === 0) return;
