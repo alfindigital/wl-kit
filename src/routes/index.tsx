@@ -102,6 +102,8 @@ function Index() {
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [shareImageOpen, setShareImageOpen] = useState(false);
   const [shareImageData, setShareImageData] = useState<string | null>(null);
+  const [shareLinkOpen, setShareLinkOpen] = useState(false);
+  const [shareLinkUrl, setShareLinkUrl] = useState("");
   const [liveStatus, setLiveStatus] = useState("");
   const [shortcutOpen, setShortcutOpen] = useState(false);
   const [onboardingActive, setOnboardingActive] = useState(false);
