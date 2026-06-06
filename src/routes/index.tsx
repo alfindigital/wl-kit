@@ -62,20 +62,20 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Format your IDX watchlist in seconds. Paste tickers in any format, auto-prefix with IDX:, and export to TradingView, plain text, or lists. Save, merge & share.",
+          "Format your IDX watchlist fast. Paste tickers in any format, auto-prefix IDX:, export to TradingView, plain text, or lists. Save, merge & share.",
       },
       { property: "og:url", content: "https://wlkit.lovable.app/" },
       { property: "og:title", content: "WatchlistKit — Free IDX Watchlist Formatter" },
       {
         property: "og:description",
         content:
-          "Format your IDX watchlist in seconds. Paste tickers in any format, auto-prefix with IDX:, and export to TradingView, plain text, or lists. Save, merge & share.",
+          "Format your IDX watchlist fast. Paste tickers in any format, auto-prefix IDX:, export to TradingView, plain text, or lists. Save, merge & share.",
       },
       { name: "twitter:title", content: "WatchlistKit — Free IDX Watchlist Formatter" },
       {
         name: "twitter:description",
         content:
-          "Format your IDX watchlist in seconds. Paste tickers in any format, auto-prefix with IDX:, and export to TradingView, plain text, or lists. Save, merge & share.",
+          "Format your IDX watchlist fast. Paste tickers in any format, auto-prefix IDX:, export to TradingView, plain text, or lists. Save, merge & share.",
       },
     ],
     links: [{ rel: "canonical", href: "https://wlkit.lovable.app/" }],
@@ -464,7 +464,10 @@ function Index() {
   };
 
   const handleShare = async () => {
-    if (tickers.length === 0) return;
+    if (tickers.length === 0) {
+      toast.error("Nothing to share — add tickers first");
+      return;
+    }
     const url = buildShareUrl();
     setShareLinkUrl(url);
     setShareLinkOpen(true);

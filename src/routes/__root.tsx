@@ -84,7 +84,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Format your IDX watchlist in seconds. Paste tickers in any format, auto-prefix with IDX:, and export to TradingView, plain text, or lists. Save, merge & share.",
+          "Format your IDX watchlist fast. Paste tickers in any format, auto-prefix IDX:, export to TradingView, plain text, or lists. Save, merge & share.",
       },
       { name: "author", content: "alfindigital" },
       { property: "og:site_name", content: "WatchlistKit" },
@@ -94,8 +94,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:title", content: "WatchlistKit — Free IDX Watchlist Formatter" },
       { name: "twitter:title", content: "WatchlistKit — Free IDX Watchlist Formatter" },
-      { property: "og:description", content: "Format your IDX watchlist in seconds. Paste tickers in any format, auto-prefix with IDX:, and export to TradingView, plain text, or lists. Save, merge & share." },
-      { name: "twitter:description", content: "Format your IDX watchlist in seconds. Paste tickers in any format, auto-prefix with IDX:, and export to TradingView, plain text, or lists. Save, merge & share." },
+      { property: "og:description", content: "Format your IDX watchlist fast. Paste tickers in any format, auto-prefix IDX:, export to TradingView, plain text, or lists. Save, merge & share." },
+      { name: "twitter:description", content: "Format your IDX watchlist fast. Paste tickers in any format, auto-prefix IDX:, export to TradingView, plain text, or lists. Save, merge & share." },
       { property: "og:image", content: OG_IMAGE_URL },
       { property: "og:image:alt", content: "WatchlistKit — Free IDX Watchlist Formatter" },
       { name: "twitter:image", content: OG_IMAGE_URL },
@@ -124,7 +124,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           name: "WatchlistKit",
           url: WEBSITE_URL,
           description:
-            "Format your IDX watchlist in seconds. Paste tickers in any format, auto-prefix with IDX:, and export to TradingView, plain text, or lists. Save, merge & share.",
+            "Format your IDX watchlist fast. Paste tickers in any format, auto-prefix IDX:, export to TradingView, plain text, or lists. Save, merge & share.",
         }),
       },
     ],
