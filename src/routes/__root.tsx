@@ -80,26 +80,26 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
-      { title: "WatchlistKit — Free IDX Watchlist Formatter" },
+      { title: "WatchlistKit — Format Watchlist Saham IDX Gratis" },
       {
         name: "description",
         content:
-          "Format your IDX watchlist fast. Paste tickers in any format, auto-prefix IDX:, export to TradingView, plain text, or lists. Save, merge & share.",
+          "Format watchlist saham IDX dalam hitungan detik. Tempel ticker dalam format apa pun, ekspor ke TradingView, teks, atau daftar. Simpan & bagikan.",
       },
       { name: "author", content: "alfindigital" },
       { property: "og:site_name", content: "WatchlistKit" },
       { property: "og:type", content: "website" },
-      { property: "og:locale", content: "en_US" },
+      { property: "og:locale", content: "id_ID" },
       { property: "og:url", content: WEBSITE_URL },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:title", content: "WatchlistKit — Free IDX Watchlist Formatter" },
-      { name: "twitter:title", content: "WatchlistKit — Free IDX Watchlist Formatter" },
-      { property: "og:description", content: "Format your IDX watchlist fast. Paste tickers in any format, auto-prefix IDX:, export to TradingView, plain text, or lists. Save, merge & share." },
-      { name: "twitter:description", content: "Format your IDX watchlist fast. Paste tickers in any format, auto-prefix IDX:, export to TradingView, plain text, or lists. Save, merge & share." },
+      { property: "og:title", content: "WatchlistKit — Format Watchlist Saham IDX Gratis" },
+      { name: "twitter:title", content: "WatchlistKit — Format Watchlist Saham IDX Gratis" },
+      { property: "og:description", content: "Format watchlist saham IDX dalam hitungan detik. Tempel ticker dalam format apa pun, ekspor ke TradingView, teks, atau daftar. Simpan & bagikan." },
+      { name: "twitter:description", content: "Format watchlist saham IDX dalam hitungan detik. Tempel ticker dalam format apa pun, ekspor ke TradingView, teks, atau daftar. Simpan & bagikan." },
       { property: "og:image", content: OG_IMAGE_URL },
-      { property: "og:image:alt", content: "WatchlistKit — Free IDX Watchlist Formatter" },
+      { property: "og:image:alt", content: "WatchlistKit — Format Watchlist Saham IDX Gratis" },
       { name: "twitter:image", content: OG_IMAGE_URL },
-      { name: "twitter:image:alt", content: "WatchlistKit — Free IDX Watchlist Formatter" },
+      { name: "twitter:image:alt", content: "WatchlistKit — Format Watchlist Saham IDX Gratis" },
       { name: "theme-color", content: "#ea580c" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-title", content: "WatchlistKit" },
@@ -123,8 +123,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "@type": "WebSite",
           name: "WatchlistKit",
           url: WEBSITE_URL,
+          inLanguage: "id-ID",
           description:
-            "Format your IDX watchlist fast. Paste tickers in any format, auto-prefix IDX:, export to TradingView, plain text, or lists. Save, merge & share.",
+            "Format watchlist saham IDX dalam hitungan detik. Tempel ticker dalam format apa pun, ekspor ke TradingView, teks, atau daftar. Simpan & bagikan.",
         }),
       },
     ],
@@ -137,7 +138,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="id">
       <head>
         <HeadContent />
       </head>
