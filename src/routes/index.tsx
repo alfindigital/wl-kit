@@ -58,24 +58,24 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "WatchlistKit — Free IDX Watchlist Formatter" },
+      { title: "WatchlistKit — Format Watchlist Saham IDX Gratis" },
       {
         name: "description",
         content:
-          "Format your IDX watchlist fast. Paste tickers in any format, auto-prefix IDX:, export to TradingView, plain text, or lists. Save, merge & share.",
+          "Format watchlist saham IDX dalam hitungan detik. Tempel ticker dalam format apa pun, ekspor ke TradingView, teks, atau daftar. Simpan & bagikan.",
       },
       { property: "og:url", content: "https://wlkit.lovable.app/" },
-      { property: "og:title", content: "WatchlistKit — Free IDX Watchlist Formatter" },
+      { property: "og:title", content: "WatchlistKit — Format Watchlist Saham IDX Gratis" },
       {
         property: "og:description",
         content:
-          "Format your IDX watchlist fast. Paste tickers in any format, auto-prefix IDX:, export to TradingView, plain text, or lists. Save, merge & share.",
+          "Format watchlist saham IDX dalam hitungan detik. Tempel ticker dalam format apa pun, ekspor ke TradingView, teks, atau daftar. Simpan & bagikan.",
       },
-      { name: "twitter:title", content: "WatchlistKit — Free IDX Watchlist Formatter" },
+      { name: "twitter:title", content: "WatchlistKit — Format Watchlist Saham IDX Gratis" },
       {
         name: "twitter:description",
         content:
-          "Format your IDX watchlist fast. Paste tickers in any format, auto-prefix IDX:, export to TradingView, plain text, or lists. Save, merge & share.",
+          "Format watchlist saham IDX dalam hitungan detik. Tempel ticker dalam format apa pun, ekspor ke TradingView, teks, atau daftar. Simpan & bagikan.",
       },
     ],
     links: [{ rel: "canonical", href: "https://wlkit.lovable.app/" }],
@@ -644,8 +644,8 @@ function Index() {
         <div className="mx-auto w-full max-w-2xl px-4 pb-10 pt-6 sm:px-6 sm:pt-10">
           <div className="mb-4 text-center sm:mb-6">
             <h1 className="font-display text-2xl leading-tight tracking-tight sm:text-3xl">
-              Format your IDX watchlist{" "}
-              <em className="italic text-primary">in seconds.</em>
+              Format watchlist saham IDX Anda{" "}
+              <em className="italic text-primary">dalam hitungan detik.</em>
             </h1>
           </div>
 
