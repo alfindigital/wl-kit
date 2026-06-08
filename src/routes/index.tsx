@@ -5,6 +5,7 @@ import { toPng } from "html-to-image";
 import { z } from "zod";
 
 import { Footer } from "@/components/watchlist/Footer";
+import { Faq, FAQ_ITEMS } from "@/components/watchlist/Faq";
 import { TickerInput } from "@/components/watchlist/TickerInput";
 import { FormatTabs } from "@/components/watchlist/FormatTabs";
 import { OutputBlock, type SortMode } from "@/components/watchlist/OutputBlock";
@@ -79,6 +80,21 @@ export const Route = createFileRoute("/")({
       },
     ],
     links: [{ rel: "canonical", href: "https://wlkit.lovable.app/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          inLanguage: "id-ID",
+          mainEntity: FAQ_ITEMS.map((item) => ({
+            "@type": "Question",
+            name: item.q,
+            acceptedAnswer: { "@type": "Answer", text: item.a },
+          })),
+        }),
+      },
+    ],
   }),
 });
 
@@ -715,6 +731,8 @@ function Index() {
           </div>
         </div>
       </main>
+
+      <Faq />
 
       <Footer />
 
