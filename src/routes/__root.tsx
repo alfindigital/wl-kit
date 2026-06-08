@@ -120,12 +120,26 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "WebSite",
+          "@type": "SoftwareApplication",
           name: "WatchlistKit",
           url: WEBSITE_URL,
           inLanguage: "id-ID",
+          applicationCategory: "FinanceApplication",
+          operatingSystem: "Web",
+          browserRequirements: "Requires JavaScript. Requires HTML5.",
           description:
             "Format watchlist saham IDX dalam hitungan detik. Tempel ticker dalam format apa pun, ekspor ke TradingView, teks, atau daftar. Simpan & bagikan.",
+          image: OG_IMAGE_URL,
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "IDR",
+          },
+          author: {
+            "@type": "Organization",
+            name: "alfindigital",
+            url: "https://alfindigital.com",
+          },
         }),
       },
     ],
