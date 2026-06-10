@@ -73,12 +73,15 @@ export const Route = createFileRoute("/")({
         content:
           "Format watchlist saham IDX dalam hitungan detik. Tempel ticker dalam format apa pun, ekspor ke TradingView, teks, atau daftar. Simpan & bagikan.",
       },
+      { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "WatchlistKit — Format Watchlist Saham IDX Gratis" },
       {
         name: "twitter:description",
         content:
           "Format watchlist saham IDX dalam hitungan detik. Tempel ticker dalam format apa pun, ekspor ke TradingView, teks, atau daftar. Simpan & bagikan.",
       },
+      { name: "twitter:image", content: `https://wlkit.lovable.app${ogImage}` },
+      { name: "twitter:image:alt", content: "WatchlistKit — Format Watchlist Saham IDX Gratis" },
     ],
     links: [{ rel: "canonical", href: "https://wlkit.lovable.app/" }],
     scripts: [
