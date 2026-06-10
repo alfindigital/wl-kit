@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { toPng } from "html-to-image";
 import { z } from "zod";
+import ogImage from "@/assets/og-image.jpg";
 
 import { Footer } from "@/components/watchlist/Footer";
 import { Faq, FAQ_ITEMS } from "@/components/watchlist/Faq";
