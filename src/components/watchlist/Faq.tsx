@@ -7,28 +7,28 @@ import {
 
 export const FAQ_ITEMS = [
   {
-    q: "Apa itu WatchlistKit?",
-    a: "WatchlistKit adalah alat gratis berbasis browser untuk memformat dan merapikan ticker saham IDX (Bursa Efek Indonesia). Tempel ticker dalam format apa pun, lalu ekspor langsung ke TradingView, teks biasa, atau daftar baris.",
+    q: "What is WatchlistKit?",
+    a: "WatchlistKit is a free, browser-based tool for formatting and cleaning up IDX (Indonesia Stock Exchange) ticker lists. Paste tickers in any format, then export directly to TradingView, plain text, or a line-by-line list.",
   },
   {
-    q: "Bagaimana cara format ticker IDX untuk TradingView?",
-    a: "Tempel daftar ticker Anda di kotak input — WatchlistKit otomatis menambahkan prefiks IDX:, menghapus duplikat, dan menampilkan hasilnya dalam format TradingView yang siap disalin ke watchlist.",
+    q: "How do I format IDX tickers for TradingView?",
+    a: "Paste your ticker list into the input box — WatchlistKit automatically adds the IDX: prefix, removes duplicates, and shows the result in a TradingView-ready format you can copy straight into your watchlist.",
   },
   {
-    q: "Apakah WatchlistKit gratis?",
-    a: "Ya, sepenuhnya gratis. Tidak perlu mendaftar akun, tidak ada batasan harian, dan tidak ada iklan.",
+    q: "Is WatchlistKit free?",
+    a: "Yes, completely free. No account required, no daily limits, and no ads.",
   },
   {
-    q: "Apakah data watchlist saya aman?",
-    a: "Semua watchlist disimpan secara lokal di browser Anda (localStorage). Tidak ada data yang dikirim ke server — Anda bisa ekspor dan impor file JSON kapan saja sebagai cadangan.",
+    q: "Is my watchlist data safe?",
+    a: "All watchlists are stored locally in your browser (localStorage). No data is sent to any server — you can export and import a JSON backup file at any time.",
   },
   {
-    q: "Format ekspor apa saja yang didukung?",
-    a: "TradingView (BBCA,BBRI,…), teks biasa dengan koma, dan daftar baris per ticker. Anda juga bisa mengunduh hasil sebagai file .txt atau gambar PNG bermerek.",
+    q: "Which export formats are supported?",
+    a: "TradingView (IDX:BBCA,IDX:BBRI,…), plain comma-separated text, and a line-per-ticker list. You can also download the result as a .txt file or a branded PNG image.",
   },
   {
-    q: "Bisakah saya membagikan watchlist dengan orang lain?",
-    a: "Bisa. Klik tombol Share untuk menghasilkan tautan unik berisi ticker Anda, atau buat gambar PNG yang siap dibagikan ke media sosial.",
+    q: "Can I share my watchlist with others?",
+    a: "Yes. Click the Share button to generate a unique link containing your tickers, or create a shareable PNG image ready to post on social media.",
   },
 ];
 
@@ -42,7 +42,7 @@ export function Faq() {
         id="faq-heading"
         className="font-display text-xl font-semibold tracking-tight sm:text-2xl"
       >
-        Pertanyaan yang sering diajukan
+        Frequently asked questions
       </h2>
       <Accordion type="single" collapsible className="mt-4">
         {FAQ_ITEMS.map((item, i) => (
