@@ -60,28 +60,28 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "WatchlistKit — Format Watchlist Saham IDX Gratis" },
+      { title: "WatchlistKit — Free IDX Stock Watchlist Formatter" },
       {
         name: "description",
         content:
-          "Format watchlist saham IDX dalam hitungan detik. Tempel ticker dalam format apa pun, ekspor ke TradingView, teks, atau daftar. Simpan & bagikan.",
+          "Format your IDX stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
       },
       { property: "og:url", content: "https://wlkit.lovable.app/" },
-      { property: "og:title", content: "WatchlistKit — Format Watchlist Saham IDX Gratis" },
+      { property: "og:title", content: "WatchlistKit — Free IDX Stock Watchlist Formatter" },
       {
         property: "og:description",
         content:
-          "Format watchlist saham IDX dalam hitungan detik. Tempel ticker dalam format apa pun, ekspor ke TradingView, teks, atau daftar. Simpan & bagikan.",
+          "Format your IDX stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
       },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "WatchlistKit — Format Watchlist Saham IDX Gratis" },
+      { name: "twitter:title", content: "WatchlistKit — Free IDX Stock Watchlist Formatter" },
       {
         name: "twitter:description",
         content:
-          "Format watchlist saham IDX dalam hitungan detik. Tempel ticker dalam format apa pun, ekspor ke TradingView, teks, atau daftar. Simpan & bagikan.",
+          "Format your IDX stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
       },
       { name: "twitter:image", content: `https://wlkit.lovable.app${ogImage}` },
-      { name: "twitter:image:alt", content: "WatchlistKit — Format Watchlist Saham IDX Gratis" },
+      { name: "twitter:image:alt", content: "WatchlistKit — Free IDX Stock Watchlist Formatter" },
     ],
     links: [{ rel: "canonical", href: "https://wlkit.lovable.app/" }],
     scripts: [
@@ -90,7 +90,7 @@ export const Route = createFileRoute("/")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "FAQPage",
-          inLanguage: "id-ID",
+          inLanguage: "en-US",
           mainEntity: FAQ_ITEMS.map((item) => ({
             "@type": "Question",
             name: item.q,
@@ -664,7 +664,7 @@ function Index() {
         <div className="mx-auto w-full max-w-2xl px-4 pb-10 pt-6 sm:px-6 sm:pt-10">
           <div className="mb-4 text-center sm:mb-6">
             <h1 className="font-display text-2xl leading-tight tracking-tight sm:text-3xl">
-              Buat watchlist IDX, <em className="italic text-primary">instan.</em>
+              Build your IDX watchlist, <em className="italic text-primary">instantly.</em>
             </h1>
           </div>
 

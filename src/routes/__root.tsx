@@ -80,29 +80,29 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
-      { title: "WatchlistKit — Format Watchlist Saham IDX Gratis" },
+      { title: "WatchlistKit — Free IDX Stock Watchlist Formatter" },
       {
         name: "description",
         content:
-          "Format watchlist saham IDX dalam hitungan detik. Tempel ticker dalam format apa pun, ekspor ke TradingView, teks, atau daftar. Simpan & bagikan.",
+          "Format your IDX stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
       },
       { name: "author", content: "alfindigital" },
       { property: "og:site_name", content: "WatchlistKit" },
       { property: "og:type", content: "website" },
-      { property: "og:locale", content: "id_ID" },
+      { property: "og:locale", content: "en_US" },
       { property: "og:url", content: WEBSITE_URL },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:title", content: "WatchlistKit — Format Watchlist Saham IDX Gratis" },
-      { name: "twitter:title", content: "WatchlistKit — Format Watchlist Saham IDX Gratis" },
-      { property: "og:description", content: "Format watchlist saham IDX dalam hitungan detik. Tempel ticker dalam format apa pun, ekspor ke TradingView, teks, atau daftar. Simpan & bagikan." },
-      { name: "twitter:description", content: "Format watchlist saham IDX dalam hitungan detik. Tempel ticker dalam format apa pun, ekspor ke TradingView, teks, atau daftar. Simpan & bagikan." },
+      { property: "og:title", content: "WatchlistKit — Free IDX Stock Watchlist Formatter" },
+      { name: "twitter:title", content: "WatchlistKit — Free IDX Stock Watchlist Formatter" },
+      { property: "og:description", content: "Format your IDX stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share." },
+      { name: "twitter:description", content: "Format your IDX stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share." },
       { property: "og:image", content: OG_IMAGE_URL },
-      { property: "og:image:alt", content: "WatchlistKit — Format Watchlist Saham IDX Gratis" },
+      { property: "og:image:alt", content: "WatchlistKit — Free IDX Stock Watchlist Formatter" },
       { property: "og:image:width", content: "1536" },
       { property: "og:image:height", content: "1024" },
       { property: "og:image:type", content: "image/jpeg" },
       { name: "twitter:image", content: OG_IMAGE_URL },
-      { name: "twitter:image:alt", content: "WatchlistKit — Format Watchlist Saham IDX Gratis" },
+      { name: "twitter:image:alt", content: "WatchlistKit — Free IDX Stock Watchlist Formatter" },
       { name: "theme-color", content: "#ea580c" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-title", content: "WatchlistKit" },
@@ -128,12 +128,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "@type": "SoftwareApplication",
           name: "WatchlistKit",
           url: WEBSITE_URL,
-          inLanguage: "id-ID",
+          inLanguage: "en-US",
           applicationCategory: "FinanceApplication",
           operatingSystem: "Web",
           browserRequirements: "Requires JavaScript. Requires HTML5.",
           description:
-            "Format watchlist saham IDX dalam hitungan detik. Tempel ticker dalam format apa pun, ekspor ke TradingView, teks, atau daftar. Simpan & bagikan.",
+            "Format your IDX stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
           image: OG_IMAGE_URL,
           offers: {
             "@type": "Offer",
@@ -157,7 +157,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="id">
+    <html lang="en">
       <head>
         <HeadContent />
       </head>
