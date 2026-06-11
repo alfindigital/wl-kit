@@ -31,7 +31,63 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { HelpCircle, MessageCircleQuestion } from "lucide-react";
+import { HelpCircle, MessageCircleQuestion, Keyboard } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+
+function HelpMenu({
+  onFaq,
+  onShortcuts,
+}: {
+  onFaq: () => void;
+  onShortcuts: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="h-9 w-9 rounded-full text-muted-foreground hover:text-primary"
+          aria-label="Help"
+        >
+          <HelpCircle className="h-4 w-4" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent
+        align="end"
+        sideOffset={8}
+        className="w-56 rounded-xl p-1.5"
+      >
+        <button
+          type="button"
+          onClick={() => {
+            setOpen(false);
+            onFaq();
+          }}
+          className="flex w-full items-center gap-3 rounded-lg px-2.5 py-2 text-left text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+        >
+          <MessageCircleQuestion className="h-4 w-4 text-muted-foreground" />
+          <span className="flex-1">FAQ</span>
+          <kbd className="font-mono text-[10px] text-muted-foreground">?</kbd>
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setOpen(false);
+            onShortcuts();
+          }}
+          className="flex w-full items-center gap-3 rounded-lg px-2.5 py-2 text-left text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+        >
+          <Keyboard className="h-4 w-4 text-muted-foreground" />
+          <span className="flex-1">Keyboard shortcuts</span>
+          <kbd className="font-mono text-[10px] text-muted-foreground">⇧?</kbd>
+        </button>
+      </PopoverContent>
+    </Popover>
+  );
+}
 
 import {
   analyzeInput,
@@ -627,26 +683,10 @@ function Index() {
               </Badge>
             )}
             <ThemeToggle />
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              onClick={() => setFaqOpen(true)}
-              className="h-9 w-9 rounded-full text-muted-foreground hover:text-primary"
-              aria-label="FAQ"
-            >
-              <MessageCircleQuestion className="h-4 w-4" />
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              onClick={() => setShortcutOpen(true)}
-              className="h-9 w-9 rounded-full text-muted-foreground hover:text-primary"
-              aria-label="Keyboard shortcuts"
-            >
-              <HelpCircle className="h-4 w-4" />
-            </Button>
+            <HelpMenu
+              onFaq={() => setFaqOpen(true)}
+              onShortcuts={() => setShortcutOpen(true)}
+            />
           </div>
         </div>
       </header>
@@ -658,26 +698,10 @@ function Index() {
           className="pointer-events-auto flex items-center gap-1 rounded-full border border-border/60 bg-card/80 px-1 py-1 shadow-sm backdrop-blur"
         >
           <ThemeToggle />
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            onClick={() => setFaqOpen(true)}
-            className="h-9 w-9 rounded-full text-muted-foreground hover:text-primary"
-            aria-label="FAQ"
-          >
-            <MessageCircleQuestion className="h-4 w-4" />
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            onClick={() => setShortcutOpen(true)}
-            className="h-9 w-9 rounded-full text-muted-foreground hover:text-primary"
-            aria-label="Keyboard shortcuts"
-          >
-            <HelpCircle className="h-4 w-4" />
-          </Button>
+          <HelpMenu
+            onFaq={() => setFaqOpen(true)}
+            onShortcuts={() => setShortcutOpen(true)}
+          />
         </div>
       </div>
 
