@@ -23,10 +23,10 @@ const links = [
 export function Footer() {
   return (
     <footer
-      className="mt-16 border-t border-border bg-background py-3"
-      style={{ paddingBottom: "calc(0.75rem + env(safe-area-inset-bottom))" }}
+      className="mt-8 border-t border-border bg-background py-1.5"
+      style={{ paddingBottom: "calc(0.375rem + env(safe-area-inset-bottom))" }}
     >
-      <div className="mx-auto flex max-w-xl flex-wrap items-center justify-center gap-x-3 gap-y-2 px-4 text-sm text-muted-foreground">
+      <div className="mx-auto flex max-w-xl flex-wrap items-center justify-center gap-x-2 gap-y-1 px-4 text-sm text-muted-foreground">
         <span>
           by{" "}
           <a
@@ -48,9 +48,9 @@ export function Footer() {
                 rel="noreferrer noopener"
                 aria-label={label}
                 title={label}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-primary"
+                className="inline-flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-primary"
               >
-                <Icon className="h-3.5 w-3.5" />
+                <Icon className="h-3 w-3" />
               </a>
             </li>
           ))}
