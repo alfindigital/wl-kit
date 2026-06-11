@@ -6,7 +6,7 @@ import { z } from "zod";
 import ogImage from "@/assets/og-image.jpg";
 
 import { Footer } from "@/components/watchlist/Footer";
-import { Faq, FAQ_ITEMS } from "@/components/watchlist/Faq";
+import { FaqDialog, FAQ_ITEMS } from "@/components/watchlist/Faq";
 import { TickerInput } from "@/components/watchlist/TickerInput";
 import { FormatTabs } from "@/components/watchlist/FormatTabs";
 import { OutputBlock, type SortMode } from "@/components/watchlist/OutputBlock";
@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { HelpCircle } from "lucide-react";
+import { HelpCircle, MessageCircleQuestion } from "lucide-react";
 
 import {
   analyzeInput,
@@ -126,6 +126,7 @@ function Index() {
   const [shareLinkUrl, setShareLinkUrl] = useState("");
   const [liveStatus, setLiveStatus] = useState("");
   const [shortcutOpen, setShortcutOpen] = useState(false);
+  const [faqOpen, setFaqOpen] = useState(false);
   const [onboardingActive, setOnboardingActive] = useState(false);
   const [sortMode, setSortMode] = useState<SortMode>("none");
   useEffect(() => {
@@ -630,6 +631,16 @@ function Index() {
               type="button"
               variant="ghost"
               size="icon"
+              onClick={() => setFaqOpen(true)}
+              className="h-9 w-9 rounded-full text-muted-foreground hover:text-primary"
+              aria-label="FAQ"
+            >
+              <MessageCircleQuestion className="h-4 w-4" />
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
               onClick={() => setShortcutOpen(true)}
               className="h-9 w-9 rounded-full text-muted-foreground hover:text-primary"
               aria-label="Keyboard shortcuts"
@@ -647,6 +658,16 @@ function Index() {
           className="pointer-events-auto flex items-center gap-1 rounded-full border border-border/60 bg-card/80 px-1 py-1 shadow-sm backdrop-blur"
         >
           <ThemeToggle />
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={() => setFaqOpen(true)}
+            className="h-9 w-9 rounded-full text-muted-foreground hover:text-primary"
+            aria-label="FAQ"
+          >
+            <MessageCircleQuestion className="h-4 w-4" />
+          </Button>
           <Button
             type="button"
             variant="ghost"
@@ -735,7 +756,6 @@ function Index() {
         </div>
       </main>
 
-      <Faq />
 
       <Footer />
 
@@ -816,6 +836,7 @@ function Index() {
       />
 
       <ScrollToInputFab targetRef={textareaRef} />
+      <FaqDialog open={faqOpen} onOpenChange={setFaqOpen} />
       <ShortcutOverlay
         open={shortcutOpen}
         onOpenChange={setShortcutOpen}
