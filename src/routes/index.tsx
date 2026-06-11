@@ -664,8 +664,7 @@ function Index() {
         <div className="mx-auto w-full max-w-2xl px-4 pb-10 pt-6 sm:px-6 sm:pt-10">
           <div className="mb-4 text-center sm:mb-6">
             <h1 className="font-display text-2xl leading-tight tracking-tight sm:text-3xl">
-              Format watchlist saham IDX Anda{" "}
-              <em className="italic text-primary">dalam hitungan detik.</em>
+              Watchlist IDX, <em className="italic text-primary">instan.</em>
             </h1>
           </div>
 
