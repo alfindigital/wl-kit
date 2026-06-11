@@ -675,57 +675,35 @@ export function SavedWatchlists({
                       </Button>
                     </div>
                   )}
-                </div>
-                {(allTags.length > 0 || tagFilter) && (
-                  <div className="flex flex-wrap items-center gap-1 px-2 pb-2">
-                    {tagFilter && (
-                      <button
-                        onClick={() => setTagFilter(null)}
-                        className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] text-primary hover:bg-primary/20"
-                      >
-                        #{tagFilter} ×
-                      </button>
-                    )}
-                    {!tagFilter &&
-                      allTags.map((t) => (
-                        <button
-                          key={t}
-                          onClick={() => setTagFilter(t)}
-                          className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground hover:bg-primary/10 hover:text-primary"
-                        >
-                          #{t}
-                        </button>
-                      ))}
+                  <div className="flex items-center gap-1 sm:ml-auto">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 rounded-lg text-[11px] text-muted-foreground hover:text-primary"
+                      onClick={onExport}
+                    >
+                      <Download className="mr-1 h-3 w-3" /> Export
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 rounded-lg text-[11px] text-muted-foreground hover:text-primary"
+                      onClick={() => fileRef.current?.click()}
+                    >
+                      <Upload className="mr-1 h-3 w-3" /> Import
+                    </Button>
+                    <input
+                      ref={fileRef}
+                      type="file"
+                      accept="application/json,.json"
+                      className="hidden"
+                      onChange={(e) => {
+                        const f = e.target.files?.[0];
+                        if (f) onImport(f);
+                        e.target.value = "";
+                      }}
+                    />
                   </div>
-                )}
-                <div className="flex items-center justify-end gap-1 px-2 pb-2">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-7 rounded-lg text-[11px] text-muted-foreground hover:text-primary"
-                    onClick={onExport}
-                  >
-                    <Download className="mr-1 h-3 w-3" /> Export
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-7 rounded-lg text-[11px] text-muted-foreground hover:text-primary"
-                    onClick={() => fileRef.current?.click()}
-                  >
-                    <Upload className="mr-1 h-3 w-3" /> Import
-                  </Button>
-                  <input
-                    ref={fileRef}
-                    type="file"
-                    accept="application/json,.json"
-                    className="hidden"
-                    onChange={(e) => {
-                      const f = e.target.files?.[0];
-                      if (f) onImport(f);
-                      e.target.value = "";
-                    }}
-                  />
                 </div>
               </>
             )}
