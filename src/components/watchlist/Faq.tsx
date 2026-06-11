@@ -4,6 +4,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export const FAQ_ITEMS = [
   {
@@ -32,6 +38,36 @@ export const FAQ_ITEMS = [
   },
 ];
 
+export function FaqDialog({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (o: boolean) => void;
+}) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-h-[80vh] overflow-y-auto rounded-2xl sm:max-w-xl">
+        <DialogHeader>
+          <DialogTitle className="font-display text-xl font-semibold tracking-tight sm:text-2xl">
+            Frequently asked questions
+          </DialogTitle>
+        </DialogHeader>
+        <Accordion type="single" collapsible className="mt-2">
+          {FAQ_ITEMS.map((item, i) => (
+            <AccordionItem key={i} value={`faq-${i}`}>
+              <AccordionTrigger>{item.q}</AccordionTrigger>
+              <AccordionContent className="text-muted-foreground">
+                {item.a}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 export function Faq() {
   return (
     <section
@@ -57,3 +93,4 @@ export function Faq() {
     </section>
   );
 }
+
