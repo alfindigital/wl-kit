@@ -26,7 +26,7 @@ export function Footer() {
       className="mt-16 border-t border-border bg-background py-3"
       style={{ paddingBottom: "calc(0.75rem + env(safe-area-inset-bottom))" }}
     >
-      <div className="mx-auto flex max-w-xl flex-wrap items-center justify-center gap-x-3 gap-y-2 px-4 text-xs text-muted-foreground">
+      <div className="mx-auto flex max-w-xl flex-wrap items-center justify-center gap-x-3 gap-y-2 px-4 text-sm text-muted-foreground">
         <span>
           by{" "}
           <a
