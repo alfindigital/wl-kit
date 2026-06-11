@@ -836,6 +836,7 @@ function Index() {
       />
 
       <ScrollToInputFab targetRef={textareaRef} />
+      <FaqDialog open={faqOpen} onOpenChange={setFaqOpen} />
       <ShortcutOverlay
         open={shortcutOpen}
         onOpenChange={setShortcutOpen}
