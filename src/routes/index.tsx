@@ -1,7 +1,6 @@
 import { createFileRoute, useSearch, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
-import { toPng } from "html-to-image";
 import { z } from "zod";
 import ogImage from "@/assets/og-image.jpg";
 
@@ -187,16 +186,28 @@ function Index() {
   const [sortMode, setSortMode] = useState<SortMode>("none");
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const done = localStorage.getItem("wlkit-onboarded");
-    if (!done) setOnboardingActive(true);
+    try {
+      const done = localStorage.getItem("wlkit-onboarded");
+      if (!done) setOnboardingActive(true);
+    } catch {
+      // Storage blocked — skip onboarding gate; don't crash.
+    }
   }, []);
 
   const dismissOnboarding = () => {
-    localStorage.setItem("wlkit-onboarded", "1");
+    try {
+      localStorage.setItem("wlkit-onboarded", "1");
+    } catch {
+      // ignore
+    }
     setOnboardingActive(false);
   };
   const reopenOnboarding = () => {
-    localStorage.removeItem("wlkit-onboarded");
+    try {
+      localStorage.removeItem("wlkit-onboarded");
+    } catch {
+      // ignore
+    }
     setOnboardingActive(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -220,27 +231,43 @@ function Index() {
     try {
       const raw = localStorage.getItem("wlkit.session");
       if (!raw) return;
-      const data = JSON.parse(raw);
-      if (typeof data?.input === "string") setInput(data.input);
-      if (["tradingview", "plain", "newline"].includes(data?.format)) setFormat(data.format);
-      if (["none", "asc", "desc"].includes(data?.sortMode)) setSortMode(data.sortMode);
+      const parsed = JSON.parse(raw);
+      // Support legacy (bare object) and versioned ({version, data}) shapes.
+      const data =
+        parsed && typeof parsed === "object" && "data" in parsed
+          ? (parsed as { version?: number; data: unknown }).data
+          : parsed;
+      const v =
+        parsed && typeof parsed === "object" && "version" in parsed
+          ? (parsed as { version?: number }).version
+          : 0;
+      if (typeof v === "number" && v > 1) return; // future schema — skip
+      const d = data as { input?: unknown; format?: unknown; sortMode?: unknown };
+      if (typeof d?.input === "string") setInput(d.input);
+      if (typeof d?.format === "string" && ["tradingview", "plain", "newline"].includes(d.format))
+        setFormat(d.format as OutputFormat);
+      if (typeof d?.sortMode === "string" && ["none", "asc", "desc"].includes(d.sortMode))
+        setSortMode(d.sortMode as SortMode);
     } catch {
       // ignore
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Persist session to localStorage whenever it changes.
+  // Persist session to localStorage (debounced to avoid jank on every keystroke).
   useEffect(() => {
     if (typeof window === "undefined") return;
-    try {
-      localStorage.setItem(
-        "wlkit.session",
-        JSON.stringify({ input, format, sortMode }),
-      );
-    } catch {
-      // ignore quota errors
-    }
+    const id = window.setTimeout(() => {
+      try {
+        localStorage.setItem(
+          "wlkit.session",
+          JSON.stringify({ version: 1, data: { input, format, sortMode } }),
+        );
+      } catch {
+        // ignore quota errors
+      }
+    }, 300);
+    return () => window.clearTimeout(id);
   }, [input, format, sortMode]);
 
   useEffect(() => {
@@ -556,6 +583,8 @@ function Index() {
     setShareImageData(null);
     setShareImageOpen(true);
     try {
+      // Lazy-load html-to-image (~80KB) only when user actually exports.
+      const { toPng } = await import("html-to-image");
       const dataUrl = await toPng(shareCardRef.current, {
         pixelRatio: 2,
         cacheBust: true,

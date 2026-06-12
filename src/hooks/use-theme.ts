@@ -20,7 +20,12 @@ export function useTheme() {
   const [theme, setThemeState] = useState<Theme>("light");
 
   useEffect(() => {
-    const stored = (localStorage.getItem(STORAGE_KEY) as Theme | null) ?? "light";
+    let stored: Theme = "light";
+    try {
+      stored = (localStorage.getItem(STORAGE_KEY) as Theme | null) ?? "light";
+    } catch {
+      // Storage may be blocked (private mode, disabled cookies); fall back.
+    }
     setThemeState(stored);
     applyTheme(stored);
   }, []);
@@ -35,7 +40,11 @@ export function useTheme() {
 
   const setTheme = useCallback((next: Theme) => {
     setThemeState(next);
-    localStorage.setItem(STORAGE_KEY, next);
+    try {
+      localStorage.setItem(STORAGE_KEY, next);
+    } catch {
+      // ignore (quota / blocked storage)
+    }
     applyTheme(next);
   }, []);
 

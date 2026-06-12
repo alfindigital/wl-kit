@@ -9,6 +9,7 @@ export type SavedWatchlist = {
 };
 
 const KEY = "watchlistkit.saved";
+export const SCHEMA_VERSION = 1;
 export const MAX_WATCHLISTS = 20;
 
 export function loadWatchlists(): SavedWatchlist[] {
@@ -16,9 +17,22 @@ export function loadWatchlists(): SavedWatchlist[] {
   try {
     const raw = localStorage.getItem(KEY);
     if (!raw) return [];
-    const data = JSON.parse(raw);
-    if (!Array.isArray(data)) return [];
-    return data.map((w: SavedWatchlist) => ({
+    const parsed = JSON.parse(raw);
+    // Support legacy (array) and versioned ({version, watchlists}) shapes.
+    let list: unknown;
+    if (Array.isArray(parsed)) {
+      list = parsed;
+    } else if (parsed && typeof parsed === "object") {
+      const v = (parsed as { version?: number }).version;
+      if (typeof v === "number" && v > SCHEMA_VERSION) {
+        // Newer schema written by a future app version — refuse to corrupt it.
+        console.warn("[storage] saved watchlists schema is newer than supported; skipping read");
+        return [];
+      }
+      list = (parsed as { watchlists?: unknown }).watchlists;
+    }
+    if (!Array.isArray(list)) return [];
+    return (list as SavedWatchlist[]).map((w) => ({
       pinned: false,
       tags: [],
       lastUsedAt: w.savedAt,
@@ -31,7 +45,19 @@ export function loadWatchlists(): SavedWatchlist[] {
 
 export function saveWatchlists(list: SavedWatchlist[]): void {
   if (typeof window === "undefined") return;
-  localStorage.setItem(KEY, JSON.stringify(list));
+  try {
+    localStorage.setItem(
+      KEY,
+      JSON.stringify({ version: SCHEMA_VERSION, watchlists: list }),
+    );
+  } catch (e) {
+    const err = e as { name?: string };
+    if (err?.name === "QuotaExceededError") {
+      console.warn("[storage] quota exceeded — watchlist not saved");
+    } else {
+      console.warn("[storage] failed to save watchlists", e);
+    }
+  }
 }
 
 export function exportAllJSON(list: SavedWatchlist[]): string {

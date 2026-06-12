@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import QRCode from "qrcode";
 import { toast } from "sonner";
 import { Copy, QrCode, Share2, ExternalLink, Check } from "lucide-react";
 
@@ -44,14 +43,24 @@ export function ShareLinkDialog({ open, onOpenChange, url, tickerCount }: Props)
 
   useEffect(() => {
     if (!showQR || !canvasRef.current || !url) return;
-    QRCode.toCanvas(canvasRef.current, url, {
-      width: 240,
-      margin: 1,
-      errorCorrectionLevel: "M",
-      color: { dark: "#000000", light: "#ffffff" },
-    }).catch(() => {
-      toast.error("Failed to render QR");
-    });
+    let cancelled = false;
+    // Lazy-load qrcode (~50KB) only when user opens the QR panel.
+    import("qrcode")
+      .then(({ default: QRCode }) => {
+        if (cancelled || !canvasRef.current) return;
+        return QRCode.toCanvas(canvasRef.current, url, {
+          width: 240,
+          margin: 1,
+          errorCorrectionLevel: "M",
+          color: { dark: "#000000", light: "#ffffff" },
+        });
+      })
+      .catch(() => {
+        if (!cancelled) toast.error("Failed to render QR");
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [showQR, url]);
 
   const handleCopy = async () => {
