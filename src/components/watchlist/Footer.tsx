@@ -134,8 +134,8 @@ export function Footer() {
         .afd-version { font-size: 10px; color: color-mix(in oklch, var(--muted-foreground) 60%, transparent); margin-left: 6px }
       `}</style>
       <footer
-        className="afd-foot mt-8"
-        style={{ paddingBottom: "calc(17px + env(safe-area-inset-bottom))" }}
+        className="afd-foot mt-4"
+        style={{ paddingBottom: "calc(10px + env(safe-area-inset-bottom))" }}
       >
         <div
           className="afd-glow"
