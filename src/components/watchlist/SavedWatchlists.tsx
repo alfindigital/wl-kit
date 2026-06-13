@@ -689,7 +689,9 @@ export function SavedWatchlists({
                       }}
                     />
                   </div>
+                  </div>
                 </div>
+
               </>
             )}
             {filtered.length === 0 ? (
