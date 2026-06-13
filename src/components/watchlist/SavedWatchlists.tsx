@@ -578,12 +578,12 @@ export function SavedWatchlists({
                     <DropdownMenuTrigger asChild>
                       <Button
                         variant="outline"
-                        size="sm"
-                        className="h-8 rounded-lg text-xs"
+                        size="icon"
+                        className="h-8 w-8 rounded-lg"
                         aria-label={`Sort by ${SORT_LABEL[sortKey]}`}
+                        title={`Sort: ${SORT_LABEL[sortKey]}`}
                       >
-                        <ArrowUpDown className="mr-1 h-3 w-3" />
-                        {SORT_LABEL[sortKey]}
+                        <ArrowUpDown className="h-3.5 w-3.5" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -607,11 +607,13 @@ export function SavedWatchlists({
                   {!selectMode ? (
                     <Button
                       variant="outline"
-                      size="sm"
-                      className="h-8 rounded-lg text-xs"
+                      size="icon"
+                      className="h-8 w-8 rounded-lg"
                       onClick={() => setSelectMode(true)}
+                      aria-label="Select"
+                      title="Select"
                     >
-                      Select
+                      <CheckSquare className="h-3.5 w-3.5" />
                     </Button>
                   ) : (
                     <div className="flex items-center gap-1">
@@ -653,19 +655,23 @@ export function SavedWatchlists({
                   <div className="flex items-center gap-1 sm:ml-auto">
                     <Button
                       variant="ghost"
-                      size="sm"
-                      className="h-7 rounded-lg text-[11px] text-muted-foreground hover:text-primary"
+                      size="icon"
+                      className="h-8 w-8 rounded-lg text-muted-foreground hover:text-primary"
                       onClick={onExport}
+                      aria-label="Export"
+                      title="Export"
                     >
-                      <Download className="mr-1 h-3 w-3" /> Export
+                      <Download className="h-3.5 w-3.5" />
                     </Button>
                     <Button
                       variant="ghost"
-                      size="sm"
-                      className="h-7 rounded-lg text-[11px] text-muted-foreground hover:text-primary"
+                      size="icon"
+                      className="h-8 w-8 rounded-lg text-muted-foreground hover:text-primary"
                       onClick={() => fileRef.current?.click()}
+                      aria-label="Import"
+                      title="Import"
                     >
-                      <Upload className="mr-1 h-3 w-3" /> Import
+                      <Upload className="h-3.5 w-3.5" />
                     </Button>
                     <input
                       ref={fileRef}
