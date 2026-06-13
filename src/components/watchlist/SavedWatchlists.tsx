@@ -544,13 +544,13 @@ export function SavedWatchlists({
             className="flex w-full items-center justify-between px-4 py-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             aria-expanded={open}
           >
-            <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            <span className={`text-xs font-semibold uppercase tracking-wide ${open ? "text-primary" : "text-muted-foreground"}`}>
               Saved Watchlists
             </span>
             <div className="flex items-center gap-2">
               <ChevronDown
-                className={`h-4 w-4 text-muted-foreground transition-transform ${
-                  open ? "rotate-180" : ""
+                className={`h-4 w-4 transition-transform ${
+                  open ? "rotate-180 text-primary" : "text-muted-foreground"
                 }`}
                 aria-hidden="true"
               />
