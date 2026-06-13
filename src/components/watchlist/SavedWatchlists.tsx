@@ -621,6 +621,7 @@ export function SavedWatchlists({
                       {selected.length >= 2 && (
                         <Button
                           size="sm"
+                          variant="outline"
                           className="h-8 rounded-lg text-xs"
                           onClick={() => {
                             onMerge(selected);
