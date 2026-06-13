@@ -56,7 +56,6 @@ import {
 import { useIsMobile } from "@/hooks/use-mobile";
 
 type SortKey =
-  | "recent"
   | "name"
   | "name-desc"
   | "created-new"
@@ -64,7 +63,6 @@ type SortKey =
   | "count";
 
 const SORT_LABEL: Record<SortKey, string> = {
-  recent: "Recent",
   name: "Name A–Z",
   "name-desc": "Name Z–A",
   "created-new": "Newest",
@@ -105,7 +103,7 @@ export function SavedWatchlists({
   const [renameError, setRenameError] = useState<string | null>(null);
   const renameErrorId = useId();
   const [swipedId, setSwipedId] = useState<string | null>(null);
-  const [sortKey, setSortKey] = useState<SortKey>("recent");
+  const [sortKey, setSortKey] = useState<SortKey>("name");
   const [tagFilter, setTagFilter] = useState<string | null>(null);
   const [tagEditId, setTagEditId] = useState<string | null>(null);
   const [tagDraft, setTagDraft] = useState("");
@@ -166,19 +164,7 @@ export function SavedWatchlists({
   };
 
   const pinned = filtered.filter((i) => i.pinned).sort(sortFn);
-  const unpinned = filtered.filter((i) => !i.pinned);
-  const recent =
-    sortKey === "recent"
-      ? unpinned
-          .slice()
-          .sort(
-            (a, b) =>
-              (b.lastUsedAt ?? b.savedAt) - (a.lastUsedAt ?? a.savedAt),
-          )
-          .slice(0, 3)
-      : [];
-  const recentIds = new Set(recent.map((r) => r.id));
-  const rest = unpinned.filter((i) => !recentIds.has(i.id)).sort(sortFn);
+  const rest = filtered.filter((i) => !i.pinned).sort(sortFn);
 
   const toggleSelect = (id: string) => {
     setSelected((prev) =>
@@ -601,9 +587,6 @@ export function SavedWatchlists({
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => setSortKey("recent")}>
-                        Recent
-                      </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => setSortKey("name")}>
                         Name A–Z
                       </DropdownMenuItem>
@@ -711,15 +694,9 @@ export function SavedWatchlists({
                     <ul className="flex flex-col gap-1">{pinned.map(renderItem)}</ul>
                   </>
                 )}
-                {recent.length > 0 && (
-                  <>
-                    {sectionHeader("Recently used")}
-                    <ul className="flex flex-col gap-1">{recent.map(renderItem)}</ul>
-                  </>
-                )}
                 {rest.length > 0 && (
                   <>
-                    {(pinned.length > 0 || recent.length > 0) && sectionHeader("All")}
+                    {pinned.length > 0 && sectionHeader("All")}
                     <ul className="flex flex-col gap-1">{rest.map(renderItem)}</ul>
                   </>
                 )}
