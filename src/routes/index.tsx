@@ -777,10 +777,6 @@ function Index() {
                 onChange={setInput}
               />
             </div>
-            <InputStats
-              validCount={tickers.length}
-              duplicates={analysis.duplicates}
-            />
             <div ref={formatStepRef} className="flex flex-col gap-4 sm:gap-5">
               <FormatTabs
                 value={format}
@@ -805,6 +801,7 @@ function Index() {
                 onCopy={() => handleCopy()}
                 sortMode={sortMode}
                 onSortChange={handleSortChange}
+                duplicates={analysis.duplicates}
               />
             </div>
             <div ref={actionStepRef}>
