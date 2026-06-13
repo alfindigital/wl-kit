@@ -694,15 +694,9 @@ export function SavedWatchlists({
                     <ul className="flex flex-col gap-1">{pinned.map(renderItem)}</ul>
                   </>
                 )}
-                {recent.length > 0 && (
-                  <>
-                    {sectionHeader("Recently used")}
-                    <ul className="flex flex-col gap-1">{recent.map(renderItem)}</ul>
-                  </>
-                )}
                 {rest.length > 0 && (
                   <>
-                    {(pinned.length > 0 || recent.length > 0) && sectionHeader("All")}
+                    {pinned.length > 0 && sectionHeader("All")}
                     <ul className="flex flex-col gap-1">{rest.map(renderItem)}</ul>
                   </>
                 )}
