@@ -727,16 +727,6 @@ function Index() {
         <div className="mx-auto flex max-w-2xl items-center justify-between gap-2 px-4 py-2">
           <span className="font-display text-base italic text-primary">WatchlistKit</span>
           <div className="flex items-center gap-1">
-            {tickers.length > 0 && (
-              <Badge
-                variant="secondary"
-                className="rounded-full text-[11px]"
-                role="status"
-                aria-label={`${tickers.length} valid tickers`}
-              >
-                {tickers.length} {tickers.length === 1 ? "ticker" : "tickers"}
-              </Badge>
-            )}
             <ThemeToggle />
             <HelpMenu
               onFaq={() => setFaqOpen(true)}
