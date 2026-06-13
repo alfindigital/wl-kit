@@ -79,9 +79,9 @@ export function Footer() {
           font-family: inherit;
           background: var(--card, var(--background));
           border-top: 1px solid var(--border);
-          padding: 17px 22px;
+          padding: 10px 18px;
           display: flex; align-items: center; justify-content: space-between;
-          gap: 16px; flex-wrap: wrap;
+          gap: 10px; flex-wrap: wrap;
         }
         .afd-foot > * { position: relative; z-index: 1 }
         .afd-glow {
@@ -92,36 +92,36 @@ export function Footer() {
           transition: left 6s ease-in-out, top 6s ease-in-out;
         }
         .afd-cr {
-          font-size: 13px; color: var(--muted-foreground);
+          font-size: 12px; color: var(--muted-foreground);
           display: inline-flex; align-items: center;
           border-left: 3px solid var(--primary);
-          padding-left: 11px;
+          padding-left: 9px;
         }
-        .afd-brand { color: var(--primary); font-weight: 600; text-decoration: none; margin-left: 4px }
+        .afd-brand { color: var(--primary); font-weight: 600; text-decoration: none; margin-left: 3px }
         .afd-brand:hover { text-decoration: underline }
         .afd-caret {
-          display: inline-block; width: 8px; height: 15px;
+          display: inline-block; width: 6px; height: 12px;
           background: var(--primary); margin-left: 3px;
           animation: afd-blink 1.1s step-end infinite;
         }
-        .afd-rot { position: relative; height: 36px; min-width: 200px; flex: 0 0 auto }
+        .afd-rot { position: relative; height: 26px; min-width: 160px; flex: 0 0 auto }
         .afd-item {
-          position: absolute; right: 0; top: 0; height: 36px;
-          display: flex; align-items: center; gap: 11px;
-          text-decoration: none; color: var(--foreground); font-size: 14px;
-          opacity: 0; transform: translateY(9px);
+          position: absolute; right: 0; top: 0; height: 26px;
+          display: flex; align-items: center; gap: 8px;
+          text-decoration: none; color: var(--foreground); font-size: 12px;
+          opacity: 0; transform: translateY(6px);
           transition: opacity .5s, transform .5s; pointer-events: none;
         }
         .afd-item.active { opacity: 1; transform: translateY(0); pointer-events: auto }
         .afd-item b { color: var(--primary); font-weight: 600 }
         .afd-ico {
-          position: relative; width: 36px; height: 36px; border-radius: 50%;
+          position: relative; width: 26px; height: 26px; border-radius: 50%;
           flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
           background: color-mix(in oklch, var(--primary) 11%, transparent);
           color: var(--primary);
           transition: background .25s, color .25s;
         }
-        .afd-ico svg { width: 19px; height: 19px }
+        .afd-ico svg { width: 14px; height: 14px }
         @media (hover: hover) {
           .afd-rot:hover .afd-item.active .afd-ico {
             background: var(--primary); color: var(--card, var(--background));
@@ -131,11 +131,11 @@ export function Footer() {
             animation: afd-ripple 1.3s ease-out infinite;
           }
         }
-        .afd-version { font-size: 11px; color: color-mix(in oklch, var(--muted-foreground) 60%, transparent); margin-left: 8px }
+        .afd-version { font-size: 10px; color: color-mix(in oklch, var(--muted-foreground) 60%, transparent); margin-left: 6px }
       `}</style>
       <footer
-        className="afd-foot mt-8"
-        style={{ paddingBottom: "calc(17px + env(safe-area-inset-bottom))" }}
+        className="afd-foot mt-4"
+        style={{ paddingBottom: "calc(10px + env(safe-area-inset-bottom))" }}
       >
         <div
           className="afd-glow"
