@@ -656,7 +656,7 @@ export function SavedWatchlists({
                       </Button>
                     </div>
                   )}
-                  <div className="flex items-center gap-1 sm:ml-auto">
+                  <div className="ml-auto flex items-center gap-1">
                     <Button
                       variant="ghost"
                       size="icon"
