@@ -760,7 +760,7 @@ function Index() {
         </div>
       </div>
 
-      <main className="flex-1 pb-[calc(80px+env(safe-area-inset-bottom))] sm:pb-0">
+      <main className="flex-1">
         <div className="mx-auto w-full max-w-2xl px-4 pb-10 pt-6 sm:px-6 sm:pt-10">
           <div className="mb-4 text-center sm:mb-6">
             <h1 className="font-display text-2xl leading-tight tracking-tight sm:text-3xl">
