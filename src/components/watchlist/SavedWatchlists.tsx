@@ -562,9 +562,9 @@ export function SavedWatchlists({
           <div className="border-t border-border/60 px-2 py-2">
             {items.length > 0 && (
               <>
-                <div className="flex flex-col gap-2 px-2 pb-2 pt-1 sm:flex-row sm:items-center">
+                <div className="flex flex-wrap items-center gap-2 px-2 pb-2 pt-1">
                   {items.length > 5 && (
-                    <div className="relative flex-1">
+                    <div className="relative w-full sm:flex-1 sm:w-auto">
                       <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
                       <Input
                         value={query}
@@ -575,6 +575,8 @@ export function SavedWatchlists({
                       />
                     </div>
                   )}
+                  <div className="flex flex-1 items-center gap-2">
+
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
@@ -654,7 +656,7 @@ export function SavedWatchlists({
                       </Button>
                     </div>
                   )}
-                  <div className="flex items-center gap-1 sm:ml-auto">
+                  <div className="ml-auto flex items-center gap-1">
                     <Button
                       variant="ghost"
                       size="icon"
@@ -687,7 +689,9 @@ export function SavedWatchlists({
                       }}
                     />
                   </div>
+                  </div>
                 </div>
+
               </>
             )}
             {filtered.length === 0 ? (
