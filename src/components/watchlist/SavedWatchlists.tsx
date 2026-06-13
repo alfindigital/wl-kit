@@ -35,6 +35,7 @@ import {
   Download,
   Upload,
   MoreVertical,
+  CheckSquare,
 } from "lucide-react";
 import type { SavedWatchlist } from "@/lib/storage";
 import {
