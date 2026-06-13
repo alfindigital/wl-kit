@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Popover,
@@ -561,14 +561,6 @@ export function SavedWatchlists({
               Saved Watchlists
             </span>
             <div className="flex items-center gap-2">
-              <Badge
-                variant="secondary"
-                className="rounded-full text-xs"
-                role="status"
-                aria-label={`${items.length} saved ${items.length === 1 ? "watchlist" : "watchlists"}`}
-              >
-                {items.length} {items.length === 1 ? "saved" : "saved"}
-              </Badge>
               <ChevronDown
                 className={`h-4 w-4 text-muted-foreground transition-transform ${
                   open ? "rotate-180" : ""
