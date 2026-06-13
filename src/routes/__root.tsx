@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { Component, useEffect, type ErrorInfo, type ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -14,6 +14,54 @@ import { registerServiceWorker } from "@/lib/register-sw";
 
 import appCss from "../styles.css?url";
 import ogImage from "@/assets/og-image.jpg";
+
+class AppErrorBoundary extends Component<
+  { children: ReactNode },
+  { hasError: boolean }
+> {
+  state = { hasError: false };
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error("[AppErrorBoundary]", error, info);
+  }
+  handleReset = () => {
+    this.setState({ hasError: false });
+  };
+  render() {
+    if (!this.state.hasError) return this.props.children;
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background px-4">
+        <div className="max-w-md text-center">
+          <h1 className="text-xl font-semibold tracking-tight text-foreground">
+            Something went wrong
+          </h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            The app hit an unexpected error. Reloading usually fixes it.
+          </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-2">
+            <button
+              onClick={() => {
+                this.handleReset();
+                window.location.reload();
+              }}
+              className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            >
+              Reload
+            </button>
+            <a
+              href="/"
+              className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+            >
+              Go home
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
 
 const OG_IMAGE_URL = `https://wlkit.lovable.app${ogImage}`;
 const WEBSITE_URL = "https://wlkit.lovable.app/";
@@ -115,10 +163,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "apple-touch-icon", href: "/icon-192.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "" },
+      // Load Google Fonts CSS without blocking initial render: request as
+      // print stylesheet (non-blocking), then swap to all once loaded.
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap",
-      },
+        media: "print",
+        onload: "this.media='all'",
+      } as { rel: string; href: string; media: string; onload: string },
     ],
     scripts: [
       {
@@ -177,11 +229,13 @@ function RootComponent() {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider delayDuration={150} skipDelayDuration={200}>
-        <Outlet />
-        <Toaster position="top-center" />
-      </TooltipProvider>
-    </QueryClientProvider>
+    <AppErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider delayDuration={150} skipDelayDuration={200}>
+          <Outlet />
+          <Toaster position="top-center" />
+        </TooltipProvider>
+      </QueryClientProvider>
+    </AppErrorBoundary>
   );
 }

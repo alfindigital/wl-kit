@@ -223,6 +223,33 @@ function Index() {
     setSaved(loadWatchlists());
   }, []);
 
+  // Surface storage write failures (quota / blocked) to the user.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const onError = (e: Event) => {
+      const detail = (e as CustomEvent<{ reason?: string }>).detail;
+      if (detail?.reason === "quota") {
+        toast.error("Storage full — your changes weren't saved. Try deleting old watchlists.");
+      } else {
+        toast.error("Couldn't save to browser storage.");
+      }
+    };
+    window.addEventListener("wlkit:storage-error", onError);
+    return () => window.removeEventListener("wlkit:storage-error", onError);
+  }, []);
+
+  // Multi-tab sync: when another tab updates saved watchlists, reflect it here.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "watchlistkit.saved") {
+        setSaved(loadWatchlists());
+      }
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
+
   // Restore last session (input/format/sort) from localStorage on mount.
   // URL params (?t=…) take precedence and are handled in the effect below.
   useEffect(() => {
