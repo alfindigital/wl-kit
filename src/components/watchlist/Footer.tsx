@@ -1,5 +1,7 @@
 import { Globe, Facebook, Youtube, Twitter, Send } from "lucide-react";
 
+declare const __APP_VERSION__: string;
+
 const TikTokIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     viewBox="0 0 24 24"
@@ -55,6 +57,10 @@ export function Footer() {
             </li>
           ))}
         </ul>
+        <span aria-hidden className="text-border">|</span>
+        <span className="text-xs text-muted-foreground/60">
+          v{__APP_VERSION__}
+        </span>
       </div>
     </footer>
   );
