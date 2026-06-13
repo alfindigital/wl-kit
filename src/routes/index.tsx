@@ -183,7 +183,7 @@ function Index() {
   const [shortcutOpen, setShortcutOpen] = useState(false);
   const [faqOpen, setFaqOpen] = useState(false);
   const [onboardingActive, setOnboardingActive] = useState(false);
-  const [sortMode, setSortMode] = useState<SortMode>("none");
+  const [sortMode, setSortMode] = useState<SortMode>("asc");
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {

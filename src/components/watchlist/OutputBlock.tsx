@@ -1,5 +1,4 @@
 import { useRef, useEffect } from "react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Copy, ArrowUpDown, ArrowDownAZ, ArrowUpAZ, RotateCcw, Check } from "lucide-react";
@@ -36,14 +35,6 @@ export function OutputBlock({
   return (
     <div className="relative rounded-2xl border border-border/80 bg-card shadow-sm">
       <div className="flex items-center justify-end gap-2 border-b border-border/60 px-3 py-1.5">
-        <Badge
-          variant="secondary"
-          className="rounded-full text-xs"
-          role="status"
-          aria-label={`${count} ${count === 1 ? "ticker" : "tickers"} in output`}
-        >
-          {count} {count === 1 ? "ticker" : "tickers"}
-        </Badge>
         {onSortChange && (
           <Popover>
             <PopoverTrigger asChild>
