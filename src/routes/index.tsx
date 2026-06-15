@@ -158,6 +158,7 @@ function Index() {
   const [faqOpen, setFaqOpen] = useState(false);
   const [onboardingActive, setOnboardingActive] = useState(false);
   const [sortMode, setSortMode] = useState<SortMode>("asc");
+  const [pillOpen, setPillOpen] = useState(false);
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
