@@ -2,7 +2,6 @@ import { createFileRoute, useSearch, useNavigate } from "@tanstack/react-router"
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
-import ogImage from "@/assets/og-image.jpg";
 
 import { Footer } from "@/components/watchlist/Footer";
 import { FaqDialog, FAQ_ITEMS } from "@/components/watchlist/Faq";
