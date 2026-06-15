@@ -49,7 +49,7 @@ export function FaqDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[80vh] overflow-y-auto rounded-2xl sm:max-w-xl">
         <DialogHeader>
-          <DialogTitle className="font-display text-xl font-semibold tracking-tight sm:text-2xl">
+          <DialogTitle className="text-xl font-semibold tracking-tight sm:text-2xl">
             Frequently asked questions
           </DialogTitle>
         </DialogHeader>
@@ -76,7 +76,7 @@ export function Faq() {
     >
       <h2
         id="faq-heading"
-        className="font-display text-xl font-semibold tracking-tight sm:text-2xl"
+        className="text-xl font-semibold tracking-tight sm:text-2xl"
       >
         Frequently asked questions
       </h2>
