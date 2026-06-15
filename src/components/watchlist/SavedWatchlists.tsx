@@ -465,7 +465,7 @@ export function SavedWatchlists({
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         aria-label="Search watchlists"
-                        placeholder="Search name, ticker, or tag…"
+                        placeholder="Search name or ticker…"
                         className="h-8 rounded-lg pl-8 text-xs"
                       />
                     </div>
