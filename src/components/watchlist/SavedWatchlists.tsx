@@ -9,11 +9,6 @@ import { Input } from "@/components/ui/input";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -30,7 +25,6 @@ import {
   X,
   Pin,
   PinOff,
-  Tags,
   ArrowUpDown,
   Download,
   Upload,
@@ -79,7 +73,6 @@ export function SavedWatchlists({
   onMerge,
   onCompare,
   onTogglePin,
-  onSetTags,
   onExport,
   onImport,
 }: {
@@ -90,7 +83,6 @@ export function SavedWatchlists({
   onMerge: (ids: string[]) => void;
   onCompare: (idA: string, idB: string) => void;
   onTogglePin: (id: string) => void;
-  onSetTags: (id: string, tags: string[]) => void;
   onExport: () => void;
   onImport: (file: File) => void;
 }) {
@@ -105,9 +97,6 @@ export function SavedWatchlists({
   const renameErrorId = useId();
   const [swipedId, setSwipedId] = useState<string | null>(null);
   const [sortKey, setSortKey] = useState<SortKey>("name");
-  const [tagFilter, setTagFilter] = useState<string | null>(null);
-  const [tagEditId, setTagEditId] = useState<string | null>(null);
-  const [tagDraft, setTagDraft] = useState("");
   const touchStart = useRef<{ x: number; id: string } | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const isMobile = useIsMobile();
@@ -134,26 +123,18 @@ export function SavedWatchlists({
     }
   }, [items, editingId]);
 
-  const allTags = useMemo(() => {
-    const s = new Set<string>();
-    items.forEach((i) => (i.tags ?? []).forEach((t) => s.add(t)));
-    return Array.from(s).sort();
-  }, [items]);
-
   const filtered = useMemo(() => {
     const q = query.trim().toUpperCase();
     return items.filter((it) => {
       if (q) {
         const hit =
           it.name.toUpperCase().includes(q) ||
-          it.tickers.some((t) => t.includes(q)) ||
-          (it.tags ?? []).some((t) => t.toUpperCase().includes(q));
+          it.tickers.some((t) => t.includes(q));
         if (!hit) return false;
       }
-      if (tagFilter && !(it.tags ?? []).includes(tagFilter)) return false;
       return true;
     });
-  }, [items, query, tagFilter]);
+  }, [items, query]);
 
   const sortFn = (a: SavedWatchlist, b: SavedWatchlist) => {
     if (sortKey === "name") return a.name.localeCompare(b.name);
@@ -355,24 +336,6 @@ export function SavedWatchlists({
                     })}
                   </div>
                 </button>
-                {(item.tags ?? []).length > 0 && (
-                  <div className="mt-1 flex flex-wrap gap-1">
-                    {(item.tags ?? []).map((t) => (
-                      <button
-                        key={t}
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setTagFilter(t);
-                        }}
-                        className="cursor-pointer rounded-full bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                        aria-label={`Filter by tag ${t}`}
-                      >
-                        #{t}
-                      </button>
-                    ))}
-                  </div>
-                )}
               </div>
               {!selectMode && !isMobile && (
                 <>
@@ -386,74 +349,6 @@ export function SavedWatchlists({
                   >
                     {item.pinned ? <PinOff className="h-4 w-4" /> : <Pin className="h-4 w-4" />}
                   </Button>
-                  <Popover
-                    open={tagEditId === item.id}
-                    onOpenChange={(o) => {
-                      if (o) {
-                        setTagEditId(item.id);
-                        setTagDraft((item.tags ?? []).join(", "));
-                      } else {
-                        setTagEditId(null);
-                      }
-                    }}
-                  >
-                    <PopoverTrigger asChild>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        className="rounded-full text-muted-foreground hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                        aria-label={`Edit tags for ${item.name}`}
-                      >
-                        <Tags className="h-4 w-4" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-64 rounded-xl p-3" align="end">
-                      <p className="mb-1.5 text-xs text-muted-foreground">
-                        Comma-separated tags
-                      </p>
-                      <Input
-                        autoFocus
-                        aria-label="Tags"
-                        value={tagDraft}
-                        onChange={(e) => setTagDraft(e.target.value)}
-                        placeholder="banking, lq45"
-                        className="h-8 rounded-lg text-xs"
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") {
-                            e.preventDefault();
-                            const tags = tagDraft
-                              .split(",")
-                              .map((t) => t.trim().toLowerCase())
-                              .filter(Boolean);
-                            onSetTags(item.id, tags);
-                            setTagEditId(null);
-                          } else if (e.key === "Escape") {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setTagEditId(null);
-                          }
-                        }}
-                      />
-                      <div className="mt-2 flex justify-end">
-                        <Button
-                          type="button"
-                          size="sm"
-                          className="h-7 rounded-lg text-xs"
-                          onClick={() => {
-                            const tags = tagDraft
-                              .split(",")
-                              .map((t) => t.trim().toLowerCase())
-                              .filter(Boolean);
-                            onSetTags(item.id, tags);
-                            setTagEditId(null);
-                          }}
-                        >
-                          Save
-                        </Button>
-                      </div>
-                    </PopoverContent>
-                  </Popover>
                   <Button
                     ref={(el) => {
                       if (el) triggerRefs.current.set(item.id, el);
@@ -570,7 +465,7 @@ export function SavedWatchlists({
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         aria-label="Search watchlists"
-                        placeholder="Search name, ticker, or tag…"
+                        placeholder="Search name or ticker…"
                         className="h-8 rounded-lg pl-8 text-xs"
                       />
                     </div>
@@ -792,18 +687,6 @@ export function SavedWatchlists({
                 <button
                   type="button"
                   onClick={() => {
-                    setTagEditId(drawerItem.id);
-                    setTagDraft((drawerItem.tags ?? []).join(", "));
-                    setDrawerId(null);
-                  }}
-                  className="flex min-h-[48px] items-center gap-3 rounded-lg px-3 text-left text-sm hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                >
-                  <Tags className="h-5 w-5 text-muted-foreground" />
-                  Edit tags
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
                     setSelectMode(true);
                     setSelected([drawerItem.id]);
                     setDrawerId(null);
@@ -830,57 +713,6 @@ export function SavedWatchlists({
           )}
         </DrawerContent>
       </Drawer>
-
-      {/* Mobile tag editor (drawer-triggered uses same popover-less flow via AlertDialog-like sheet) */}
-      {tagEditId && isMobile && (
-        <Drawer
-          open={!!tagEditId}
-          onOpenChange={(o) => {
-            if (!o) setTagEditId(null);
-          }}
-        >
-          <DrawerContent className="pb-safe">
-            <DrawerHeader className="text-left">
-              <DrawerTitle className="text-base">Edit tags</DrawerTitle>
-              <p className="text-xs text-muted-foreground">Comma-separated tags</p>
-            </DrawerHeader>
-            <div className="flex flex-col gap-3 px-4 pb-4">
-              <Input
-                autoFocus
-                aria-label="Tags"
-                value={tagDraft}
-                onChange={(e) => setTagDraft(e.target.value)}
-                placeholder="banking, lq45"
-                className="h-11 rounded-lg text-sm"
-              />
-              <div className="flex justify-end gap-2">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="h-10 rounded-lg"
-                  onClick={() => setTagEditId(null)}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="button"
-                  className="h-10 rounded-lg"
-                  onClick={() => {
-                    const tags = tagDraft
-                      .split(",")
-                      .map((t) => t.trim().toLowerCase())
-                      .filter(Boolean);
-                    if (tagEditId) onSetTags(tagEditId, tags);
-                    setTagEditId(null);
-                  }}
-                >
-                  Save
-                </Button>
-              </div>
-            </div>
-          </DrawerContent>
-        </Drawer>
-      )}
     </>
   );
 }

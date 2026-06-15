@@ -379,7 +379,6 @@ function Index() {
       tickers,
       savedAt: Date.now(),
       pinned: false,
-      tags: [],
       lastUsedAt: Date.now(),
     };
     const next = [entry, ...saved];
@@ -441,13 +440,6 @@ function Index() {
     }
   };
 
-  const handleSetTags = (id: string, tags: string[]) => {
-    const next = saved.map((w) => (w.id === id ? { ...w, tags } : w));
-    setSaved(next);
-    saveWatchlists(next);
-    setLiveStatus("Tags updated");
-    toast.success("Tags updated");
-  };
 
   const handleExport = () => {
     const json = exportAllJSON(saved);
@@ -502,7 +494,6 @@ function Index() {
       tickers: merged,
       savedAt: Date.now(),
       pinned: false,
-      tags: [],
       lastUsedAt: Date.now(),
     };
     const next = [entry, ...saved];
@@ -775,7 +766,6 @@ function Index() {
               onMerge={handleMerge}
               onCompare={handleCompare}
               onTogglePin={handleTogglePin}
-              onSetTags={handleSetTags}
               onExport={handleExport}
               onImport={handleImport}
             />
