@@ -288,28 +288,7 @@ function ImportToTradingViewGuide() {
             Frequently asked questions
           </h2>
           <div className="mt-6 space-y-5">
-            {[
-              {
-                q: "How do I add multiple stocks to a TradingView watchlist at once?",
-                a: "Copy your formatted ticker list from WatchlistKit (TradingView format), open any watchlist panel in TradingView, click the import/menu icon, and paste the comma-separated string. All symbols are added in one action.",
-              },
-              {
-                q: "Does TradingView support IDX tickers?",
-                a: "Yes. TradingView recognizes Indonesia Stock Exchange (IDX) symbols when they are prefixed with IDX:, such as IDX:BBCA or IDX:BBRI. WatchlistKit adds this prefix automatically.",
-              },
-              {
-                q: "What if a ticker is not recognized in TradingView?",
-                a: "TradingView only supports actively traded symbols. If a ticker was recently delisted or is very illiquid, it may not appear. WatchlistKit flags unknown tickers during formatting so you can review them before importing.",
-              },
-              {
-                q: "Can I import watchlists on TradingView mobile?",
-                a: "The bulk-import paste method works best on TradingView web and desktop. The mobile app has limited watchlist-management features, so we recommend importing on desktop first.",
-              },
-              {
-                q: "Is WatchlistKit free?",
-                a: "Yes, completely free. No sign-up, no limits, and no ads. Your watchlists are stored locally in your browser.",
-              },
-            ].map((item, i) => (
+            {FAQS.map((item, i) => (
               <div key={i}>
                 <h3 className="font-semibold text-foreground">{item.q}</h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{item.a}</p>
