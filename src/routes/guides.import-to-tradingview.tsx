@@ -2,8 +2,9 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { ArrowLeft, CheckCircle, Copy, Download, ExternalLink, List, MousePointerClick, Type } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import ogImage from "@/assets/og-image.jpg";
 
-const OG_IMAGE = "https://wlkit.lovable.app/og-image.jpg";
+const OG_IMAGE = `https://wlkit.lovable.app${ogImage}`;
 const WEBSITE_URL = "https://wlkit.lovable.app/";
 
 export const Route = createFileRoute("/guides/import-to-tradingview")({
