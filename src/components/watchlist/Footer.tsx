@@ -162,28 +162,29 @@ export function Footer() {
           >
             Guides
           </a>
-        <div
-          className="afd-rot"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-        >
-          {SOCIALS.map((s, idx) => (
-            <a
-              key={s.label}
-              className={`afd-item${idx === active ? " active" : ""}`}
-              href={s.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={s.label}
-            >
-              <span className="afd-ico">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-                  <path d={s.path} />
-                </svg>
-              </span>
-              <b>{s.handle}</b>
-            </a>
-          ))}
+          <div
+            className="afd-rot"
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+          >
+            {SOCIALS.map((s, idx) => (
+              <a
+                key={s.label}
+                className={`afd-item${idx === active ? " active" : ""}`}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.label}
+              >
+                <span className="afd-ico">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                    <path d={s.path} />
+                  </svg>
+                </span>
+                <b>{s.handle}</b>
+              </a>
+            ))}
+          </div>
         </div>
       </footer>
     </>
