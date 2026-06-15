@@ -96,8 +96,8 @@ import {
 import {
   loadWatchlists,
   saveWatchlists,
-  exportAllJSON,
-  importAllJSON,
+  exportAllTXT,
+  importAllTXT,
   MAX_WATCHLISTS,
   type SavedWatchlist,
 } from "@/lib/storage";
