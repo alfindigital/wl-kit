@@ -1,7 +1,9 @@
 {
+  "id": "/",
   "name": "WatchlistKit",
   "short_name": "WatchlistKit",
   "description": "Format your IDX watchlist in seconds.",
+  "lang": "en",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

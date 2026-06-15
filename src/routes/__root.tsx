@@ -25,7 +25,7 @@ class AppErrorBoundary extends Component<
     return { hasError: true };
   }
   componentDidCatch(error: Error, info: ErrorInfo) {
-    console.error("[AppErrorBoundary]", error, info);
+    if (import.meta.env.DEV) console.error("[AppErrorBoundary]", error, info);
   }
   handleReset = () => {
     this.setState({ hasError: false });
@@ -90,7 +90,7 @@ function NotFoundComponent() {
 }
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
-  console.error(error);
+  if (import.meta.env.DEV) console.error(error);
   const router = useRouter();
 
   return (
