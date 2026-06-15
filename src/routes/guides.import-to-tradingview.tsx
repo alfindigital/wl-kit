@@ -34,9 +34,38 @@ export const Route = createFileRoute("/guides/import-to-tradingview")({
           "Format IDX tickers and bulk-import them into TradingView. A quick guide for Indonesian stock traders.",
       },
       { name: "twitter:image", content: OG_IMAGE },
+      { property: "og:type", content: "article" },
     ],
     links: [
       { rel: "canonical", href: GUIDE_URL },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Article",
+              headline: "How to Import IDX Watchlists to TradingView",
+              description:
+                "Step-by-step tutorial: format your IDX tickers with WatchlistKit and import them into TradingView in seconds.",
+              image: OG_IMAGE,
+              mainEntityOfPage: GUIDE_URL,
+              author: { "@type": "Organization", name: "alfindigital", url: "https://alfindigital.com" },
+              publisher: { "@type": "Organization", name: "WatchlistKit", url: SITE_URL },
+              inLanguage: "en",
+            },
+            {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+                { "@type": "ListItem", position: 2, name: "Guides", item: `${SITE_URL}/guides/import-to-tradingview` },
+              ],
+            },
+          ],
+        }),
+      },
     ],
   }),
 });
