@@ -153,7 +153,6 @@ export function Footer() {
             alfindigital
           </a>
           <span className="afd-caret" aria-hidden />
-          <span className="afd-version">v{__APP_VERSION__}</span>
         </span>
         <div className="flex items-center gap-4">
           <div
