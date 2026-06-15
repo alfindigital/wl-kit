@@ -36,7 +36,7 @@ export const Route = createFileRoute("/guides/import-to-tradingview")({
       { name: "twitter:image", content: OG_IMAGE },
     ],
     links: [
-      { rel: "canonical", href: "https://wlkit.lovable.app/guides/import-to-tradingview" },
+      { rel: "canonical", href: GUIDE_URL },
     ],
   }),
 });
