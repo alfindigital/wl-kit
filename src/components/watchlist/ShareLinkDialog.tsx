@@ -93,9 +93,7 @@ export function ShareLinkDialog({ open, onOpenChange, url, tickerCount }: Props)
         <DialogHeader>
           <DialogTitle>Share watchlist</DialogTitle>
           <DialogDescription>
-            Anyone with this link opens WatchlistKit with the same{" "}
-            {tickerCount} {tickerCount === 1 ? "ticker" : "tickers"} and format
-            preloaded.
+            Opens WatchlistKit with {tickerCount} {tickerCount === 1 ? "ticker" : "tickers"} preloaded.
           </DialogDescription>
         </DialogHeader>
 
