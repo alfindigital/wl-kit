@@ -810,7 +810,6 @@ function Index() {
         open={saveOpen}
         onOpenChange={setSaveOpen}
         onSave={handleSave}
-        tickerCount={tickers.length}
         existingNames={saved.map((w) => w.name)}
       />
 
