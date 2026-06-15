@@ -155,28 +155,36 @@ export function Footer() {
           <span className="afd-caret" aria-hidden />
           <span className="afd-version">v{__APP_VERSION__}</span>
         </span>
-        <div
-          className="afd-rot"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-        >
-          {SOCIALS.map((s, idx) => (
-            <a
-              key={s.label}
-              className={`afd-item${idx === active ? " active" : ""}`}
-              href={s.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={s.label}
-            >
-              <span className="afd-ico">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-                  <path d={s.path} />
-                </svg>
-              </span>
-              <b>{s.handle}</b>
-            </a>
-          ))}
+        <div className="flex items-center gap-4">
+          <a
+            href="/guides/import-to-tradingview"
+            className="text-xs text-muted-foreground hover:text-primary transition-colors"
+          >
+            Guides
+          </a>
+          <div
+            className="afd-rot"
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+          >
+            {SOCIALS.map((s, idx) => (
+              <a
+                key={s.label}
+                className={`afd-item${idx === active ? " active" : ""}`}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.label}
+              >
+                <span className="afd-ico">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                    <path d={s.path} />
+                  </svg>
+                </span>
+                <b>{s.handle}</b>
+              </a>
+            ))}
+          </div>
         </div>
       </footer>
     </>
