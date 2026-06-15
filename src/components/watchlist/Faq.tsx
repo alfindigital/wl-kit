@@ -26,7 +26,7 @@ export const FAQ_ITEMS = [
   },
   {
     q: "Is my watchlist data safe?",
-    a: "All watchlists are stored locally in your browser (localStorage). No data is sent to any server — you can export and import a JSON backup file at any time.",
+    a: "All watchlists are stored locally in your browser (localStorage). No data is sent to any server — you can export and import a .txt backup file at any time.",
   },
   {
     q: "Which export formats are supported?",
