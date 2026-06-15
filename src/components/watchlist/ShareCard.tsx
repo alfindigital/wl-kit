@@ -44,7 +44,7 @@ export const ShareCard = forwardRef<
           wordBreak: "break-all",
         }}
       >
-        {output || "—"}
+        {output || "-"}
       </div>
 
       <div

@@ -18,7 +18,7 @@ export const FAQ_ITEMS = [
   },
   {
     q: "How do I format IDX tickers for TradingView?",
-    a: "Paste your ticker list into the input box — WatchlistKit automatically adds the IDX: prefix, removes duplicates, and shows the result in a TradingView-ready format you can copy straight into your watchlist.",
+    a: "Paste your ticker list into the input box. WatchlistKit adds the IDX: prefix, removes duplicates, and outputs a TradingView-ready format you can copy instantly.",
   },
   {
     q: "Is WatchlistKit free?",
@@ -26,7 +26,7 @@ export const FAQ_ITEMS = [
   },
   {
     q: "Is my watchlist data safe?",
-    a: "All watchlists are stored locally in your browser (localStorage). No data is sent to any server — you can export and import a .txt backup file at any time.",
+    a: "All watchlists are stored locally in your browser (localStorage). No data is sent to any server. Export and import a .txt backup file anytime.",
   },
   {
     q: "Which export formats are supported?",

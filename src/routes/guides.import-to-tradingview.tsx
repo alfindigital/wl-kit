@@ -10,7 +10,7 @@ export const Route = createFileRoute("/guides/import-to-tradingview")({
   component: ImportToTradingViewGuide,
   head: () => ({
     meta: [
-      { title: "How to Import IDX Watchlists to TradingView — WatchlistKit Guide" },
+      { title: "How to Import IDX Watchlists to TradingView | WatchlistKit Guide" },
       {
         name: "description",
         content:
@@ -44,7 +44,7 @@ const STEPS = [
     number: 1,
     title: "Paste your IDX tickers into WatchlistKit",
     description:
-      "Open WatchlistKit and paste your ticker list into the input box. You can drop them in any format — comma-separated, spaced, one per line, or even copied straight from a PDF or spreadsheet.",
+      "Open WatchlistKit and paste your ticker list into the input box. You can drop them in any format: comma-separated, spaced, one per line, or even copied straight from a PDF or spreadsheet.",
     details: [
       "Accepts raw text, Excel columns, or broker export files",
       "Automatically validates each ticker against the official IDX symbol list",
@@ -56,7 +56,7 @@ const STEPS = [
     number: 2,
     title: "Select the TradingView format",
     description:
-      "Click the TradingView tab in the output panel. WatchlistKit instantly prefixes every valid ticker with IDX: — the exact format TradingView expects for Indonesia Stock Exchange symbols.",
+      "Click the TradingView tab in the output panel. WatchlistKit instantly prefixes every valid ticker with IDX:, the exact format TradingView expects for Indonesia Stock Exchange symbols.",
     details: [
       "Output looks like: IDX:BBCA,IDX:BBRI,IDX:TLKM,…",
       "Only valid 4-letter IDX tickers are included",
@@ -83,7 +83,7 @@ const STEPS = [
       "In TradingView, open a watchlist panel and click the import button (or use the watchlist menu). Paste the formatted ticker string and confirm. All your IDX stocks will appear instantly.",
     details: [
       "Works in both TradingView web and desktop apps",
-      "Imports all tickers at once — no adding one by one",
+      "Imports all tickers at once. No adding one by one",
       "Symbols are recognized immediately if they are active on IDX",
     ],
     icon: MousePointerClick,
@@ -129,7 +129,7 @@ function ImportToTradingViewGuide() {
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted-foreground">
             The fastest way to bulk-add Indonesian stocks to your TradingView watchlist.
-            Format any ticker list in seconds and import them all at once — no manual typing needed.
+            Format any ticker list in seconds and import them all at once. No manual typing needed.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link to="/">

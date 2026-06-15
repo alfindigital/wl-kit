@@ -204,7 +204,7 @@ function Index() {
     const onError = (e: Event) => {
       const detail = (e as CustomEvent<{ reason?: string }>).detail;
       if (detail?.reason === "quota") {
-        toast.error("Storage full — your changes weren't saved. Try deleting old watchlists.");
+        toast.error("Storage full. Your changes weren't saved. Try deleting old watchlists.");
       } else {
         toast.error("Couldn't save to browser storage.");
       }
@@ -562,7 +562,7 @@ function Index() {
 
   const handleShare = async () => {
     if (tickers.length === 0) {
-      toast.error("Nothing to share — add tickers first");
+      toast.error("Nothing to share. Add tickers first.");
       return;
     }
     const url = buildShareUrl();
@@ -895,7 +895,7 @@ function Index() {
           {
             ref: inputStepRef,
             title: "Paste your tickers here",
-            body: "Any format works: comma, space, newline — or drop a .txt / .csv file.",
+            body: "Any format works: comma, space, newline, or drop a .txt / .csv file.",
           },
           {
             ref: formatStepRef,
@@ -911,7 +911,7 @@ function Index() {
           {
             ref: savedStepRef,
             title: "Your saved watchlists live here",
-            body: "Tap any watchlist to load it back into the input. Long-press or use the menu to delete. You can save up to 20 watchlists — a warning appears when you're close to the limit.",
+            body: "Tap any watchlist to load it back. Long-press or use the menu to delete. Save up to 20. A warning shows when you're near the limit.",
             placement: "top",
           },
           {
