@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useId, useMemo } from "react";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
