@@ -495,10 +495,10 @@ export function SavedWatchlists({
                         Name Z–A
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => setSortKey("created-new")}>
-                        Date created — Newest
+                        Newest first
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => setSortKey("created-old")}>
-                        Date created — Oldest
+                        Oldest first
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => setSortKey("count")}>
                         Most tickers
