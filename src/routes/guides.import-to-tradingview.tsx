@@ -3,9 +3,10 @@ import { ArrowLeft, CheckCircle, Copy, Download, ExternalLink, List, MousePointe
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import ogImage from "@/assets/og-image.jpg";
+import { SITE_URL } from "@/lib/site";
 
-const OG_IMAGE = `https://wlkit.lovable.app${ogImage}`;
-const WEBSITE_URL = "https://wlkit.lovable.app/";
+const OG_IMAGE = `${SITE_URL}${ogImage}`;
+const WEBSITE_URL = `${SITE_URL}/`;
 
 export const Route = createFileRoute("/guides/import-to-tradingview")({
   component: ImportToTradingViewGuide,
