@@ -460,31 +460,31 @@ export function SavedWatchlists({
           <div className="border-t border-border/60 px-2 py-2">
             {items.length > 0 && (
               <>
-                <div className="flex flex-wrap items-center gap-2 px-2 pb-2 pt-1">
+                <div className="flex flex-wrap items-center gap-1.5 px-2 pb-2 pt-1">
                   {items.length > 5 && (
                     <div className="relative w-full sm:flex-1 sm:w-auto">
-                      <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+                      <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
                       <Input
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         aria-label="Search watchlists"
-                        placeholder="Search name or ticker…"
-                        className="h-8 rounded-lg pl-8 text-xs"
+                        placeholder="Search…"
+                        className="h-7 rounded-md pl-7 text-xs"
                       />
                     </div>
                   )}
-                  <div className="flex flex-1 items-center gap-2">
+                  <div className="flex flex-1 items-center gap-1">
 
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
                         variant="outline"
                         size="icon"
-                        className="h-8 w-8 rounded-lg"
+                        className="h-7 w-7 rounded-md"
                         aria-label={`Sort by ${SORT_LABEL[sortKey]}`}
                         title={`Sort: ${SORT_LABEL[sortKey]}`}
                       >
-                        <ArrowUpDown className="h-3.5 w-3.5" />
+                        <ArrowUpDown className="h-3 w-3" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -509,12 +509,12 @@ export function SavedWatchlists({
                     <Button
                       variant="outline"
                       size="icon"
-                      className="h-8 w-8 rounded-lg"
+                      className="h-7 w-7 rounded-md"
                       onClick={() => setSelectMode(true)}
                       aria-label="Select"
                       title="Select"
                     >
-                      <CheckSquare className="h-3.5 w-3.5" />
+                      <CheckSquare className="h-3 w-3" />
                     </Button>
                   ) : (
                     <div className="flex items-center gap-1">
@@ -522,32 +522,32 @@ export function SavedWatchlists({
                         <Button
                           size="sm"
                           variant="outline"
-                          className="h-8 rounded-lg text-xs"
+                          className="h-7 rounded-md text-xs"
                           onClick={() => {
                             onMerge(selected);
                             exitSelectMode();
                           }}
                         >
-                          <Combine className="mr-1 h-3.5 w-3.5" /> Merge
+                          <Combine className="mr-1 h-3 w-3" /> Merge
                         </Button>
                       )}
                       {selected.length === 2 && (
                         <Button
                           size="sm"
                           variant="outline"
-                          className="h-8 rounded-lg text-xs"
+                          className="h-7 rounded-md text-xs"
                           onClick={() => {
                             onCompare(selected[0], selected[1]);
                             exitSelectMode();
                           }}
                         >
-                          <GitCompare className="mr-1 h-3.5 w-3.5" /> Compare
+                          <GitCompare className="mr-1 h-3 w-3" /> Compare
                         </Button>
                       )}
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="h-8 rounded-lg text-xs"
+                        className="h-7 rounded-md text-xs"
                         onClick={exitSelectMode}
                       >
                         Cancel
@@ -558,22 +558,22 @@ export function SavedWatchlists({
                     <Button
                       variant="outline"
                       size="icon"
-                      className="h-8 w-8 rounded-lg"
+                      className="h-7 w-7 rounded-md"
                       onClick={onExport}
                       aria-label="Export"
                       title="Export"
                     >
-                      <Download className="h-3.5 w-3.5" />
+                      <Download className="h-3 w-3" />
                     </Button>
                     <Button
                       variant="outline"
                       size="icon"
-                      className="h-8 w-8 rounded-lg"
+                      className="h-7 w-7 rounded-md"
                       onClick={() => fileRef.current?.click()}
                       aria-label="Import"
                       title="Import"
                     >
-                      <Upload className="h-3.5 w-3.5" />
+                      <Upload className="h-3 w-3" />
                     </Button>
                     <input
                       ref={fileRef}
