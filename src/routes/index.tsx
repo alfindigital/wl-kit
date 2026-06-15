@@ -735,7 +735,8 @@ function Index() {
         <div className="mx-auto w-full max-w-2xl px-4 pb-10 pt-6 sm:px-6 sm:pt-10">
           <div className="mb-4 text-center sm:mb-6">
             <h1 className="font-display text-2xl leading-tight tracking-tight sm:text-3xl">
-              Build IDX watchlist, <em className="italic text-primary">instantly.</em>
+              Build IDX watchlist,<br />
+              <em className="italic text-primary">Instantly.</em>
             </h1>
           </div>
 
