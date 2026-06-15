@@ -442,12 +442,12 @@ function Index() {
 
 
   const handleExport = () => {
-    const json = exportAllJSON(saved);
-    const blob = new Blob([json], { type: "application/json" });
+    const txt = exportAllTXT(saved);
+    const blob = new Blob([txt], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `watchlistkit-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `watchlistkit-backup-${new Date().toISOString().slice(0, 10)}.txt`;
     a.click();
     URL.revokeObjectURL(url);
     const msg = `Exported ${saved.length} watchlist${saved.length === 1 ? "" : "s"}`;
@@ -459,7 +459,7 @@ function Index() {
     try {
       const text = await file.text();
       const snapshot = saved;
-      const { merged, added, skipped } = importAllJSON(saved, text);
+      const { merged, added, skipped } = importAllTXT(saved, text);
       setSaved(merged);
       saveWatchlists(merged);
       const msg = `Imported ${added}${skipped ? `, skipped ${skipped}` : ""}`;
@@ -475,8 +475,8 @@ function Index() {
         duration: 5000,
       });
     } catch {
-      setLiveStatus("Invalid JSON file");
-      toast.error("Invalid JSON file");
+      setLiveStatus("Invalid file");
+      toast.error("Invalid file");
     }
   };
 

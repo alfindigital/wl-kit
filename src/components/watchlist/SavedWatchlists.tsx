@@ -575,7 +575,7 @@ export function SavedWatchlists({
                     <input
                       ref={fileRef}
                       type="file"
-                      accept="application/json,.json"
+                      accept="text/plain,.txt"
                       className="hidden"
                       onChange={(e) => {
                         const f = e.target.files?.[0];
