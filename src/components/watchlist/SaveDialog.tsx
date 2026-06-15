@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useId, useMemo } from "react";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -14,13 +13,11 @@ export function SaveDialog({
   open,
   onOpenChange,
   onSave,
-  tickerCount,
   existingNames = [],
 }: {
   open: boolean;
   onOpenChange: (o: boolean) => void;
   onSave: (name: string) => void;
-  tickerCount: number;
   existingNames?: string[];
 }) {
   const [name, setName] = useState("");
@@ -53,9 +50,6 @@ export function SaveDialog({
       <DialogContent className="rounded-2xl sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Save watchlist</DialogTitle>
-          <DialogDescription>
-            Saving {tickerCount} {tickerCount === 1 ? "ticker" : "tickers"} to your browser.
-          </DialogDescription>
         </DialogHeader>
         <Input
           ref={inputRef}
