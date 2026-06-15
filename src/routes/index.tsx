@@ -2,6 +2,7 @@ import { createFileRoute, useSearch, useNavigate } from "@tanstack/react-router"
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
+import { SITE_URL } from "@/lib/site";
 
 import { Footer } from "@/components/watchlist/Footer";
 import { FaqDialog, FAQ_ITEMS } from "@/components/watchlist/Faq";
@@ -112,7 +113,7 @@ export const Route = createFileRoute("/")({
   validateSearch: searchSchema,
   component: Index,
   head: () => ({
-    links: [{ rel: "canonical", href: "https://wlkit.lovable.app/" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/` }],
     scripts: [
       {
         type: "application/ld+json",

@@ -14,6 +14,7 @@ import { registerServiceWorker } from "@/lib/register-sw";
 
 import appCss from "../styles.css?url";
 import ogImage from "@/assets/og-image.jpg";
+import { SITE_URL } from "@/lib/site";
 
 class AppErrorBoundary extends Component<
   { children: ReactNode },
@@ -63,8 +64,8 @@ class AppErrorBoundary extends Component<
   }
 }
 
-const OG_IMAGE_URL = `https://wlkit.lovable.app${ogImage}`;
-const WEBSITE_URL = "https://wlkit.lovable.app/";
+const OG_IMAGE_URL = `${SITE_URL}${ogImage}`;
+const WEBSITE_URL = `${SITE_URL}/`;
 
 function NotFoundComponent() {
   return (
@@ -146,8 +147,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:description", content: "Format your IDX stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share." },
       { property: "og:image", content: OG_IMAGE_URL },
       { property: "og:image:alt", content: "WatchlistKit | Free IDX Stock Watchlist Formatter" },
-      { property: "og:image:width", content: "1536" },
-      { property: "og:image:height", content: "1024" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
       { property: "og:image:type", content: "image/jpeg" },
       { name: "twitter:image", content: OG_IMAGE_URL },
       { name: "twitter:image:alt", content: "WatchlistKit | Free IDX Stock Watchlist Formatter" },
@@ -208,10 +209,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
+const NO_FOUC_SCRIPT = `(function(){try{var t=localStorage.getItem('wlkit-theme')||'light';var d=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');document.documentElement.style.colorScheme=d?'dark':'light';}catch(e){}})();`;
+
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
+        <meta name="color-scheme" content="light dark" />
+        <script dangerouslySetInnerHTML={{ __html: NO_FOUC_SCRIPT }} />
         <HeadContent />
       </head>
       <body>

@@ -3,9 +3,10 @@ import { ArrowLeft, CheckCircle, Copy, Download, ExternalLink, List, MousePointe
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import ogImage from "@/assets/og-image.jpg";
+import { SITE_URL } from "@/lib/site";
 
-const OG_IMAGE = `https://wlkit.lovable.app${ogImage}`;
-const WEBSITE_URL = "https://wlkit.lovable.app/";
+const OG_IMAGE = `${SITE_URL}${ogImage}`;
+const GUIDE_URL = `${SITE_URL}/guides/import-to-tradingview`;
 
 export const Route = createFileRoute("/guides/import-to-tradingview")({
   component: ImportToTradingViewGuide,
@@ -17,7 +18,7 @@ export const Route = createFileRoute("/guides/import-to-tradingview")({
         content:
           "Step-by-step tutorial: format your IDX (Indonesia Stock Exchange) tickers with WatchlistKit and import them into TradingView in seconds. No manual typing needed.",
       },
-      { property: "og:url", content: "https://wlkit.lovable.app/guides/import-to-tradingview" },
+      { property: "og:url", content: GUIDE_URL },
       { property: "og:title", content: "How to Import IDX Watchlists to TradingView" },
       {
         property: "og:description",
@@ -35,7 +36,7 @@ export const Route = createFileRoute("/guides/import-to-tradingview")({
       { name: "twitter:image", content: OG_IMAGE },
     ],
     links: [
-      { rel: "canonical", href: "https://wlkit.lovable.app/guides/import-to-tradingview" },
+      { rel: "canonical", href: GUIDE_URL },
     ],
   }),
 });
