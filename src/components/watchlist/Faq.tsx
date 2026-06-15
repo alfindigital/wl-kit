@@ -30,7 +30,7 @@ export const FAQ_ITEMS = [
   },
   {
     q: "Which export formats are supported?",
-    a: "TradingView (IDX:BBCA,IDX:BBRI,…), plain comma-separated text, and a line-per-ticker list. You can also download the result as a .txt file or a branded PNG image.",
+    a: "TradingView (IDX:BUMI,IDX:ANTM,…), plain comma-separated text, and a line-per-ticker list. You can also download the result as a .txt file or a branded PNG image.",
   },
   {
     q: "Can I share my watchlist with others?",
