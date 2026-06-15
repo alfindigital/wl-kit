@@ -53,9 +53,6 @@ export function SaveDialog({
       <DialogContent className="rounded-2xl sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Save watchlist</DialogTitle>
-          <DialogDescription>
-            Saving {tickerCount} {tickerCount === 1 ? "ticker" : "tickers"} to your browser.
-          </DialogDescription>
         </DialogHeader>
         <Input
           ref={inputRef}
