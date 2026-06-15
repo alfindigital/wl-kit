@@ -18,7 +18,7 @@ export const Route = createFileRoute("/guides/import-to-tradingview")({
         content:
           "Step-by-step tutorial: format your IDX (Indonesia Stock Exchange) tickers with WatchlistKit and import them into TradingView in seconds. No manual typing needed.",
       },
-      { property: "og:url", content: "https://wlkit.lovable.app/guides/import-to-tradingview" },
+      { property: "og:url", content: GUIDE_URL },
       { property: "og:title", content: "How to Import IDX Watchlists to TradingView" },
       {
         property: "og:description",
