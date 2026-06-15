@@ -45,13 +45,13 @@
   --card-foreground: oklch(0.22 0.03 260);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.22 0.03 260);
-  /* Bold orange primary */
-  --primary: oklch(0.66 0.22 40);
+  /* Bold orange primary — darkened for AA contrast as text on light bg */
+  --primary: oklch(0.56 0.2 40);
   --primary-foreground: oklch(0.99 0 0);
   --secondary: oklch(0.96 0.008 80);
   --secondary-foreground: oklch(0.22 0.03 260);
   --muted: oklch(0.95 0.01 80);
-  --muted-foreground: oklch(0.4 0.02 260);
+  --muted-foreground: oklch(0.36 0.02 260);
   --accent: oklch(0.93 0.04 70);
   --accent-foreground: oklch(0.22 0.03 260);
   --destructive: oklch(0.62 0.22 25);
