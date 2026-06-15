@@ -156,12 +156,6 @@ export function Footer() {
           <span className="afd-version">v{__APP_VERSION__}</span>
         </span>
         <div className="flex items-center gap-4">
-          <a
-            href="/guides/import-to-tradingview"
-            className="text-xs text-muted-foreground hover:text-primary transition-colors"
-          >
-            Guides
-          </a>
           <div
             className="afd-rot"
             onMouseEnter={() => setPaused(true)}
