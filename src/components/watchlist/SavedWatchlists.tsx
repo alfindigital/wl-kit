@@ -436,13 +436,16 @@ export function SavedWatchlists({
         <CollapsibleTrigger asChild>
           <button
             type="button"
-            className="flex w-full items-center justify-between px-4 py-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            className="flex w-full items-center justify-between px-4 py-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             aria-expanded={open}
           >
-            <span className="text-xs font-semibold uppercase tracking-wide text-primary">
+            <span className="text-sm font-semibold tracking-wide text-foreground">
               Saved Watchlists
             </span>
             <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground">
+                {items.length} item{items.length !== 1 ? "s" : ""}
+              </span>
               <ChevronDown
                 className={`h-4 w-4 transition-transform ${
                   open ? "rotate-180 text-primary" : "text-muted-foreground"
