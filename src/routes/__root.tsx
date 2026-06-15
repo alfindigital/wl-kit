@@ -14,6 +14,7 @@ import { registerServiceWorker } from "@/lib/register-sw";
 
 import appCss from "../styles.css?url";
 import ogImage from "@/assets/og-image.jpg";
+import { SITE_URL } from "@/lib/site";
 
 class AppErrorBoundary extends Component<
   { children: ReactNode },
