@@ -113,7 +113,7 @@ export const Route = createFileRoute("/")({
   validateSearch: searchSchema,
   component: Index,
   head: () => ({
-    links: [{ rel: "canonical", href: "https://wlkit.lovable.app/" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/` }],
     scripts: [
       {
         type: "application/ld+json",
