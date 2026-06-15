@@ -6,7 +6,7 @@ import ogImage from "@/assets/og-image.jpg";
 import { SITE_URL } from "@/lib/site";
 
 const OG_IMAGE = `${SITE_URL}${ogImage}`;
-const WEBSITE_URL = `${SITE_URL}/`;
+const GUIDE_URL = `${SITE_URL}/guides/import-to-tradingview`;
 
 export const Route = createFileRoute("/guides/import-to-tradingview")({
   component: ImportToTradingViewGuide,
