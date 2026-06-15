@@ -64,8 +64,8 @@ class AppErrorBoundary extends Component<
   }
 }
 
-const OG_IMAGE_URL = `https://wlkit.lovable.app${ogImage}`;
-const WEBSITE_URL = "https://wlkit.lovable.app/";
+const OG_IMAGE_URL = `${SITE_URL}${ogImage}`;
+const WEBSITE_URL = `${SITE_URL}/`;
 
 function NotFoundComponent() {
   return (
