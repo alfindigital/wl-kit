@@ -203,7 +203,7 @@ export function ShortcutOverlay({
         {onShowOnboarding && (
           <div className="mt-4 flex items-center justify-between gap-3 border-t border-border pt-4">
             <p className="font-sans text-sm text-muted-foreground">
-              New here? Take the quick tour.
+              New? Take the tour.
             </p>
             <Button
               variant="outline"
