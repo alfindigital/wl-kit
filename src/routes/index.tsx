@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { HelpCircle, MessageCircleQuestion, Keyboard } from "lucide-react";
+import { HelpCircle, MessageCircleQuestion, Keyboard, ChevronLeft, MoreHorizontal } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 function HelpMenu({
@@ -158,6 +158,7 @@ function Index() {
   const [faqOpen, setFaqOpen] = useState(false);
   const [onboardingActive, setOnboardingActive] = useState(false);
   const [sortMode, setSortMode] = useState<SortMode>("asc");
+  const [pillOpen, setPillOpen] = useState(false);
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
@@ -688,19 +689,47 @@ function Index() {
 
   return (
     <div className="flex min-h-dvh flex-col bg-background">
-      {/* Floating controls — all screen sizes */}
+      {/* Floating controls — collapsible on mobile, always expanded on sm+ */}
       <div className="pointer-events-none fixed right-4 top-4 z-30 flex items-center gap-1">
         <div
           ref={helpStepRef}
           className="pointer-events-auto flex items-center gap-1 rounded-full border border-border/60 bg-card/80 px-1 py-1 shadow-sm backdrop-blur"
         >
-          <ThemeToggle />
-          <HelpMenu
-            onFaq={() => setFaqOpen(true)}
-            onShortcuts={() => setShortcutOpen(true)}
-          />
+          {/* Mobile: toggle button visible when collapsed */}
+          {!pillOpen && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={() => setPillOpen(true)}
+              aria-label="Show controls"
+              aria-expanded={false}
+              className="h-9 w-9 rounded-full text-muted-foreground hover:text-primary sm:hidden"
+            >
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          )}
+          {/* Expanded controls: always on sm+, conditional on mobile */}
+          <div className={`${pillOpen ? "flex" : "hidden"} items-center gap-1 sm:flex`}>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={() => setPillOpen(false)}
+              aria-label="Hide controls"
+              className="h-9 w-9 rounded-full text-muted-foreground hover:text-primary sm:hidden"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <ThemeToggle />
+            <HelpMenu
+              onFaq={() => setFaqOpen(true)}
+              onShortcuts={() => setShortcutOpen(true)}
+            />
+          </div>
         </div>
       </div>
+
 
       <main className="flex-1">
         <div className="mx-auto w-full max-w-2xl px-4 pb-10 pt-6 sm:px-6 sm:pt-10">
