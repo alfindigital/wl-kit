@@ -76,7 +76,7 @@ export function Faq() {
     >
       <h2
         id="faq-heading"
-        className="font-display text-xl font-semibold tracking-tight sm:text-2xl"
+        className="text-xl font-semibold tracking-tight sm:text-2xl"
       >
         Frequently asked questions
       </h2>
