@@ -697,25 +697,8 @@ function Index() {
 
   return (
     <div className="flex min-h-dvh flex-col bg-background">
-      {/* Mobile sticky compact header */}
-      <header className="sticky top-0 z-30 border-b border-border/60 bg-background/85 pt-safe backdrop-blur supports-[backdrop-filter]:bg-background/70 sm:hidden">
-        <div className="mx-auto flex max-w-2xl items-center justify-between gap-2 px-4 py-2">
-          <span className="font-display text-base italic">
-            <span className="text-foreground">Watchlist</span>
-            <span className="text-primary">Kit</span>
-          </span>
-          <div className="flex items-center gap-1">
-            <ThemeToggle />
-            <HelpMenu
-              onFaq={() => setFaqOpen(true)}
-              onShortcuts={() => setShortcutOpen(true)}
-            />
-          </div>
-        </div>
-      </header>
-
-      {/* Desktop floating controls */}
-      <div className="pointer-events-none fixed right-4 top-4 z-30 hidden items-center gap-1 sm:flex">
+      {/* Floating controls — all screen sizes */}
+      <div className="pointer-events-none fixed right-4 top-4 z-30 flex items-center gap-1">
         <div
           ref={helpStepRef}
           className="pointer-events-auto flex items-center gap-1 rounded-full border border-border/60 bg-card/80 px-1 py-1 shadow-sm backdrop-blur"
