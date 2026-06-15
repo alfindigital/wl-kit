@@ -379,7 +379,6 @@ function Index() {
       tickers,
       savedAt: Date.now(),
       pinned: false,
-      tags: [],
       lastUsedAt: Date.now(),
     };
     const next = [entry, ...saved];
@@ -495,7 +494,6 @@ function Index() {
       tickers: merged,
       savedAt: Date.now(),
       pinned: false,
-      tags: [],
       lastUsedAt: Date.now(),
     };
     const next = [entry, ...saved];
