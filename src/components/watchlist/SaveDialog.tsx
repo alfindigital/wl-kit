@@ -13,13 +13,11 @@ export function SaveDialog({
   open,
   onOpenChange,
   onSave,
-  tickerCount,
   existingNames = [],
 }: {
   open: boolean;
   onOpenChange: (o: boolean) => void;
   onSave: (name: string) => void;
-  tickerCount: number;
   existingNames?: string[];
 }) {
   const [name, setName] = useState("");
