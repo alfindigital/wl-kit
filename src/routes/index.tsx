@@ -2,7 +2,6 @@ import { createFileRoute, useSearch, useNavigate } from "@tanstack/react-router"
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
-import ogImage from "@/assets/og-image.jpg";
 
 import { Footer } from "@/components/watchlist/Footer";
 import { FaqDialog, FAQ_ITEMS } from "@/components/watchlist/Faq";
@@ -113,30 +112,6 @@ export const Route = createFileRoute("/")({
   validateSearch: searchSchema,
   component: Index,
   head: () => ({
-    meta: [
-      { title: "WatchlistKit — Free IDX Stock Watchlist Formatter" },
-      {
-        name: "description",
-        content:
-          "Format your IDX stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
-      },
-      { property: "og:url", content: "https://wlkit.lovable.app/" },
-      { property: "og:title", content: "WatchlistKit — Free IDX Stock Watchlist Formatter" },
-      {
-        property: "og:description",
-        content:
-          "Format your IDX stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
-      },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "WatchlistKit — Free IDX Stock Watchlist Formatter" },
-      {
-        name: "twitter:description",
-        content:
-          "Format your IDX stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
-      },
-      { name: "twitter:image", content: `https://wlkit.lovable.app${ogImage}` },
-      { name: "twitter:image:alt", content: "WatchlistKit — Free IDX Stock Watchlist Formatter" },
-    ],
     links: [{ rel: "canonical", href: "https://wlkit.lovable.app/" }],
     scripts: [
       {
