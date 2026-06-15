@@ -111,53 +111,47 @@ export function ShareLinkDialog({ open, onOpenChange, url, tickerCount }: Props)
               type="button"
               onClick={handleCopy}
               variant="default"
-              className="shrink-0 gap-1.5"
+              size="icon"
+              className="shrink-0"
               aria-label="Copy link"
             >
               {copied ? (
-                <>
-                  <Check className="h-4 w-4" /> Copied
-                </>
+                <Check className="h-4 w-4" />
               ) : (
-                <>
-                  <Copy className="h-4 w-4" /> Copy
-                </>
+                <Copy className="h-4 w-4" />
               )}
             </Button>
           </div>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex items-center justify-center gap-2">
             <Button
               type="button"
-              variant="outline"
-              size="sm"
+              variant={showQR ? "default" : "outline"}
+              size="icon"
               onClick={() => setShowQR((v) => !v)}
-              className="gap-1.5"
               aria-expanded={showQR}
+              aria-label={showQR ? "Hide QR" : "Show QR"}
             >
               <QrCode className="h-4 w-4" />
-              {showQR ? "Hide QR" : "Show QR"}
             </Button>
             <Button
               type="button"
               variant="outline"
-              size="sm"
+              size="icon"
               onClick={() => window.open(url, "_blank", "noopener,noreferrer")}
-              className="gap-1.5"
+              aria-label="Open link"
             >
               <ExternalLink className="h-4 w-4" />
-              Open
             </Button>
             {hasNativeShare && (
               <Button
                 type="button"
                 variant="outline"
-                size="sm"
+                size="icon"
                 onClick={handleNativeShare}
-                className="gap-1.5"
+                aria-label="Share"
               >
                 <Share2 className="h-4 w-4" />
-                Share…
               </Button>
             )}
           </div>
