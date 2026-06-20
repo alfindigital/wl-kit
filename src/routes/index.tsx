@@ -669,6 +669,12 @@ function Index() {
 
   return (
     <div className="flex min-h-dvh flex-col bg-background">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-foreground focus:shadow-lg"
+      >
+        Skip to content
+      </a>
       {/* Floating controls — collapsible on mobile, always expanded on sm+ */}
       <div className="pointer-events-none fixed right-4 top-4 z-30 flex items-center gap-1">
         <div
@@ -707,7 +713,7 @@ function Index() {
         </div>
       </div>
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         <div className="mx-auto w-full max-w-2xl px-4 pb-10 pt-6 sm:px-6 sm:pt-10">
           <div className="mb-4 text-center sm:mb-6">
             <h1 className="font-display text-2xl leading-tight tracking-tight sm:text-3xl">
