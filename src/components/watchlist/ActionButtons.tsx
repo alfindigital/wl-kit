@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Save, ImageDown, Share2, Download } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useIsTouch } from "@/hooks/use-touch";
+import { useI18n } from "@/lib/i18n";
 import { toast } from "sonner";
 
 type Action = {
@@ -25,14 +26,15 @@ export function ActionButtons({
   onShare: () => void;
 }) {
   const isTouch = useIsTouch();
+  const { t } = useI18n();
 
   const getTooltipId = (label: string) => `tt-${label.toLowerCase()}`;
 
   const desktopActions: Action[] = [
-    { label: "Save", icon: Save, onClick: onSave },
-    { label: "Download", icon: Download, onClick: onDownload },
-    { label: "Image", icon: ImageDown, onClick: onImage },
-    { label: "Share", icon: Share2, onClick: onShare },
+    { label: t("action.save"), icon: Save, onClick: onSave },
+    { label: t("action.download"), icon: Download, onClick: onDownload },
+    { label: t("action.image"), icon: ImageDown, onClick: onImage },
+    { label: t("action.share"), icon: Share2, onClick: onShare },
   ];
 
   return (

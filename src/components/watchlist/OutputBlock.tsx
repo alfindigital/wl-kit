@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Copy, ArrowUpDown, ArrowDownAZ, ArrowUpAZ, RotateCcw, Check } from "lucide-react";
 import type { OutputFormat } from "@/lib/tickers";
+import { useI18n } from "@/lib/i18n";
 
 export type SortMode = "none" | "asc" | "desc";
 
@@ -23,6 +24,7 @@ export function OutputBlock({
   onSortChange?: (mode: SortMode) => void;
   duplicates?: string[];
 }) {
+  const { t } = useI18n();
   const lines = output ? output.split("\n") : [];
   const showLineNumbers = format === "newline" && lines.length > 0;
 
@@ -36,14 +38,15 @@ export function OutputBlock({
         >
           <span>
             <span className="font-semibold text-foreground">{count}</span>{" "}
-            {count === 1 ? "ticker" : "tickers"}
+            {count === 1 ? t("output.ticker") : t("output.tickers")}
           </span>
           {duplicates.length > 0 && (
             <>
               <span>·</span>
               <span>
-                {duplicates.length} duplicate
-                {duplicates.length === 1 ? "" : "s"} removed
+                {duplicates.length}{" "}
+                {duplicates.length === 1 ? t("output.duplicate") : t("output.duplicates")}{" "}
+                {t("output.duplicatesRemoved")}
               </span>
             </>
           )}
@@ -103,11 +106,7 @@ export function OutputBlock({
         aria-label="Formatted watchlist output"
         className="max-h-[280px] min-h-[80px] overflow-auto p-4 font-mono text-[15px] leading-relaxed text-foreground outline-none transition-shadow focus-visible:rounded-b-2xl focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset sm:text-sm"
       >
-        {!output && (
-          <p className="font-sans text-sm text-muted-foreground">
-            Paste tickers above to see formatted output.
-          </p>
-        )}
+        {!output && <p className="font-sans text-sm text-muted-foreground">{t("output.empty")}</p>}
         {output && showLineNumbers && (
           <div className="grid grid-cols-[auto_1fr] gap-x-3">
             {lines.map((line, i) => (
