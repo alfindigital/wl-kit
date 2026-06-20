@@ -79,18 +79,12 @@ export function ShareImageDialog({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Share as image</DialogTitle>
-          <DialogDescription>
-            Download a branded preview of your watchlist.
-          </DialogDescription>
+          <DialogDescription>Download a branded preview of your watchlist.</DialogDescription>
         </DialogHeader>
 
         <div className="overflow-hidden rounded-lg border border-border bg-muted/30">
           {dataUrl ? (
-            <img
-              src={dataUrl}
-              alt={`${name} preview`}
-              className="block h-auto w-full"
-            />
+            <img src={dataUrl} alt={`${name} preview`} className="block h-auto w-full" />
           ) : (
             <div className="flex h-48 items-center justify-center text-sm text-muted-foreground">
               Generating preview…
@@ -98,12 +92,7 @@ export function ShareImageDialog({
           )}
         </div>
 
-        <Button
-          type="button"
-          onClick={handleDownload}
-          disabled={!dataUrl}
-          className="w-full"
-        >
+        <Button type="button" onClick={handleDownload} disabled={!dataUrl} className="w-full">
           <Download className="mr-2 h-4 w-4" />
           Download
         </Button>

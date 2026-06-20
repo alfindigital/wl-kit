@@ -45,9 +45,7 @@ self.addEventListener("activate", (event) => {
     (async () => {
       const keys = await caches.keys();
       await Promise.all(
-        keys
-          .filter((k) => k !== RUNTIME_CACHE && k !== HTML_CACHE)
-          .map((k) => caches.delete(k)),
+        keys.filter((k) => k !== RUNTIME_CACHE && k !== HTML_CACHE).map((k) => caches.delete(k)),
       );
       await self.clients.claim();
     })(),
@@ -59,7 +57,10 @@ self.addEventListener("message", (event) => {
 });
 
 function isNavigation(request) {
-  return request.mode === "navigate" || (request.method === "GET" && request.headers.get("accept")?.includes("text/html"));
+  return (
+    request.mode === "navigate" ||
+    (request.method === "GET" && request.headers.get("accept")?.includes("text/html"))
+  );
 }
 
 async function networkFirstHTML(request) {

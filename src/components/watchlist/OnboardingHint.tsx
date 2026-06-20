@@ -20,9 +20,7 @@ export function OnboardingHint({
 }: Props) {
   const isFirst = step === 1;
   const toneClasses =
-    tone === "accent"
-      ? "border-accent/40 bg-accent/10"
-      : "border-primary/30 bg-primary/5";
+    tone === "accent" ? "border-accent/40 bg-accent/10" : "border-primary/30 bg-primary/5";
 
   return (
     <div
@@ -35,11 +33,7 @@ export function OnboardingHint({
       </span>
       <div className="min-w-0 flex-1">
         <p className="font-medium text-foreground">{title}</p>
-        {body && (
-          <p className="mt-0.5 text-xs leading-snug text-muted-foreground">
-            {body}
-          </p>
-        )}
+        {body && <p className="mt-0.5 text-xs leading-snug text-muted-foreground">{body}</p>}
       </div>
       {isFirst && (
         <Button

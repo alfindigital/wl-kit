@@ -25,9 +25,7 @@ export const ShareCard = forwardRef<
             background: "#ea580c",
           }}
         />
-        <span style={{ fontSize: 22, fontWeight: 700, letterSpacing: -0.3 }}>
-          WatchlistKit
-        </span>
+        <span style={{ fontSize: 22, fontWeight: 700, letterSpacing: -0.3 }}>WatchlistKit</span>
       </div>
 
       <div
@@ -62,8 +60,7 @@ export const ShareCard = forwardRef<
         }}
       >
         <span>
-          Built with{" "}
-          <span style={{ color: "#ea580c", fontWeight: 600 }}>WatchlistKit</span>
+          Built with <span style={{ color: "#ea580c", fontWeight: 600 }}>WatchlistKit</span>
         </span>
         <span style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <span style={{ color: "#ea580c" }}>alfindigital.com</span>

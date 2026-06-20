@@ -16,10 +16,7 @@ import appCss from "../styles.css?url";
 import ogImage from "@/assets/og-image.jpg";
 import { SITE_URL } from "@/lib/site";
 
-class AppErrorBoundary extends Component<
-  { children: ReactNode },
-  { hasError: boolean }
-> {
+class AppErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
   state = { hasError: false };
   static getDerivedStateFromError() {
     return { hasError: true };
@@ -143,8 +140,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:title", content: "WatchlistKit | Free IDX Stock Watchlist Formatter" },
       { name: "twitter:title", content: "WatchlistKit | Free IDX Stock Watchlist Formatter" },
-      { property: "og:description", content: "Format your IDX stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share." },
-      { name: "twitter:description", content: "Format your IDX stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share." },
+      {
+        property: "og:description",
+        content:
+          "Format your IDX stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Format your IDX stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
+      },
       { property: "og:image", content: OG_IMAGE_URL },
       { property: "og:image:alt", content: "WatchlistKit | Free IDX Stock Watchlist Formatter" },
       { property: "og:image:width", content: "1200" },

@@ -1,9 +1,5 @@
 import { useEffect, useId, useMemo, useRef, useState } from "react";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -42,20 +38,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-type SortKey =
-  | "name"
-  | "name-desc"
-  | "created-new"
-  | "created-old"
-  | "count";
+type SortKey = "name" | "name-desc" | "created-new" | "created-old" | "count";
 
 const SORT_LABEL: Record<SortKey, string> = {
   name: "Name A–Z",
@@ -101,10 +87,9 @@ export function SavedWatchlists({
   const fileRef = useRef<HTMLInputElement>(null);
   const isMobile = useIsMobile();
   const [drawerId, setDrawerId] = useState<string | null>(null);
-  const drawerItem = drawerId ? items.find((i) => i.id === drawerId) ?? null : null;
+  const drawerItem = drawerId ? (items.find((i) => i.id === drawerId) ?? null) : null;
   const triggerRefs = useRef(new Map<string, HTMLButtonElement | null>());
   const focusReturnIdRef = useRef<string | null>(null);
-  
 
   const restoreFocus = (id: string | null) => {
     if (!id) return;
@@ -127,9 +112,7 @@ export function SavedWatchlists({
     const q = query.trim().toUpperCase();
     return items.filter((it) => {
       if (q) {
-        const hit =
-          it.name.toUpperCase().includes(q) ||
-          it.tickers.some((t) => t.includes(q));
+        const hit = it.name.toUpperCase().includes(q) || it.tickers.some((t) => t.includes(q));
         if (!hit) return false;
       }
       return true;
@@ -149,9 +132,7 @@ export function SavedWatchlists({
   const rest = filtered.filter((i) => !i.pinned).sort(sortFn);
 
   const toggleSelect = (id: string) => {
-    setSelected((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
-    );
+    setSelected((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   };
 
   const exitSelectMode = () => {
@@ -170,16 +151,11 @@ export function SavedWatchlists({
     touchStart.current = null;
   };
 
-  const validateRename = (
-    id: string,
-    value: string,
-  ): { ok: boolean; error: string | null } => {
+  const validateRename = (id: string, value: string): { ok: boolean; error: string | null } => {
     const trimmed = value.trim();
     if (!trimmed) return { ok: false, error: "Name cannot be empty." };
     const lower = trimmed.toLowerCase();
-    const dup = items.some(
-      (w) => w.id !== id && w.name.trim().toLowerCase() === lower,
-    );
+    const dup = items.some((w) => w.id !== id && w.name.trim().toLowerCase() === lower);
     if (dup) {
       return {
         ok: false,
@@ -214,9 +190,7 @@ export function SavedWatchlists({
   const renderItem = (item: SavedWatchlist) => {
     const isEditing = editingId === item.id;
     const isSwiped = swipedId === item.id;
-    const liveError = isEditing
-      ? validateRename(item.id, editName).error
-      : null;
+    const liveError = isEditing ? validateRename(item.id, editName).error : null;
     const showError = isEditing && (renameError ?? (editName.trim() ? liveError : null));
     return (
       <li key={item.id} className="relative overflow-hidden rounded-xl">
@@ -407,7 +381,6 @@ export function SavedWatchlists({
     );
   };
 
-
   const sectionHeader = (label: string) => (
     <div className="px-3 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
       {label}
@@ -432,7 +405,6 @@ export function SavedWatchlists({
         }}
         className="rounded-2xl border border-border/80 bg-card shadow-sm"
       >
-
         <CollapsibleTrigger asChild>
           <button
             type="button"
@@ -463,7 +435,10 @@ export function SavedWatchlists({
                 <div className="flex flex-wrap items-center gap-1.5 px-2 pb-2 pt-1">
                   {items.length > 5 && (
                     <div className="relative w-full sm:flex-1 sm:w-auto">
-                      <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+                      <Search
+                        className="pointer-events-none absolute left-2.5 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground"
+                        aria-hidden="true"
+                      />
                       <Input
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
@@ -474,122 +449,120 @@ export function SavedWatchlists({
                     </div>
                   )}
                   <div className="flex flex-1 items-center gap-1">
-
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-7 w-7 rounded-md"
+                          aria-label={`Sort by ${SORT_LABEL[sortKey]}`}
+                          title={`Sort: ${SORT_LABEL[sortKey]}`}
+                        >
+                          <ArrowUpDown className="h-3 w-3" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => setSortKey("name")}>
+                          Name A–Z
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setSortKey("name-desc")}>
+                          Name Z–A
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setSortKey("created-new")}>
+                          Newest first
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setSortKey("created-old")}>
+                          Oldest first
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setSortKey("count")}>
+                          Most tickers
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                    {!selectMode ? (
                       <Button
                         variant="outline"
                         size="icon"
                         className="h-7 w-7 rounded-md"
-                        aria-label={`Sort by ${SORT_LABEL[sortKey]}`}
-                        title={`Sort: ${SORT_LABEL[sortKey]}`}
+                        onClick={() => setSelectMode(true)}
+                        aria-label="Select"
+                        title="Select"
                       >
-                        <ArrowUpDown className="h-3 w-3" />
+                        <CheckSquare className="h-3 w-3" />
                       </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => setSortKey("name")}>
-                        Name A–Z
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => setSortKey("name-desc")}>
-                        Name Z–A
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => setSortKey("created-new")}>
-                        Newest first
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => setSortKey("created-old")}>
-                        Oldest first
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => setSortKey("count")}>
-                        Most tickers
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                  {!selectMode ? (
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="h-7 w-7 rounded-md"
-                      onClick={() => setSelectMode(true)}
-                      aria-label="Select"
-                      title="Select"
-                    >
-                      <CheckSquare className="h-3 w-3" />
-                    </Button>
-                  ) : (
-                    <div className="flex items-center gap-1">
-                      {selected.length >= 2 && (
+                    ) : (
+                      <div className="flex items-center gap-1">
+                        {selected.length >= 2 && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="h-7 rounded-md text-xs"
+                            onClick={() => {
+                              onMerge(selected);
+                              exitSelectMode();
+                            }}
+                          >
+                            <Combine className="mr-1 h-3 w-3" /> Merge
+                          </Button>
+                        )}
+                        {selected.length === 2 && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="h-7 rounded-md text-xs"
+                            onClick={() => {
+                              onCompare(selected[0], selected[1]);
+                              exitSelectMode();
+                            }}
+                          >
+                            <GitCompare className="mr-1 h-3 w-3" /> Compare
+                          </Button>
+                        )}
                         <Button
                           size="sm"
-                          variant="outline"
+                          variant="ghost"
                           className="h-7 rounded-md text-xs"
-                          onClick={() => {
-                            onMerge(selected);
-                            exitSelectMode();
-                          }}
+                          onClick={exitSelectMode}
                         >
-                          <Combine className="mr-1 h-3 w-3" /> Merge
+                          Cancel
                         </Button>
-                      )}
-                      {selected.length === 2 && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="h-7 rounded-md text-xs"
-                          onClick={() => {
-                            onCompare(selected[0], selected[1]);
-                            exitSelectMode();
-                          }}
-                        >
-                          <GitCompare className="mr-1 h-3 w-3" /> Compare
-                        </Button>
-                      )}
+                      </div>
+                    )}
+                    <div className="ml-auto flex items-center gap-1">
                       <Button
-                        size="sm"
-                        variant="ghost"
-                        className="h-7 rounded-md text-xs"
-                        onClick={exitSelectMode}
+                        variant="outline"
+                        size="icon"
+                        className="h-7 w-7 rounded-md"
+                        onClick={onExport}
+                        aria-label="Export"
+                        title="Export"
                       >
-                        Cancel
+                        <Download className="h-3 w-3" />
                       </Button>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-7 w-7 rounded-md"
+                        onClick={() => fileRef.current?.click()}
+                        aria-label="Import"
+                        title="Import"
+                      >
+                        <Upload className="h-3 w-3" />
+                      </Button>
+                      <input
+                        ref={fileRef}
+                        type="file"
+                        accept="text/plain,.txt"
+                        className="hidden"
+                        onChange={(e) => {
+                          const f = e.target.files?.[0];
+                          if (f) onImport(f);
+                          e.target.value = "";
+                        }}
+                      />
                     </div>
-                  )}
-                  <div className="ml-auto flex items-center gap-1">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="h-7 w-7 rounded-md"
-                      onClick={onExport}
-                      aria-label="Export"
-                      title="Export"
-                    >
-                      <Download className="h-3 w-3" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="h-7 w-7 rounded-md"
-                      onClick={() => fileRef.current?.click()}
-                      aria-label="Import"
-                      title="Import"
-                    >
-                      <Upload className="h-3 w-3" />
-                    </Button>
-                    <input
-                      ref={fileRef}
-                      type="file"
-                      accept="text/plain,.txt"
-                      className="hidden"
-                      onChange={(e) => {
-                        const f = e.target.files?.[0];
-                        if (f) onImport(f);
-                        e.target.value = "";
-                      }}
-                    />
-                  </div>
                   </div>
                 </div>
-
               </>
             )}
             {filtered.length === 0 ? (
@@ -648,14 +621,10 @@ export function SavedWatchlists({
             <>
               <DrawerHeader className="text-left">
                 <DrawerTitle className="flex items-center gap-2 text-base">
-                  {drawerItem.pinned && (
-                    <Pin className="h-4 w-4 text-primary" aria-hidden="true" />
-                  )}
+                  {drawerItem.pinned && <Pin className="h-4 w-4 text-primary" aria-hidden="true" />}
                   <span className="truncate">{drawerItem.name}</span>
                 </DrawerTitle>
-                <p className="text-xs text-muted-foreground">
-                  {drawerItem.tickers.length} tickers
-                </p>
+                <p className="text-xs text-muted-foreground">{drawerItem.tickers.length} tickers</p>
               </DrawerHeader>
               <div className="flex flex-col px-2 pb-4">
                 <button

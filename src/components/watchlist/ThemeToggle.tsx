@@ -6,8 +6,7 @@ import { haptic } from "@/lib/haptics";
 export function ThemeToggle({ className }: { className?: string }) {
   const { theme, cycle } = useTheme();
   const Icon = theme === "system" ? Monitor : theme === "dark" ? Moon : Sun;
-  const next =
-    theme === "system" ? "light" : theme === "light" ? "dark" : "system";
+  const next = theme === "system" ? "light" : theme === "light" ? "dark" : "system";
   return (
     <Button
       type="button"

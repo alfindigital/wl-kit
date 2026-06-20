@@ -29,16 +29,16 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { HelpCircle, MessageCircleQuestion, Keyboard, ChevronLeft, MoreHorizontal } from "lucide-react";
+import {
+  HelpCircle,
+  MessageCircleQuestion,
+  Keyboard,
+  ChevronLeft,
+  MoreHorizontal,
+} from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
-function HelpMenu({
-  onFaq,
-  onShortcuts,
-}: {
-  onFaq: () => void;
-  onShortcuts: () => void;
-}) {
+function HelpMenu({ onFaq, onShortcuts }: { onFaq: () => void; onShortcuts: () => void }) {
   const [open, setOpen] = useState(false);
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -53,11 +53,7 @@ function HelpMenu({
           <HelpCircle className="h-4 w-4" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent
-        align="end"
-        sideOffset={8}
-        className="w-56 rounded-xl p-1.5"
-      >
+      <PopoverContent align="end" sideOffset={8} className="w-56 rounded-xl p-1.5">
         <button
           type="button"
           onClick={() => {
@@ -108,6 +104,8 @@ const searchSchema = z.object({
   f: z.enum(["tradingview", "plain", "newline"]).optional(),
   s: z.enum(["none", "asc", "desc"]).optional(),
 });
+
+type SearchParams = z.infer<typeof searchSchema>;
 
 export const Route = createFileRoute("/")({
   validateSearch: searchSchema,
@@ -292,7 +290,6 @@ function Index() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-
   const analysis = useMemo(() => analyzeInput(input), [input]);
   const tickers = useMemo(() => {
     const base = analysis.valid;
@@ -303,11 +300,7 @@ function Index() {
   const output = useMemo(() => formatTickers(tickers, format), [tickers, format]);
 
   // Undo helper
-  const updateSaved = (
-    next: SavedWatchlist[],
-    undoSnapshot: SavedWatchlist[],
-    message: string,
-  ) => {
+  const updateSaved = (next: SavedWatchlist[], undoSnapshot: SavedWatchlist[], message: string) => {
     setSaved(next);
     saveWatchlists(next);
     setLiveStatus(message);
@@ -340,7 +333,7 @@ function Index() {
   const handleFormatChange = (f: OutputFormat) => {
     if (f === format) return;
     setFormat(f);
-    navigate({ search: (prev: any) => ({ ...prev, f }) });
+    navigate({ search: (prev: SearchParams) => ({ ...prev, f }) });
     if (tickers.length > 0) {
       const next = formatTickers(tickers, f);
       if (next === output) return;
@@ -357,7 +350,7 @@ function Index() {
   const handleSortChange = (s: SortMode) => {
     if (s === sortMode) return;
     setSortMode(s);
-    navigate({ search: (prev: any) => ({ ...prev, s }) });
+    navigate({ search: (prev: SearchParams) => ({ ...prev, s }) });
   };
 
   const handleSave = (name: string) => {
@@ -367,9 +360,7 @@ function Index() {
       return;
     }
     const trimmed = name.trim();
-    const dup = saved.some(
-      (w) => w.name.trim().toLowerCase() === trimmed.toLowerCase(),
-    );
+    const dup = saved.some((w) => w.name.trim().toLowerCase() === trimmed.toLowerCase());
     if (dup) {
       toast.error(`A watchlist named "${trimmed}" already exists`);
       setLiveStatus(`Save failed: "${trimmed}" already exists`);
@@ -421,9 +412,7 @@ function Index() {
       setLiveStatus(`Rename failed: "${trimmed}" already exists`);
       return;
     }
-    const next = saved.map((w) =>
-      w.id === id ? { ...w, name: trimmed, savedAt: Date.now() } : w,
-    );
+    const next = saved.map((w) => (w.id === id ? { ...w, name: trimmed, savedAt: Date.now() } : w));
     setSaved(next);
     saveWatchlists(next);
     setLiveStatus(`Renamed to "${trimmed}"`);
@@ -432,16 +421,13 @@ function Index() {
 
   const handleTogglePin = (id: string) => {
     const item = saved.find((w) => w.id === id);
-    const next = saved.map((w) =>
-      w.id === id ? { ...w, pinned: !w.pinned } : w,
-    );
+    const next = saved.map((w) => (w.id === id ? { ...w, pinned: !w.pinned } : w));
     setSaved(next);
     saveWatchlists(next);
     if (item) {
       setLiveStatus(`${item.pinned ? "Unpinned" : "Pinned"} "${item.name}"`);
     }
   };
-
 
   const handleExport = () => {
     const txt = exportAllTXT(saved);
@@ -488,8 +474,7 @@ function Index() {
       .filter((x): x is SavedWatchlist => !!x);
     const lists = sources.map((w) => w.tickers);
     const merged = mergeTickers(lists);
-    const mergedName =
-      sources.map((w) => w.name).join(" + ") || `Merged (${ids.length})`;
+    const mergedName = sources.map((w) => w.name).join(" + ") || `Merged (${ids.length})`;
     const entry: SavedWatchlist = {
       id: crypto.randomUUID(),
       name: mergedName,
@@ -517,9 +502,7 @@ function Index() {
   const handleLoad = (item: SavedWatchlist) => {
     setInput(item.tickers.join("\n"));
     setLoadedName(item.name);
-    const next = saved.map((w) =>
-      w.id === item.id ? { ...w, lastUsedAt: Date.now() } : w,
-    );
+    const next = saved.map((w) => (w.id === item.id ? { ...w, lastUsedAt: Date.now() } : w));
     setSaved(next);
     saveWatchlists(next);
     setLiveStatus(`Loaded "${item.name}"`);
@@ -571,7 +554,6 @@ function Index() {
     setShareLinkOpen(true);
   };
 
-
   const handleImage = async () => {
     if (!shareCardRef.current || tickers.length === 0) return;
     setShareImageData(null);
@@ -591,7 +573,6 @@ function Index() {
     }
   };
 
-
   // Keyboard shortcuts
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -599,9 +580,7 @@ function Index() {
       const target = e.target as HTMLElement | null;
       const inField =
         target &&
-        (target.tagName === "INPUT" ||
-          target.tagName === "TEXTAREA" ||
-          target.isContentEditable);
+        (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable);
 
       if (mod && e.key === "Enter") {
         e.preventDefault();
@@ -723,31 +702,24 @@ function Index() {
               <ChevronLeft className="h-4 w-4" />
             </Button>
             <ThemeToggle />
-            <HelpMenu
-              onFaq={() => setFaqOpen(true)}
-              onShortcuts={() => setShortcutOpen(true)}
-            />
+            <HelpMenu onFaq={() => setFaqOpen(true)} onShortcuts={() => setShortcutOpen(true)} />
           </div>
         </div>
       </div>
-
 
       <main className="flex-1">
         <div className="mx-auto w-full max-w-2xl px-4 pb-10 pt-6 sm:px-6 sm:pt-10">
           <div className="mb-4 text-center sm:mb-6">
             <h1 className="font-display text-2xl leading-tight tracking-tight sm:text-3xl">
-              Build IDX watchlist,<br />
+              Build IDX watchlist,
+              <br />
               <em className="italic text-primary">Instantly.</em>
             </h1>
           </div>
 
           <div className="flex flex-col gap-4 sm:gap-5">
             <div ref={inputStepRef}>
-              <TickerInput
-                ref={textareaRef}
-                value={input}
-                onChange={setInput}
-              />
+              <TickerInput ref={textareaRef} value={input} onChange={setInput} />
             </div>
             <div ref={formatStepRef} className="flex flex-col gap-4 sm:gap-5">
               <FormatTabs
@@ -803,7 +775,6 @@ function Index() {
           </div>
         </div>
       </main>
-
 
       <Footer />
 
@@ -926,7 +897,6 @@ function Index() {
   );
 }
 
-
 function DiffSection({
   label,
   tone,
@@ -973,4 +943,3 @@ function DiffSection({
 function labelFor(f: OutputFormat): string {
   return f === "tradingview" ? "TradingView" : f === "plain" ? "Plain" : "Newline";
 }
-

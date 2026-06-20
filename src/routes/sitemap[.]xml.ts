@@ -18,13 +18,19 @@ export const Route = createFileRoute("/sitemap.xml")({
         const today = new Date().toISOString().split("T")[0];
         const entries: SitemapEntry[] = [
           { path: "/", changefreq: "weekly", priority: "1.0", lastmod: today },
-          { path: "/guides/import-to-tradingview", changefreq: "monthly", priority: "0.7", lastmod: today },
+          {
+            path: "/guides/import-to-tradingview",
+            changefreq: "monthly",
+            priority: "0.7",
+            lastmod: today,
+          },
         ];
 
         const urls = entries.map((e) =>
           [
             `  <url>`,
             `    <loc>${BASE_URL}${e.path}</loc>`,
+            e.lastmod ? `    <lastmod>${e.lastmod}</lastmod>` : null,
             e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>` : null,
             e.priority ? `    <priority>${e.priority}</priority>` : null,
             `  </url>`,

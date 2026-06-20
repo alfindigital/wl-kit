@@ -137,11 +137,7 @@ export function Footer() {
         className="afd-foot mt-4"
         style={{ paddingBottom: "calc(10px + env(safe-area-inset-bottom))" }}
       >
-        <div
-          className="afd-glow"
-          style={{ left: glow.left, top: glow.top }}
-          aria-hidden
-        />
+        <div className="afd-glow" style={{ left: glow.left, top: glow.top }} aria-hidden />
         <span className="afd-cr">
           © {year}
           <a

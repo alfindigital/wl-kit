@@ -84,8 +84,7 @@ export function ShareLinkDialog({ open, onOpenChange, url, tickerCount }: Props)
     }
   };
 
-  const hasNativeShare =
-    typeof navigator !== "undefined" && typeof navigator.share === "function";
+  const hasNativeShare = typeof navigator !== "undefined" && typeof navigator.share === "function";
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -93,7 +92,8 @@ export function ShareLinkDialog({ open, onOpenChange, url, tickerCount }: Props)
         <DialogHeader>
           <DialogTitle>Share watchlist</DialogTitle>
           <DialogDescription>
-            Opens WatchlistKit with {tickerCount} {tickerCount === 1 ? "ticker" : "tickers"} preloaded.
+            Opens WatchlistKit with {tickerCount} {tickerCount === 1 ? "ticker" : "tickers"}{" "}
+            preloaded.
           </DialogDescription>
         </DialogHeader>
 
@@ -115,11 +115,7 @@ export function ShareLinkDialog({ open, onOpenChange, url, tickerCount }: Props)
               className="shrink-0"
               aria-label="Copy link"
             >
-              {copied ? (
-                <Check className="h-4 w-4" />
-              ) : (
-                <Copy className="h-4 w-4" />
-              )}
+              {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
             </Button>
           </div>
 
@@ -158,14 +154,8 @@ export function ShareLinkDialog({ open, onOpenChange, url, tickerCount }: Props)
 
           {showQR && (
             <div className="flex flex-col items-center gap-2 rounded-xl border border-border bg-card p-4">
-              <canvas
-                ref={canvasRef}
-                aria-label="QR code for share link"
-                className="rounded-md"
-              />
-              <p className="text-xs text-muted-foreground">
-                Scan to open on another device
-              </p>
+              <canvas ref={canvasRef} aria-label="QR code for share link" className="rounded-md" />
+              <p className="text-xs text-muted-foreground">Scan to open on another device</p>
             </div>
           )}
         </div>

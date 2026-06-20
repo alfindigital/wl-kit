@@ -1,5 +1,14 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { ArrowLeft, CheckCircle, Copy, Download, ExternalLink, List, MousePointerClick, Type } from "lucide-react";
+import {
+  ArrowLeft,
+  CheckCircle,
+  Copy,
+  Download,
+  ExternalLink,
+  List,
+  MousePointerClick,
+  Type,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import ogImage from "@/assets/og-image.jpg";
@@ -59,9 +68,7 @@ export const Route = createFileRoute("/guides/import-to-tradingview")({
       { name: "twitter:image", content: OG_IMAGE },
       { property: "og:type", content: "article" },
     ],
-    links: [
-      { rel: "canonical", href: GUIDE_URL },
-    ],
+    links: [{ rel: "canonical", href: GUIDE_URL }],
     scripts: [
       {
         type: "application/ld+json",
@@ -75,7 +82,11 @@ export const Route = createFileRoute("/guides/import-to-tradingview")({
                 "Step-by-step tutorial: format your IDX tickers with WatchlistKit and import them into TradingView in seconds.",
               image: OG_IMAGE,
               mainEntityOfPage: GUIDE_URL,
-              author: { "@type": "Organization", name: "alfindigital", url: "https://alfindigital.com" },
+              author: {
+                "@type": "Organization",
+                name: "alfindigital",
+                url: "https://alfindigital.com",
+              },
               publisher: { "@type": "Organization", name: "WatchlistKit", url: SITE_URL },
               inLanguage: "en",
             },
@@ -83,7 +94,12 @@ export const Route = createFileRoute("/guides/import-to-tradingview")({
               "@type": "BreadcrumbList",
               itemListElement: [
                 { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
-                { "@type": "ListItem", position: 2, name: "Guides", item: `${SITE_URL}/guides/import-to-tradingview` },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "Guides",
+                  item: `${SITE_URL}/guides/import-to-tradingview`,
+                },
               ],
             },
             {
@@ -190,18 +206,14 @@ function ImportToTradingViewGuide() {
             How to Import IDX Watchlists to TradingView
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted-foreground">
-            The fastest way to bulk-add Indonesian stocks to your TradingView watchlist.
-            Format any ticker list in seconds and import them all at once. No manual typing needed.
+            The fastest way to bulk-add Indonesian stocks to your TradingView watchlist. Format any
+            ticker list in seconds and import them all at once. No manual typing needed.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link to="/">
               <Button className="rounded-full px-6">Try WatchlistKit now</Button>
             </Link>
-            <a
-              href="https://www.tradingview.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer">
               <Button variant="outline" className="rounded-full px-6 gap-2">
                 Open TradingView
                 <ExternalLink className="h-3.5 w-3.5" />
@@ -212,7 +224,10 @@ function ImportToTradingViewGuide() {
 
         {/* Why this matters */}
         <section aria-labelledby="why-heading" className="mb-14">
-          <h2 id="why-heading" className="font-display text-xl font-semibold tracking-tight sm:text-2xl">
+          <h2
+            id="why-heading"
+            className="font-display text-xl font-semibold tracking-tight sm:text-2xl"
+          >
             Why traders use WatchlistKit
           </h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-3">
@@ -233,7 +248,9 @@ function ImportToTradingViewGuide() {
               <Card key={item.title} className="border-border/60">
                 <CardContent className="p-5">
                   <h3 className="font-semibold text-foreground">{item.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
+                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                    {item.text}
+                  </p>
                 </CardContent>
               </Card>
             ))}
@@ -242,7 +259,10 @@ function ImportToTradingViewGuide() {
 
         {/* Step-by-step */}
         <section aria-labelledby="steps-heading" className="mb-14">
-          <h2 id="steps-heading" className="font-display text-xl font-semibold tracking-tight sm:text-2xl">
+          <h2
+            id="steps-heading"
+            className="font-display text-xl font-semibold tracking-tight sm:text-2xl"
+          >
             Step-by-step guide
           </h2>
           <div className="mt-6 space-y-6">
@@ -267,7 +287,10 @@ function ImportToTradingViewGuide() {
                         </p>
                         <ul className="mt-3 space-y-2">
                           {step.details.map((d, i) => (
-                            <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                            <li
+                              key={i}
+                              className="flex items-start gap-2 text-sm text-muted-foreground"
+                            >
                               <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary/80" />
                               <span>{d}</span>
                             </li>
@@ -284,7 +307,10 @@ function ImportToTradingViewGuide() {
 
         {/* FAQ */}
         <section aria-labelledby="faq-heading" className="mb-14">
-          <h2 id="faq-heading" className="font-display text-xl font-semibold tracking-tight sm:text-2xl">
+          <h2
+            id="faq-heading"
+            className="font-display text-xl font-semibold tracking-tight sm:text-2xl"
+          >
             Frequently asked questions
           </h2>
           <div className="mt-6 space-y-5">
@@ -333,7 +359,10 @@ function ImportToTradingViewGuide() {
             <Link to="/" className="hover:text-primary transition-colors">
               Home
             </Link>
-            <Link to="/guides/import-to-tradingview" className="hover:text-primary transition-colors">
+            <Link
+              to="/guides/import-to-tradingview"
+              className="hover:text-primary transition-colors"
+            >
               Guides
             </Link>
           </div>

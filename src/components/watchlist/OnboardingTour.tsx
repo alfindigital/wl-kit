@@ -73,14 +73,9 @@ export function OnboardingTour({
     if (!step.placement) {
       placement = rect.top + rect.height + TOOLTIP_GAP + 180 > vh ? "top" : "bottom";
     }
-    tipLeft = Math.min(
-      Math.max(8, rect.left + rect.width / 2 - TOOLTIP_W / 2),
-      vw - TOOLTIP_W - 8,
-    );
+    tipLeft = Math.min(Math.max(8, rect.left + rect.width / 2 - TOOLTIP_W / 2), vw - TOOLTIP_W - 8);
     tipTop =
-      placement === "bottom"
-        ? rect.top + rect.height + TOOLTIP_GAP
-        : rect.top - TOOLTIP_GAP - 8; // adjusted via transform
+      placement === "bottom" ? rect.top + rect.height + TOOLTIP_GAP : rect.top - TOOLTIP_GAP - 8; // adjusted via transform
   }
 
   return createPortal(
@@ -146,12 +141,8 @@ export function OnboardingTour({
                 Step {i + 1} of {steps.length}
               </span>
             </div>
-            <h3 className="mt-2 pr-6 text-sm font-semibold text-foreground">
-              {step.title}
-            </h3>
-            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-              {step.body}
-            </p>
+            <h3 className="mt-2 pr-6 text-sm font-semibold text-foreground">{step.title}</h3>
+            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{step.body}</p>
             <div className="mt-4 flex items-center justify-between gap-2">
               <Button
                 type="button"

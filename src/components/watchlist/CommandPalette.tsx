@@ -102,9 +102,7 @@ export function CommandPalette({
                 >
                   <Bookmark className="mr-2 h-4 w-4" />
                   <span className="flex-1 truncate">{w.name}</span>
-                  <span className="ml-2 text-xs text-muted-foreground">
-                    {w.tickers.length}
-                  </span>
+                  <span className="ml-2 text-xs text-muted-foreground">{w.tickers.length}</span>
                 </CommandItem>
               ))}
             </CommandGroup>

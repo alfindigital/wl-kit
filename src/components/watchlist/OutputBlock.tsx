@@ -1,18 +1,7 @@
 import { useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Copy,
-  ArrowUpDown,
-  ArrowDownAZ,
-  ArrowUpAZ,
-  RotateCcw,
-  Check,
-} from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Copy, ArrowUpDown, ArrowDownAZ, ArrowUpAZ, RotateCcw, Check } from "lucide-react";
 import type { OutputFormat } from "@/lib/tickers";
 
 export type SortMode = "none" | "asc" | "desc";
@@ -41,10 +30,7 @@ export function OutputBlock({
 
   useEffect(() => {
     if (liveRef.current && output) {
-      liveRef.current.setAttribute(
-        "aria-label",
-        `Output updated: ${count} tickers`,
-      );
+      liveRef.current.setAttribute("aria-label", `Output updated: ${count} tickers`);
     }
   }, [output, count]);
 
@@ -146,9 +132,7 @@ export function OutputBlock({
           </div>
         )}
         {output && !showLineNumbers && (
-          <pre className="whitespace-pre-wrap break-all font-mono">
-            {output}
-          </pre>
+          <pre className="whitespace-pre-wrap break-all font-mono">{output}</pre>
         )}
       </div>
     </div>

@@ -26,8 +26,7 @@ export function ShortcutOverlay({
   onOpenChange: (o: boolean) => void;
   onShowOnboarding?: () => void;
 }) {
-  const isMac =
-    typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform);
+  const isMac = typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform);
   const mod = isMac ? "⌘" : "Ctrl";
 
   const sections: { title: string; rows: Row[] }[] = [
@@ -188,10 +187,7 @@ export function ShortcutOverlay({
               </h3>
               <ul className="space-y-2">
                 {s.rows.map((r, i) => (
-                  <li
-                    key={i}
-                    className="flex items-center justify-between gap-3 text-sm"
-                  >
+                  <li key={i} className="flex items-center justify-between gap-3 text-sm">
                     <span className="text-foreground">{r.label}</span>
                     <span className="flex items-center gap-1">{r.keys}</span>
                   </li>
@@ -202,9 +198,7 @@ export function ShortcutOverlay({
         </div>
         {onShowOnboarding && (
           <div className="mt-4 flex items-center justify-between gap-3 border-t border-border pt-4">
-            <p className="font-sans text-sm text-muted-foreground">
-              New? Take the tour.
-            </p>
+            <p className="font-sans text-sm text-muted-foreground">New? Take the tour.</p>
             <Button
               variant="outline"
               size="sm"

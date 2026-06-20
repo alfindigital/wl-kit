@@ -46,10 +46,7 @@ export function loadWatchlists(): SavedWatchlist[] {
 export function saveWatchlists(list: SavedWatchlist[]): void {
   if (typeof window === "undefined") return;
   try {
-    localStorage.setItem(
-      KEY,
-      JSON.stringify({ version: SCHEMA_VERSION, watchlists: list }),
-    );
+    localStorage.setItem(KEY, JSON.stringify({ version: SCHEMA_VERSION, watchlists: list }));
   } catch (e) {
     const err = e as { name?: string };
     const reason = err?.name === "QuotaExceededError" ? "quota" : "other";
@@ -168,9 +165,7 @@ export function importAllTXT(
       if (Array.isArray(arr)) {
         incoming = arr.filter(
           (w: unknown) =>
-            !!w &&
-            typeof w === "object" &&
-            Array.isArray((w as SavedWatchlist).tickers),
+            !!w && typeof w === "object" && Array.isArray((w as SavedWatchlist).tickers),
         ) as SavedWatchlist[];
       }
     } catch {

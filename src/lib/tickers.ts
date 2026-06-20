@@ -32,7 +32,6 @@ export function analyzeInput(raw: string): InputAnalysis {
   else if (hasNl) delimiter = "newline";
   else if (hasSpace) delimiter = "space";
 
-
   // Tokenize: split on anything that's not A-Z or 0-9 (after uppercasing).
   // This catches mangled input like "AMMN;;.;KIJA.;.;JPFA" cleanly.
   const tokens = raw

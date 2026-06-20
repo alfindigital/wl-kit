@@ -4,12 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export const FAQ_ITEMS = [
   {
@@ -57,9 +52,7 @@ export function FaqDialog({
           {FAQ_ITEMS.map((item, i) => (
             <AccordionItem key={i} value={`faq-${i}`}>
               <AccordionTrigger>{item.q}</AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">
-                {item.a}
-              </AccordionContent>
+              <AccordionContent className="text-muted-foreground">{item.a}</AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
@@ -70,27 +63,18 @@ export function FaqDialog({
 
 export function Faq() {
   return (
-    <section
-      aria-labelledby="faq-heading"
-      className="mx-auto mt-16 w-full max-w-2xl px-4 sm:px-6"
-    >
-      <h2
-        id="faq-heading"
-        className="text-xl font-semibold tracking-tight sm:text-2xl"
-      >
+    <section aria-labelledby="faq-heading" className="mx-auto mt-16 w-full max-w-2xl px-4 sm:px-6">
+      <h2 id="faq-heading" className="text-xl font-semibold tracking-tight sm:text-2xl">
         Frequently asked questions
       </h2>
       <Accordion type="single" collapsible className="mt-4">
         {FAQ_ITEMS.map((item, i) => (
           <AccordionItem key={i} value={`faq-${i}`}>
             <AccordionTrigger>{item.q}</AccordionTrigger>
-            <AccordionContent className="text-muted-foreground">
-              {item.a}
-            </AccordionContent>
+            <AccordionContent className="text-muted-foreground">{item.a}</AccordionContent>
           </AccordionItem>
         ))}
       </Accordion>
     </section>
   );
 }
-
