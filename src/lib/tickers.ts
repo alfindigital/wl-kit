@@ -73,6 +73,16 @@ export function parseTickers(input: string): string[] {
   return analyzeInput(input).valid;
 }
 
+// Prefix-match the official IDX symbol list for typeahead suggestions.
+// Only fires for 2-3 character prefixes (a 4-char token is already complete).
+export function suggestTickers(partial: string, limit = 6): string[] {
+  const p = partial.trim().toUpperCase();
+  if (!/^[A-Z]{2,3}$/.test(p)) return [];
+  const matches: string[] = [];
+  for (const t of IDX_TICKERS) if (t.startsWith(p)) matches.push(t);
+  return matches.sort().slice(0, limit);
+}
+
 export function formatTickers(tickers: string[], format: OutputFormat): string {
   if (tickers.length === 0) return "";
   switch (format) {

@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { X, ClipboardPaste } from "lucide-react";
@@ -14,7 +14,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { haptic } from "@/lib/haptics";
-import { analyzeInput } from "@/lib/tickers";
+import { analyzeInput, suggestTickers } from "@/lib/tickers";
 
 const CLEAR_THRESHOLD = 20;
 
@@ -127,6 +127,23 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(function Ticke
 
   const inputHelpId = "ticker-input-help";
 
+  // Typeahead: suggest IDX symbols for the token currently being typed at the
+  // end of the input (the trailing alphanumeric run).
+  const trailing = value.toUpperCase().match(/[A-Z0-9]+$/)?.[0] ?? "";
+  const suggestions = useMemo(() => suggestTickers(trailing), [trailing]);
+
+  const completeWith = (ticker: string) => {
+    const base = trailing ? value.slice(0, value.length - trailing.length) : value;
+    emit(base + ticker + "\n");
+    requestAnimationFrame(() => {
+      const el = innerRef.current;
+      if (el) {
+        el.focus();
+        el.setSelectionRange(el.value.length, el.value.length);
+      }
+    });
+  };
+
   return (
     <div
       className="relative"
@@ -195,6 +212,23 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(function Ticke
           </div>
         </div>
       </div>
+
+      {suggestions.length > 0 && (
+        <div className="mt-2 flex flex-wrap items-center gap-1.5" aria-label="Ticker suggestions">
+          <span className="text-xs text-muted-foreground">Did you mean</span>
+          {suggestions.map((t) => (
+            <button
+              key={t}
+              type="button"
+              onClick={() => completeWith(t)}
+              className="rounded-md border border-border/70 bg-card px-2 py-1 font-mono text-xs text-foreground transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+      )}
+
       {isDragging && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center rounded-2xl bg-primary/10 text-sm font-medium text-primary">
           Drop file to import
