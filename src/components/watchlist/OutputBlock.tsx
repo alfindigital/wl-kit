@@ -1,4 +1,3 @@
-import { useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Copy, ArrowUpDown, ArrowDownAZ, ArrowUpAZ, RotateCcw, Check } from "lucide-react";
@@ -26,13 +25,6 @@ export function OutputBlock({
 }) {
   const lines = output ? output.split("\n") : [];
   const showLineNumbers = format === "newline" && lines.length > 0;
-  const liveRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (liveRef.current && output) {
-      liveRef.current.setAttribute("aria-label", `Output updated: ${count} tickers`);
-    }
-  }, [output, count]);
 
   return (
     <div className="relative rounded-2xl border border-border/80 bg-card shadow-sm">
@@ -107,11 +99,8 @@ export function OutputBlock({
         </div>
       </div>
       <div
-        ref={liveRef}
         tabIndex={0}
         aria-label="Formatted watchlist output"
-        aria-live="polite"
-        aria-atomic="true"
         className="max-h-[280px] min-h-[80px] overflow-auto p-4 font-mono text-[15px] leading-relaxed text-foreground outline-none transition-shadow focus-visible:rounded-b-2xl focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset sm:text-sm"
       >
         {!output && (

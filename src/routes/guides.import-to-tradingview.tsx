@@ -67,6 +67,7 @@ export const Route = createFileRoute("/guides/import-to-tradingview")({
       },
       { name: "twitter:image", content: OG_IMAGE },
       { property: "og:type", content: "article" },
+      { property: "og:locale", content: "en_US" },
     ],
     links: [{ rel: "canonical", href: GUIDE_URL }],
     scripts: [
@@ -88,7 +89,7 @@ export const Route = createFileRoute("/guides/import-to-tradingview")({
                 url: "https://alfindigital.com",
               },
               publisher: { "@type": "Organization", name: "WatchlistKit", url: SITE_URL },
-              inLanguage: "en",
+              inLanguage: "en-US",
             },
             {
               "@type": "BreadcrumbList",
