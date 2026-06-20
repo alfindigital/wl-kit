@@ -97,8 +97,8 @@ export const Route = createFileRoute("/guides/import-to-tradingview")({
                 {
                   "@type": "ListItem",
                   position: 2,
-                  name: "Guides",
-                  item: `${SITE_URL}/guides/import-to-tradingview`,
+                  name: "How to Import IDX Watchlists to TradingView",
+                  item: GUIDE_URL,
                 },
               ],
             },

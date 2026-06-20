@@ -2,6 +2,7 @@ import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { haptic } from "@/lib/haptics";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -603,7 +604,7 @@ export function SavedWatchlists({
               className="rounded-xl bg-destructive text-destructive-foreground hover:bg-destructive/90"
               onClick={() => {
                 if (pendingDelete) {
-                  import("@/lib/haptics").then(({ haptic }) => haptic([20, 40]));
+                  haptic([20, 40]);
                   onDelete(pendingDelete.id);
                 }
                 setPendingDelete(null);
