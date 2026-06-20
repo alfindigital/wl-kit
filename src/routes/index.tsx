@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { HelpCircle, MessageCircleQuestion, Keyboard, BookOpen } from "lucide-react";
+import { HelpCircle, MessageCircleQuestion, Keyboard, BookOpen, LineChart } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 function HelpMenu({
@@ -578,6 +578,25 @@ function Index() {
     setShareLinkOpen(true);
   };
 
+  // TradingView has no public bulk-import-by-URL endpoint, so we copy the
+  // TradingView-formatted list to the clipboard (ready to paste into a
+  // watchlist) and open the chart for the first symbol as a jumping-off point.
+  const handleOpenTradingView = () => {
+    if (tickers.length === 0) return;
+    navigator.clipboard?.writeText(formatTickers(tickers, "tradingview")).catch(() => {});
+    window.open(
+      `https://www.tradingview.com/chart/?symbol=IDX:${tickers[0]}`,
+      "_blank",
+      "noopener,noreferrer",
+    );
+    const msg =
+      tickers.length > 1
+        ? "List copied — paste it into your TradingView watchlist"
+        : "Opening in TradingView";
+    toast.success(msg);
+    setLiveStatus(msg);
+  };
+
   const handleImage = async () => {
     if (!shareCardRef.current || tickers.length === 0) return;
     setShareImageData(null);
@@ -770,6 +789,17 @@ function Index() {
                 onShare={handleShare}
               />
             </div>
+            {tickers.length > 0 && (
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={handleOpenTradingView}
+                className="h-10 w-full rounded-xl border border-dashed border-border/70 text-sm font-medium text-muted-foreground hover:text-primary"
+              >
+                <LineChart className="mr-2 h-4 w-4" />
+                Open in TradingView
+              </Button>
+            )}
           </div>
 
           <div ref={savedStepRef} className="mt-10">

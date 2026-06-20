@@ -206,6 +206,33 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           },
         }),
       },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "WatchlistKit",
+          url: WEBSITE_URL,
+          inLanguage: "en-US",
+          description:
+            "Format your IDX stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
+          publisher: {
+            "@type": "Organization",
+            name: "alfindigital",
+            url: "https://alfindigital.com",
+          },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "alfindigital",
+          url: "https://alfindigital.com",
+          logo: `${SITE_URL}/icon-512.png`,
+        }),
+      },
     ],
   }),
   shellComponent: RootShell,
