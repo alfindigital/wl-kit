@@ -15,6 +15,7 @@ import { SavedWatchlists } from "@/components/watchlist/SavedWatchlists";
 import { ShareCard } from "@/components/watchlist/ShareCard";
 import { ShareImageDialog } from "@/components/watchlist/ShareImageDialog";
 import { ShareLinkDialog } from "@/components/watchlist/ShareLinkDialog";
+import { GuideDialog } from "@/components/watchlist/GuideDialog";
 import { CommandPalette } from "@/components/watchlist/CommandPalette";
 import { ThemeToggle } from "@/components/watchlist/ThemeToggle";
 import { OnboardingTour, type TourStep } from "@/components/watchlist/OnboardingTour";
@@ -29,16 +30,18 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  HelpCircle,
-  MessageCircleQuestion,
-  Keyboard,
-  ChevronLeft,
-  MoreHorizontal,
-} from "lucide-react";
+import { HelpCircle, MessageCircleQuestion, Keyboard, BookOpen } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
-function HelpMenu({ onFaq, onShortcuts }: { onFaq: () => void; onShortcuts: () => void }) {
+function HelpMenu({
+  onGuide,
+  onFaq,
+  onShortcuts,
+}: {
+  onGuide: () => void;
+  onFaq: () => void;
+  onShortcuts: () => void;
+}) {
   const [open, setOpen] = useState(false);
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -53,7 +56,18 @@ function HelpMenu({ onFaq, onShortcuts }: { onFaq: () => void; onShortcuts: () =
           <HelpCircle className="h-4 w-4" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" sideOffset={8} className="w-56 rounded-xl p-1.5">
+      <PopoverContent align="end" sideOffset={8} className="w-60 rounded-xl p-1.5">
+        <button
+          type="button"
+          onClick={() => {
+            setOpen(false);
+            onGuide();
+          }}
+          className="flex w-full items-center gap-3 rounded-lg px-2.5 py-2 text-left text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+        >
+          <BookOpen className="h-4 w-4 text-muted-foreground" />
+          <span className="flex-1">How to import to TradingView</span>
+        </button>
         <button
           type="button"
           onClick={() => {
@@ -103,6 +117,7 @@ const searchSchema = z.object({
   t: z.string().optional(),
   f: z.enum(["tradingview", "plain", "newline"]).optional(),
   s: z.enum(["none", "asc", "desc"]).optional(),
+  guide: z.enum(["tradingview"]).optional(),
 });
 
 type SearchParams = z.infer<typeof searchSchema>;
@@ -157,7 +172,16 @@ function Index() {
   const [faqOpen, setFaqOpen] = useState(false);
   const [onboardingActive, setOnboardingActive] = useState(false);
   const [sortMode, setSortMode] = useState<SortMode>("asc");
-  const [pillOpen, setPillOpen] = useState(false);
+
+  // The TradingView guide is rendered as a modal but kept URL-driven so it is
+  // shareable/deep-linkable (?guide=tradingview) while the crawlable SSR route
+  // at /guides/import-to-tradingview stays available for search engines.
+  const guideOpen = search.guide === "tradingview";
+  const setGuideOpen = (open: boolean) =>
+    navigate({
+      search: (prev: SearchParams) => ({ ...prev, guide: open ? "tradingview" : undefined }),
+    });
+
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
@@ -675,43 +699,22 @@ function Index() {
       >
         Skip to content
       </a>
-      {/* Floating controls — collapsible on mobile, always expanded on sm+ */}
-      <div className="pointer-events-none fixed right-4 top-4 z-30 flex items-center gap-1">
-        <div
-          ref={helpStepRef}
-          className="pointer-events-auto flex items-center gap-1 rounded-full border border-border/60 bg-card/80 px-1 py-1 shadow-sm backdrop-blur"
-        >
-          {/* Mobile: toggle button visible when collapsed */}
-          {!pillOpen && (
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              onClick={() => setPillOpen(true)}
-              aria-label="Show controls"
-              aria-expanded={false}
-              className="h-9 w-9 rounded-full text-muted-foreground hover:text-primary sm:hidden"
-            >
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          )}
-          {/* Expanded controls: always on sm+, conditional on mobile */}
-          <div className={`${pillOpen ? "flex" : "hidden"} items-center gap-1 sm:flex`}>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              onClick={() => setPillOpen(false)}
-              aria-label="Hide controls"
-              className="h-9 w-9 rounded-full text-muted-foreground hover:text-primary sm:hidden"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
+      {/* Unified app header: brand + theme + help menu (guide / FAQ / shortcuts) */}
+      <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur">
+        <div className="mx-auto flex w-full max-w-2xl items-center justify-between px-4 py-2.5 sm:px-6">
+          <span className="font-display text-base font-semibold tracking-tight text-foreground">
+            WatchlistKit
+          </span>
+          <div ref={helpStepRef} className="flex items-center gap-1">
             <ThemeToggle />
-            <HelpMenu onFaq={() => setFaqOpen(true)} onShortcuts={() => setShortcutOpen(true)} />
+            <HelpMenu
+              onGuide={() => setGuideOpen(true)}
+              onFaq={() => setFaqOpen(true)}
+              onShortcuts={() => setShortcutOpen(true)}
+            />
           </div>
         </div>
-      </div>
+      </header>
 
       <main id="main-content" className="flex-1">
         <div className="mx-auto w-full max-w-2xl px-4 pb-10 pt-6 sm:px-6 sm:pt-10">
@@ -863,6 +866,7 @@ function Index() {
       />
 
       <ScrollToInputFab targetRef={textareaRef} />
+      <GuideDialog open={guideOpen} onOpenChange={setGuideOpen} />
       <FaqDialog open={faqOpen} onOpenChange={setFaqOpen} />
       <ShortcutOverlay
         open={shortcutOpen}
