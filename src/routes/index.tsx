@@ -2,7 +2,9 @@ import { createFileRoute, useSearch, useNavigate, Link } from "@tanstack/react-r
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
+import LZString from "lz-string";
 import { SITE_URL } from "@/lib/site";
+import { PRESETS } from "@/lib/presets";
 
 import { Footer } from "@/components/watchlist/Footer";
 import { FAQ_ITEMS } from "@/components/watchlist/Faq";
@@ -122,9 +124,9 @@ import {
 
 const searchSchema = z.object({
   t: z.string().optional(),
+  c: z.string().optional(), // lz-string compressed ticker list (for long share URLs)
   f: z.enum(["tradingview", "plain", "newline"]).optional(),
   s: z.enum(["none", "asc", "desc"]).optional(),
-  
 });
 
 type SearchParams = z.infer<typeof searchSchema>;
