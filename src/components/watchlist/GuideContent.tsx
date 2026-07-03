@@ -37,25 +37,25 @@ export const GUIDE_FAQS = [
 export const GUIDE_STEPS = [
   {
     number: 1,
-    title: "Paste your IDX tickers into WatchlistKit",
+    title: "Paste your tickers into WatchlistKit",
     description:
       "Open WatchlistKit and paste your ticker list into the input box. You can drop them in any format: comma-separated, spaced, one per line, or even copied straight from a PDF or spreadsheet.",
     details: [
       "Accepts raw text, Excel columns, or broker export files",
-      "Automatically validates each ticker against the official IDX symbol list",
       "Removes duplicates and sorts alphabetically",
+      "Supports any 2 to 12 character token",
     ],
     icon: Type,
   },
   {
     number: 2,
-    title: "Select the TradingView format",
+    title: "Select the TradingView format and prefix",
     description:
-      "Click the TradingView tab in the output panel. WatchlistKit instantly prefixes every valid ticker with IDX:, the exact format TradingView expects for Indonesia Stock Exchange symbols.",
+      "Click the TradingView tab in the output panel and pick the prefix that matches your market: IDX:, BINANCE:, or none. WatchlistKit applies it to every ticker instantly.",
     details: [
-      "Output looks like: IDX:BBCA,IDX:BBRI,IDX:TLKM,…",
-      "Only valid 4-letter IDX tickers are included",
-      "Invalid or unknown tokens are flagged so you can fix them",
+      "Output looks like: IDX:BBCA,IDX:BBRI or BTCUSDT,ETHUSDT",
+      "Only the chosen prefix is added",
+      "Switch prefixes anytime without re-pasting tickers",
     ],
     icon: List,
   },
@@ -66,7 +66,7 @@ export const GUIDE_STEPS = [
       "Press the Copy button (or Ctrl/Cmd + C) to copy the entire comma-separated line to your clipboard. The output is already optimized for TradingView's import field.",
     details: [
       "One click copies the full formatted string",
-      "No need to manually add IDX: prefixes",
+      "No need to manually add prefixes",
       "Clipboard-ready for direct paste into TradingView",
     ],
     icon: Copy,
@@ -75,11 +75,11 @@ export const GUIDE_STEPS = [
     number: 4,
     title: "Open TradingView and import",
     description:
-      "In TradingView, open a watchlist panel and click the import button (or use the watchlist menu). Paste the formatted ticker string and confirm. All your IDX stocks will appear instantly.",
+      "In TradingView, open a watchlist panel and click the import button (or use the watchlist menu). Paste the formatted ticker string and confirm. All your stocks will appear instantly.",
     details: [
       "Works in both TradingView web and desktop apps",
       "Imports all tickers at once. No adding one by one",
-      "Symbols are recognized immediately if they are active on IDX",
+      "Symbols are recognized immediately if they are active and prefixed correctly",
     ],
     icon: MousePointerClick,
   },
