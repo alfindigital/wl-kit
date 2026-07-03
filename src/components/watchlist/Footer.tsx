@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "@tanstack/react-router";
 
-declare const __APP_VERSION__: string;
 
 type Social = {
   href: string;
