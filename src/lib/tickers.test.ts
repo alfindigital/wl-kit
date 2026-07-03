@@ -13,7 +13,6 @@ describe("analyzeInput", () => {
     expect(analyzeInput("")).toEqual({
       valid: [],
       invalid: [],
-      unknown: [],
       duplicates: [],
       delimiter: null,
     });
