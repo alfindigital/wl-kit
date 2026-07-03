@@ -84,6 +84,7 @@ export function ShortcutOverlay({
           label: "Focus input",
         },
         { keys: <Kbd>?</Kbd>, label: "This shortcut overlay" },
+        { keys: <Kbd>P</Kbd>, label: "Privacy" },
       ],
     },
     {
