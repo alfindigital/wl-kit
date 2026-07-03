@@ -959,17 +959,6 @@ function Index() {
                 onShare={handleShare}
               />
             </div>
-            {tickers.length > 0 && (
-              <Button
-                type="button"
-                variant="ghost"
-                onClick={handleOpenTradingView}
-                className="h-10 w-full rounded-xl border border-dashed border-border/70 text-sm font-medium text-muted-foreground hover:text-primary"
-              >
-                <LineChart className="mr-2 h-4 w-4" />
-                Open in TradingView
-              </Button>
-            )}
           </div>
 
           <div ref={savedStepRef} className="mt-10">
