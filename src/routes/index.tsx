@@ -777,6 +777,10 @@ function Index() {
         e.preventDefault();
         setShortcutOpen((o) => !o);
       }
+      if (e.key.toLowerCase() === "g" && !inField && !mod && !e.shiftKey) {
+        e.preventDefault();
+        navigate({ to: "/guides/import-to-tradingview" });
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
