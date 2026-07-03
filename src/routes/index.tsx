@@ -1051,6 +1051,17 @@ function Index() {
         tickerCount={tickers.length}
       />
 
+      <Dialog open={guideOpen} onOpenChange={setGuideOpen}>
+        <DialogContent className="max-h-[85vh] overflow-y-auto rounded-2xl sm:max-w-3xl">
+          <DialogHeader className="sr-only">
+            <DialogTitle>Import to TradingView</DialogTitle>
+            <DialogDescription>Step-by-step guide for importing your watchlist into TradingView.</DialogDescription>
+          </DialogHeader>
+          <GuideContent inModal onClose={() => setGuideOpen(false)} />
+        </DialogContent>
+      </Dialog>
+
+
       <ScrollToInputFab targetRef={textareaRef} />
       
       
