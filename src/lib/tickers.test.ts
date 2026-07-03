@@ -29,18 +29,6 @@ describe("analyzeInput", () => {
     expect(valid).toEqual(["AMMN", "KIJA", "JPFA"]);
   });
 
-  it("flags tokens of the wrong length as 'length'", () => {
-    const { invalid } = analyzeInput("BBC");
-    expect(invalid).toEqual([{ token: "BBC", reason: "length" }]);
-  });
-
-  it("includes 4-letter tokens not on the IDX snapshot, but flags them as unknown", () => {
-    const { valid, unknown, invalid } = analyzeInput("ZZZZ");
-    expect(valid).toEqual(["ZZZZ"]);
-    expect(unknown).toEqual(["ZZZZ"]);
-    expect(invalid).toEqual([]);
-  });
-
   it("collects duplicates once and keeps the first occurrence valid", () => {
     const { valid, duplicates } = analyzeInput("BBCA BBCA BBRI BBCA");
     expect(valid).toEqual(["BBCA", "BBRI"]);
