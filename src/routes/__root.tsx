@@ -158,10 +158,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:image:type", content: "image/jpeg" },
       { name: "twitter:image", content: OG_IMAGE_URL },
       { name: "twitter:image:alt", content: "WatchlistKit | Free IDX Stock Watchlist Formatter" },
-      { name: "theme-color", content: "#ea580c" },
+      { name: "theme-color", content: "#ea580c", media: "(prefers-color-scheme: light)" },
+      { name: "theme-color", content: "#0a0a0a", media: "(prefers-color-scheme: dark)" },
+      { name: "robots", content: "index,follow" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-title", content: "WatchlistKit" },
       { name: "google-site-verification", content: "J-Czc4w4Dto_XXTUZfW8lAMoT45CpTWqZ72Nt91yFbw" },
+
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -198,8 +201,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           offers: {
             "@type": "Offer",
             price: "0",
-            priceCurrency: "IDR",
+            priceCurrency: "USD",
           },
+
           author: {
             "@type": "Organization",
             name: "alfindigital",

@@ -32,7 +32,7 @@ export function registerServiceWorker() {
 
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("/sw.js").catch((err) => {
-      console.warn("SW registration failed:", err);
+      if (import.meta.env.DEV) console.warn("SW registration failed:", err);
     });
   });
 }
