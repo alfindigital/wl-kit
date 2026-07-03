@@ -240,7 +240,7 @@ export function GuideContent({
           Ready to format your watchlist?
         </h2>
         <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
-          Paste your IDX tickers into WatchlistKit and get a TradingView-ready list in seconds.
+          Paste your tickers into WatchlistKit and get a TradingView-ready list in seconds.
         </p>
         <div className="mt-6">
           {inModal ? (
