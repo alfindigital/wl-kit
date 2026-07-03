@@ -338,6 +338,22 @@ function Index() {
   }, [analysis.valid, sortMode]);
   const output = useMemo(() => formatTickers(tickers, format), [tickers, format]);
 
+  // Auto-scroll to the output block on mobile the first time tickers appear,
+  // so users don't paste-and-think-nothing-happened below the fold.
+  const prevTickerCountRef = useRef(0);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const prev = prevTickerCountRef.current;
+    prevTickerCountRef.current = tickers.length;
+    if (prev === 0 && tickers.length > 0 && window.innerWidth < 640) {
+      // Wait a frame so layout settles before scrolling.
+      requestAnimationFrame(() => {
+        formatStepRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+  }, [tickers.length]);
+
+
   // Undo helper
   const updateSaved = (next: SavedWatchlist[], undoSnapshot: SavedWatchlist[], message: string) => {
     setSaved(next);
@@ -692,11 +708,14 @@ function Index() {
         handleOpenSave();
         return;
       }
-      if (mod && e.key.toLowerCase() === "d") {
+      // Only hijack Cmd/Ctrl+D when there's actually something to download and
+      // the user isn't typing — otherwise let the browser bookmark the tab.
+      if (mod && !inField && tickers.length > 0 && e.key.toLowerCase() === "d") {
         e.preventDefault();
         handleDownload();
         return;
       }
+
       if (mod && !inField && e.key.toLowerCase() === "v") {
         textareaRef.current?.focus();
       }
@@ -724,11 +743,16 @@ function Index() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [output, tickers.length, saved.length, input]);
 
-  const dateStr = new Date().toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
+  const dateStr = useMemo(
+    () =>
+      new Date().toLocaleDateString("en-US", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      }),
+    [],
+  );
+
 
   return (
     <div className="flex min-h-dvh flex-col bg-background">
