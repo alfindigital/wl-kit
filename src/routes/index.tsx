@@ -806,6 +806,10 @@ function Index() {
         e.preventDefault();
         setGuideOpen(true);
       }
+      if (e.key.toLowerCase() === "p" && !inField && !mod && !e.shiftKey) {
+        e.preventDefault();
+        navigate({ to: "/privacy" });
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
