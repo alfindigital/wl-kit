@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GuidesImportToTradingviewRouteImport } from './routes/guides.import-to-tradingview'
@@ -17,6 +18,11 @@ import { Route as GuidesImportToTradingviewRouteImport } from './routes/guides.i
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -39,12 +45,14 @@ const GuidesImportToTradingviewRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/faq': typeof FaqRoute
+  '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/guides/import-to-tradingview': typeof GuidesImportToTradingviewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/faq': typeof FaqRoute
+  '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/guides/import-to-tradingview': typeof GuidesImportToTradingviewRoute
 }
@@ -52,18 +60,30 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/faq': typeof FaqRoute
+  '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/guides/import-to-tradingview': typeof GuidesImportToTradingviewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/faq' | '/sitemap.xml' | '/guides/import-to-tradingview'
+  fullPaths:
+    | '/'
+    | '/faq'
+    | '/privacy'
+    | '/sitemap.xml'
+    | '/guides/import-to-tradingview'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/faq' | '/sitemap.xml' | '/guides/import-to-tradingview'
+  to:
+    | '/'
+    | '/faq'
+    | '/privacy'
+    | '/sitemap.xml'
+    | '/guides/import-to-tradingview'
   id:
     | '__root__'
     | '/'
     | '/faq'
+    | '/privacy'
     | '/sitemap.xml'
     | '/guides/import-to-tradingview'
   fileRoutesById: FileRoutesById
@@ -71,6 +91,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   FaqRoute: typeof FaqRoute
+  PrivacyRoute: typeof PrivacyRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   GuidesImportToTradingviewRoute: typeof GuidesImportToTradingviewRoute
 }
@@ -82,6 +103,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -111,6 +139,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   FaqRoute: FaqRoute,
+  PrivacyRoute: PrivacyRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   GuidesImportToTradingviewRoute: GuidesImportToTradingviewRoute,
 }
