@@ -208,6 +208,7 @@ function Index() {
   const [shareImageData, setShareImageData] = useState<string | null>(null);
   const [shareLinkOpen, setShareLinkOpen] = useState(false);
   const [shareLinkUrl, setShareLinkUrl] = useState("");
+  const [guideOpen, setGuideOpen] = useState(false);
   const [liveStatus, setLiveStatus] = useState("");
   const [shortcutOpen, setShortcutOpen] = useState(false);
   
