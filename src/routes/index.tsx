@@ -1,4 +1,4 @@
-import { createFileRoute, useSearch, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useSearch, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -177,7 +177,7 @@ function Index() {
   const [shareLinkUrl, setShareLinkUrl] = useState("");
   const [liveStatus, setLiveStatus] = useState("");
   const [shortcutOpen, setShortcutOpen] = useState(false);
-  const [faqOpen, setFaqOpen] = useState(false);
+  
   const [onboardingActive, setOnboardingActive] = useState(false);
   const [sortMode, setSortMode] = useState<SortMode>("asc");
 
@@ -907,7 +907,7 @@ function Index() {
 
       <ScrollToInputFab targetRef={textareaRef} />
       <GuideDialog open={guideOpen} onOpenChange={setGuideOpen} />
-      <FaqDialog open={faqOpen} onOpenChange={setFaqOpen} />
+      
       <ShortcutOverlay
         open={shortcutOpen}
         onOpenChange={setShortcutOpen}
