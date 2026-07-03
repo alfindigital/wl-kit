@@ -157,7 +157,7 @@ function newId(): string {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
-const MAX_IMPORT_BYTES = 1_000_000; // 1MB — matches TickerInput drop cap.
+const MAX_IMPORT_BYTES = 1_000_000; // 1MB - matches TickerInput drop cap.
 
 
 export const Route = createFileRoute("/")({
@@ -229,7 +229,7 @@ function Index() {
         const done = localStorage.getItem("wlkit-onboarded");
         if (!done) setOnboardingActive(true);
       } catch {
-        // Storage blocked — skip onboarding gate; don't crash.
+        // Storage blocked - skip onboarding gate; don't crash.
       }
     });
     return () => {
@@ -315,7 +315,7 @@ function Index() {
         parsed && typeof parsed === "object" && "version" in parsed
           ? (parsed as { version?: number }).version
           : 0;
-      if (typeof v === "number" && v > 1) return; // future schema — skip
+      if (typeof v === "number" && v > 1) return; // future schema - skip
       const d = data as { input?: unknown; format?: unknown; sortMode?: unknown; prefix?: unknown };
       if (typeof d?.input === "string") setInput(d.input);
       if (typeof d?.format === "string" && ["tradingview", "plain", "newline"].includes(d.format))
@@ -774,7 +774,7 @@ function Index() {
         return;
       }
       // Only hijack Cmd/Ctrl+D when there's actually something to download and
-      // the user isn't typing — otherwise let the browser bookmark the tab.
+      // the user isn't typing - otherwise let the browser bookmark the tab.
       if (mod && !inField && tickers.length > 0 && e.key.toLowerCase() === "d") {
         e.preventDefault();
         handleDownload();
@@ -816,15 +816,6 @@ function Index() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [output, tickers.length, saved.length, input]);
 
-  const dateStr = useMemo(
-    () =>
-      new Date().toLocaleDateString("en-US", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      }),
-    [],
-  );
 
   // Dirty = loaded watchlist exists and current tickers differ from original.
   const isDirty = useMemo(() => {
@@ -1026,7 +1017,6 @@ function Index() {
           name={loadedName || "My Watchlist"}
           output={output}
           count={tickers.length}
-          date={dateStr}
         />
       </div>
 

@@ -1,4 +1,4 @@
-// Curated IDX index presets. Snapshots — not real-time.
+// Curated IDX index presets. Snapshots - not real-time.
 // Users tap a chip to instantly seed the input with a known basket.
 
 export type Preset = { id: string; label: string; tickers: string[] };

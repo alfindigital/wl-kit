@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 
 export const ShareCard = forwardRef<
   HTMLDivElement,
-  { name: string; output: string; count: number; date: string }
+  { name: string; output: string; count: number }
 >(function ShareCard({ output }, ref) {
   return (
     <div
@@ -61,9 +61,7 @@ export const ShareCard = forwardRef<
           color: "#373d48",
         }}
       >
-        <span>
-          Built with <span style={{ color: "#ce3600", fontWeight: 600 }}>WatchlistKit</span>
-        </span>
+        <span style={{ color: "#ce3600", fontWeight: 600 }}>WatchlistKit</span>
       </div>
     </div>
   );

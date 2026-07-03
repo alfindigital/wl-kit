@@ -7,7 +7,7 @@ import { SITE_URL } from "@/lib/site";
 const PAGE_URL = `${SITE_URL}/faq`;
 const TITLE = "FAQ | WatchlistKit";
 const DESCRIPTION =
-  "Answers about formatting IDX watchlists, TradingView export, privacy, sharing, and .txt backups.";
+  "Answers about formatting watchlists, TradingView export, privacy, sharing, and .txt backups.";
 
 export const Route = createFileRoute("/faq")({
   component: FaqPage,

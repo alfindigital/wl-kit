@@ -81,7 +81,7 @@ export function CommandPalette({
         <CommandSeparator />
         <CommandGroup heading="Format">
           <CommandItem onSelect={() => run(() => onSetFormat("tradingview"))}>
-            <Hash className="mr-2 h-4 w-4" /> TradingView (IDX:…)
+            <Hash className="mr-2 h-4 w-4" /> TradingView
           </CommandItem>
           <CommandItem onSelect={() => run(() => onSetFormat("plain"))}>
             <AlignLeft className="mr-2 h-4 w-4" /> Plain (comma-separated)

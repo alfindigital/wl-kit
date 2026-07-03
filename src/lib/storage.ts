@@ -25,7 +25,7 @@ export function loadWatchlists(): SavedWatchlist[] {
     } else if (parsed && typeof parsed === "object") {
       const v = (parsed as { version?: number }).version;
       if (typeof v === "number" && v > SCHEMA_VERSION) {
-        // Newer schema written by a future app version — refuse to corrupt it.
+        // Newer schema written by a future app version - refuse to corrupt it.
         if (import.meta.env.DEV)
           console.warn("[storage] saved watchlists schema is newer than supported; skipping read");
 
