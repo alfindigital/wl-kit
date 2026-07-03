@@ -15,7 +15,7 @@ import { SavedWatchlists } from "@/components/watchlist/SavedWatchlists";
 import { ShareCard } from "@/components/watchlist/ShareCard";
 import { ShareImageDialog } from "@/components/watchlist/ShareImageDialog";
 import { ShareLinkDialog } from "@/components/watchlist/ShareLinkDialog";
-import { GuideDialog } from "@/components/watchlist/GuideDialog";
+
 import { CommandPalette } from "@/components/watchlist/CommandPalette";
 import { ThemeToggle } from "@/components/watchlist/ThemeToggle";
 
@@ -124,7 +124,7 @@ const searchSchema = z.object({
   t: z.string().optional(),
   f: z.enum(["tradingview", "plain", "newline"]).optional(),
   s: z.enum(["none", "asc", "desc"]).optional(),
-  guide: z.enum(["tradingview"]).optional(),
+  
 });
 
 type SearchParams = z.infer<typeof searchSchema>;
@@ -181,14 +181,6 @@ function Index() {
   const [onboardingActive, setOnboardingActive] = useState(false);
   const [sortMode, setSortMode] = useState<SortMode>("asc");
 
-  // The TradingView guide is rendered as a modal but kept URL-driven so it is
-  // shareable/deep-linkable (?guide=tradingview) while the crawlable SSR route
-  // at /guides/import-to-tradingview stays available for search engines.
-  const guideOpen = search.guide === "tradingview";
-  const setGuideOpen = (open: boolean) =>
-    navigate({
-      search: (prev: SearchParams) => ({ ...prev, guide: open ? "tradingview" : undefined }),
-    });
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -736,7 +728,7 @@ function Index() {
             <ThemeToggle />
 
             <HelpMenu
-              onGuide={() => setGuideOpen(true)}
+              onGuide={() => navigate({ to: "/guides/import-to-tradingview" })}
               onFaq={() => navigate({ to: "/faq" })}
               onShortcuts={() => setShortcutOpen(true)}
             />
@@ -906,7 +898,7 @@ function Index() {
       />
 
       <ScrollToInputFab targetRef={textareaRef} />
-      <GuideDialog open={guideOpen} onOpenChange={setGuideOpen} />
+      
       
       <ShortcutOverlay
         open={shortcutOpen}
