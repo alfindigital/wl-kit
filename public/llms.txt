@@ -7,6 +7,7 @@ WatchlistKit is a free, browser-based tool by @alfindigital for cleaning and for
 ## Pages
 
 - [Home](/): Paste tickers, format them for TradingView, save and manage watchlists.
+- [Import to TradingView guide](/guides/import-to-tradingview): Step-by-step tutorial for bulk-importing IDX watchlists into TradingView.
 
 ## Optional
 
