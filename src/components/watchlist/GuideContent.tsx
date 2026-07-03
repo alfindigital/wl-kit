@@ -14,15 +14,15 @@ import { Card, CardContent } from "@/components/ui/card";
 export const GUIDE_FAQS = [
   {
     q: "How do I add multiple stocks to a TradingView watchlist at once?",
-    a: "Copy your formatted ticker list from WatchlistKit (TradingView format), open any watchlist panel in TradingView, click the import/menu icon, and paste the comma-separated string. All symbols are added in one action.",
+    a: "Copy your formatted ticker list from WatchlistKit (TradingView format), open any watchlist panel in TradingView, click the import menu icon, and paste the comma-separated string. All symbols are added in one action.",
   },
   {
-    q: "Does TradingView support IDX tickers?",
-    a: "Yes. TradingView recognizes Indonesia Stock Exchange (IDX) symbols when they are prefixed with IDX:, such as IDX:BBCA or IDX:BBRI. WatchlistKit adds this prefix automatically.",
+    q: "Does TradingView support exchange prefixes?",
+    a: "Yes. TradingView recognizes symbols with prefixes like IDX: or BINANCE: when the exchange is configured. Use the prefix selector below the TradingView format tab to pick the right one for your market.",
   },
   {
     q: "What if a ticker is not recognized in TradingView?",
-    a: "TradingView only supports actively traded symbols. If a ticker was recently delisted or is very illiquid, it may not appear. WatchlistKit flags unknown tickers during formatting so you can review them before importing.",
+    a: "TradingView only supports actively traded symbols. If a ticker was recently delisted, is very illiquid, or uses the wrong prefix, it may not appear. Try a different prefix or remove it and try again.",
   },
   {
     q: "Can I import watchlists on TradingView mobile?",
