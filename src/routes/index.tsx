@@ -129,6 +129,21 @@ const searchSchema = z.object({
 
 type SearchParams = z.infer<typeof searchSchema>;
 
+// Fallback for browsers without crypto.randomUUID (older iOS Safari, non-HTTPS embeds).
+function newId(): string {
+  try {
+    if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+      return crypto.randomUUID();
+    }
+  } catch {
+    // ignore
+  }
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+const MAX_IMPORT_BYTES = 1_000_000; // 1MB — matches TickerInput drop cap.
+
+
 export const Route = createFileRoute("/")({
   validateSearch: searchSchema,
   component: Index,
@@ -358,18 +373,11 @@ function Index() {
     if (f === format) return;
     setFormat(f);
     navigate({ search: (prev: SearchParams) => ({ ...prev, f }) });
-    if (tickers.length > 0) {
-      const next = formatTickers(tickers, f);
-      if (next === output) return;
-      navigator.clipboard.writeText(next).then(
-        () => {
-          toast.success(`Copied as ${labelFor(f)}`);
-          setLiveStatus(`Copied as ${labelFor(f)}`);
-        },
-        () => {},
-      );
-    }
+    // Do not auto-copy on format switch — user may just be previewing.
+    // Explicit copy is still available via the Copy button, Cmd+Enter, or
+    // tapping the already-active tab (handled by FormatTabs.onSelect).
   };
+
 
   const handleSortChange = (s: SortMode) => {
     if (s === sortMode) return;
@@ -391,7 +399,7 @@ function Index() {
       return;
     }
     const entry: SavedWatchlist = {
-      id: crypto.randomUUID(),
+      id: newId(),
       name: trimmed,
       tickers,
       savedAt: Date.now(),
@@ -468,13 +476,24 @@ function Index() {
   };
 
   const handleImport = async (file: File) => {
+    if (file.size > MAX_IMPORT_BYTES) {
+      const msg = "File too large (max 1MB)";
+      setLiveStatus(msg);
+      toast.error(msg);
+      return;
+    }
     try {
       const text = await file.text();
       const snapshot = saved;
       const { merged, added, skipped } = importAllTXT(saved, text);
-      setSaved(merged);
-      saveWatchlists(merged);
-      const msg = `Imported ${added}${skipped ? `, skipped ${skipped}` : ""}`;
+      const capped = merged.slice(0, MAX_WATCHLISTS);
+      const dropped = merged.length - capped.length;
+      setSaved(capped);
+      saveWatchlists(capped);
+      const parts = [`Imported ${added}`];
+      if (skipped) parts.push(`skipped ${skipped}`);
+      if (dropped) parts.push(`${dropped} over limit`);
+      const msg = parts.join(", ");
       setLiveStatus(msg);
       toast(msg, {
         action: {
@@ -492,6 +511,7 @@ function Index() {
     }
   };
 
+
   const handleMerge = (ids: string[]) => {
     const sources = ids
       .map((id) => saved.find((w) => w.id === id))
@@ -500,7 +520,7 @@ function Index() {
     const merged = mergeTickers(lists);
     const mergedName = sources.map((w) => w.name).join(" + ") || `Merged (${ids.length})`;
     const entry: SavedWatchlist = {
-      id: crypto.randomUUID(),
+      id: newId(),
       name: mergedName,
       tickers: merged,
       savedAt: Date.now(),
