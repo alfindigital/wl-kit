@@ -816,7 +816,7 @@ function Index() {
       <header className="border-b border-border/60 bg-background/80 backdrop-blur sm:sticky sm:top-0 sm:z-30">
         <div className="mx-auto flex w-full max-w-2xl items-center justify-between px-4 py-2.5 sm:px-6">
           <span className="font-display text-base font-semibold tracking-tight text-foreground">
-            WatchlistKit
+            Watchlist<span className="text-primary">Kit</span>
           </span>
           <div ref={helpStepRef} className="flex items-center gap-1.5">
             <ThemeToggle />
