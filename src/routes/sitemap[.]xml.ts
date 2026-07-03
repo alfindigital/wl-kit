@@ -20,6 +20,7 @@ export const Route = createFileRoute("/sitemap.xml")({
         const lastmod = "2026-07-03";
         const entries: SitemapEntry[] = [
           { path: "/", changefreq: "weekly", priority: "1.0", lastmod },
+          { path: "/faq", changefreq: "monthly", priority: "0.6", lastmod },
           {
             path: "/guides/import-to-tradingview",
             changefreq: "monthly",
