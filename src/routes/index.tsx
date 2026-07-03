@@ -5,7 +5,7 @@ import { z } from "zod";
 import { SITE_URL } from "@/lib/site";
 
 import { Footer } from "@/components/watchlist/Footer";
-import { FaqDialog, FAQ_ITEMS } from "@/components/watchlist/Faq";
+import { FAQ_ITEMS } from "@/components/watchlist/Faq";
 import { TickerInput } from "@/components/watchlist/TickerInput";
 import { FormatTabs } from "@/components/watchlist/FormatTabs";
 import { OutputBlock, type SortMode } from "@/components/watchlist/OutputBlock";
