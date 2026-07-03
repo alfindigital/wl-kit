@@ -10,8 +10,8 @@ export const ShareCard = forwardRef<
       style={{
         width: 720,
         padding: 48,
-        background: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
-        color: "#f8fafc",
+        background: "#fcfaf6",
+        color: "#121b29",
         fontFamily: "Inter, system-ui, sans-serif",
         borderRadius: 24,
       }}
@@ -22,22 +22,24 @@ export const ShareCard = forwardRef<
             width: 28,
             height: 28,
             borderRadius: 8,
-            background: "#ea580c",
+            background: "#ce3600",
           }}
         />
-        <span style={{ fontSize: 22, fontWeight: 700, letterSpacing: -0.3 }}>WatchlistKit</span>
+        <span style={{ fontSize: 22, fontWeight: 700, letterSpacing: -0.3 }}>
+          Watchlist<span style={{ color: "#ce3600" }}>Kit</span>
+        </span>
       </div>
 
       <div
         style={{
           padding: 20,
-          background: "rgba(255,255,255,0.05)",
-          border: "1px solid rgba(255,255,255,0.08)",
+          background: "#ffffff",
+          border: "1px solid #e1ddd7",
           borderRadius: 16,
           fontFamily: "'JetBrains Mono', ui-monospace, monospace",
           fontSize: 15,
           lineHeight: 1.6,
-          color: "#e2e8f0",
+          color: "#121b29",
           whiteSpace: "pre-wrap",
           wordBreak: "break-all",
         }}
@@ -49,22 +51,22 @@ export const ShareCard = forwardRef<
         style={{
           marginTop: 28,
           paddingTop: 16,
-          borderTop: "1px solid rgba(255,255,255,0.08)",
+          borderTop: "1px solid #e1ddd7",
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
           gap: 12,
           fontSize: 12,
-          color: "#94a3b8",
+          color: "#373d48",
         }}
       >
         <span>
-          Built with <span style={{ color: "#ea580c", fontWeight: 600 }}>WatchlistKit</span>
+          Built with <span style={{ color: "#ce3600", fontWeight: 600 }}>WatchlistKit</span>
         </span>
         <span style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <span style={{ color: "#ea580c" }}>alfindigital.com</span>
-          <span style={{ color: "#ea580c" }}>@AlfIDX</span>
+          <span style={{ color: "#ce3600" }}>alfindigital.com</span>
+          <span style={{ color: "#ce3600" }}>@AlfIDX</span>
         </span>
       </div>
     </div>
