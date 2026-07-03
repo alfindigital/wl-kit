@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { Copy, QrCode, Share2, ExternalLink, Check } from "lucide-react";
+import { Copy, QrCode, Check } from "lucide-react";
 
 import {
   Dialog,
@@ -74,17 +74,6 @@ export function ShareLinkDialog({ open, onOpenChange, url, tickerCount }: Props)
     }
   };
 
-  const handleNativeShare = async () => {
-    if (typeof navigator === "undefined" || !navigator.share) return;
-    try {
-      await navigator.share({ title: "WatchlistKit", url });
-    } catch (e) {
-      const err = e as DOMException;
-      if (err?.name !== "AbortError") toast.error("Share failed");
-    }
-  };
-
-  const hasNativeShare = typeof navigator !== "undefined" && typeof navigator.share === "function";
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -107,49 +96,27 @@ export function ShareLinkDialog({ open, onOpenChange, url, tickerCount }: Props)
               className="font-mono text-xs"
               aria-label="Share URL"
             />
-            <Button
-              type="button"
-              onClick={handleCopy}
-              variant="default"
-              size="icon"
-              className="shrink-0"
-              aria-label="Copy link"
-            >
-              {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-            </Button>
-          </div>
-
-          <div className="flex items-center justify-center gap-2">
-            <Button
-              type="button"
-              variant={showQR ? "default" : "outline"}
-              size="icon"
-              onClick={() => setShowQR((v) => !v)}
-              aria-expanded={showQR}
-              aria-label={showQR ? "Hide QR" : "Show QR"}
-            >
-              <QrCode className="h-4 w-4" />
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              onClick={() => window.open(url, "_blank", "noopener,noreferrer")}
-              aria-label="Open link"
-            >
-              <ExternalLink className="h-4 w-4" />
-            </Button>
-            {hasNativeShare && (
+            <div className="flex shrink-0 gap-2">
               <Button
                 type="button"
-                variant="outline"
+                onClick={handleCopy}
+                variant="default"
                 size="icon"
-                onClick={handleNativeShare}
-                aria-label="Share"
+                aria-label="Copy link"
               >
-                <Share2 className="h-4 w-4" />
+                {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
               </Button>
-            )}
+              <Button
+                type="button"
+                variant={showQR ? "default" : "outline"}
+                size="icon"
+                onClick={() => setShowQR((v) => !v)}
+                aria-expanded={showQR}
+                aria-label={showQR ? "Hide QR" : "Show QR"}
+              >
+                <QrCode className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
 
           {showQR && (
