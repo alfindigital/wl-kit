@@ -334,7 +334,7 @@ function Index() {
   }, [search.t, search.c, search.f, search.s]);
 
   useEffect(() => {
-    if (!search.t) {
+    if (!search.t && !search.c) {
       setTimeout(() => textareaRef.current?.focus(), 50);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -609,7 +609,19 @@ function Index() {
 
   const buildShareUrl = () => {
     const params = new URLSearchParams();
-    params.set("t", tickers.join(","));
+    const joined = tickers.join(",");
+    // Long lists blow past mail client / social bio URL caps; compress > 40 tickers.
+    if (tickers.length > 40) {
+      const compressed = LZString.compressToEncodedURIComponent(joined);
+      // Only use if it actually shrinks the payload (it always does at this size).
+      if (compressed.length < joined.length) {
+        params.set("c", compressed);
+      } else {
+        params.set("t", joined);
+      }
+    } else {
+      params.set("t", joined);
+    }
     if (format !== "tradingview") params.set("f", format);
     if (sortMode !== "none") params.set("s", sortMode);
     return `${window.location.origin}/?${params.toString()}`;
