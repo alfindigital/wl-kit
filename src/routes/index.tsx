@@ -34,7 +34,7 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { HelpCircle, MessageCircleQuestion, Keyboard, BookOpen, LineChart } from "lucide-react";
+import { HelpCircle, MessageCircleQuestion, Keyboard, BookOpen } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 function HelpMenu({
