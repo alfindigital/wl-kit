@@ -737,7 +737,7 @@ function Index() {
 
             <HelpMenu
               onGuide={() => setGuideOpen(true)}
-              onFaq={() => setFaqOpen(true)}
+              onFaq={() => navigate({ to: "/faq" })}
               onShortcuts={() => setShortcutOpen(true)}
             />
           </div>
