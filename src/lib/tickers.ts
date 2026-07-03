@@ -76,11 +76,15 @@ export function suggestTickers(partial: string, limit = 6): string[] {
   return matches.sort().slice(0, limit);
 }
 
-export function formatTickers(tickers: string[], format: OutputFormat): string {
+export function formatTickers(
+  tickers: string[],
+  format: OutputFormat,
+  prefix: string = "",
+): string {
   if (tickers.length === 0) return "";
   switch (format) {
     case "tradingview":
-      return tickers.map((t) => `IDX:${t}`).join(",");
+      return tickers.map((t) => (prefix ? `${prefix}${t}` : t)).join(",");
     case "plain":
       return tickers.join(",");
     case "newline":
