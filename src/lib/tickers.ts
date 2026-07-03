@@ -46,11 +46,8 @@ export function analyzeInput(raw: string): InputAnalysis {
   const dupSet = new Set<string>();
 
   for (const token of tokens) {
-    if (!/^[A-Z]{4}$/.test(token)) {
-      invalid.push({
-        token,
-        reason: /^[A-Z0-9]+$/.test(token) && token.length !== 4 ? "length" : "chars",
-      });
+    if (!/^[A-Z0-9]{2,12}$/.test(token)) {
+      invalid.push({ token, reason: "chars" });
       continue;
     }
     if (seen.has(token)) {
