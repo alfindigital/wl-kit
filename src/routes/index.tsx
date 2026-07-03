@@ -438,8 +438,25 @@ function Index() {
     saveWatchlists(next);
     setSaveOpen(false);
     setLoadedName(trimmed);
+    setLoadedId(entry.id);
+    setLoadedOriginal(tickers);
     setLiveStatus(`Watchlist "${trimmed}" saved`);
     toast.success("Watchlist saved");
+  };
+
+  // Update the currently loaded watchlist in place (Update {name}).
+  const handleUpdateLoaded = () => {
+    if (!loadedId) return;
+    const item = saved.find((w) => w.id === loadedId);
+    if (!item) return;
+    const snapshot = saved;
+    const next = saved.map((w) =>
+      w.id === loadedId ? { ...w, tickers, savedAt: Date.now(), lastUsedAt: Date.now() } : w,
+    );
+    setSaved(next);
+    saveWatchlists(next);
+    setLoadedOriginal(tickers);
+    updateSaved(next, snapshot, `Updated "${item.name}"`);
   };
 
   const handleOpenSave = () => {
