@@ -883,7 +883,7 @@ function Index() {
                 onChange={handleFormatChange}
                 onSelect={(f) => {
                   if (f === "tradingview" && f === format && tickers.length > 0) {
-                    navigator.clipboard.writeText(formatTickers(tickers, f)).then(
+                    navigator.clipboard.writeText(formatTickers(tickers, f, prefix)).then(
                       () => {
                         toast.success("Copied as TradingView");
                         setLiveStatus("Copied as TradingView");
@@ -893,6 +893,7 @@ function Index() {
                   }
                 }}
               />
+              <ExchangePrefixSelector value={prefix} onChange={handlePrefixChange} />
               <OutputBlock
                 output={output}
                 count={tickers.length}
