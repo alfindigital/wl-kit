@@ -203,13 +203,27 @@ function Index() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    try {
-      const done = localStorage.getItem("wlkit-onboarded");
-      if (!done) setOnboardingActive(true);
-    } catch {
-      // Storage blocked — skip onboarding gate; don't crash.
-    }
+    // Delay onboarding until the first paint settles so the spotlight
+    // doesn't overlap the header mid-animation on mobile.
+    const schedule =
+      (window as unknown as { requestIdleCallback?: (cb: () => void) => number })
+        .requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 300));
+    const id = schedule(() => {
+      try {
+        const done = localStorage.getItem("wlkit-onboarded");
+        if (!done) setOnboardingActive(true);
+      } catch {
+        // Storage blocked — skip onboarding gate; don't crash.
+      }
+    });
+    return () => {
+      const cancel = (window as unknown as { cancelIdleCallback?: (id: number) => void })
+        .cancelIdleCallback;
+      if (cancel) cancel(id as number);
+      else window.clearTimeout(id as number);
+    };
   }, []);
+
 
   const dismissOnboarding = () => {
     try {
