@@ -802,6 +802,15 @@ function Index() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [output, tickers.length, saved.length, input]);
 
+  const dateStr = useMemo(
+    () =>
+      new Date().toLocaleDateString("en-US", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      }),
+    [],
+  );
 
   // Dirty = loaded watchlist exists and current tickers differ from original.
   const isDirty = useMemo(() => {
@@ -848,10 +857,6 @@ function Index() {
               <br />
               <em className="italic text-primary">Instantly.</em>
             </h1>
-
-            <p className="mt-2 font-mono text-xs uppercase tracking-wider text-muted-foreground">
-              <time dateTime={new Date().toISOString().split("T")[0]}>{dateStr}</time>
-            </p>
           </div>
 
           <div className="flex flex-col gap-4 sm:gap-5">
