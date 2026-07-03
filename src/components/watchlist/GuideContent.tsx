@@ -147,15 +147,15 @@ export function GuideContent({
           {[
             {
               title: "Bulk import",
-              text: "Add dozens of IDX tickers to TradingView in one paste instead of typing each symbol manually.",
+              text: "Add dozens of tickers to TradingView in one paste instead of typing each symbol manually.",
             },
             {
               title: "Auto-format",
-              text: "WatchlistKit adds the required IDX: prefix and removes duplicates automatically.",
+              text: "WatchlistKit adds the exchange prefix you choose and removes duplicates automatically.",
             },
             {
               title: "Error-free",
-              text: "Invalid tickers are flagged instantly so you never import a broken symbol.",
+              text: "Invalid or unsupported tokens are flagged instantly so you never import a broken symbol.",
             },
           ].map((item) => (
             <Card key={item.title} className="border-border/60">
