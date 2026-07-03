@@ -55,7 +55,7 @@ export const ShareCard = forwardRef<
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
-          justifyContent: "space-between",
+          justifyContent: "center",
           gap: 12,
           fontSize: 12,
           color: "#373d48",
@@ -63,10 +63,6 @@ export const ShareCard = forwardRef<
       >
         <span>
           Built with <span style={{ color: "#ce3600", fontWeight: 600 }}>WatchlistKit</span>
-        </span>
-        <span style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <span style={{ color: "#ce3600" }}>alfindigital.com</span>
-          <span style={{ color: "#ce3600" }}>@AlfIDX</span>
         </span>
       </div>
     </div>
