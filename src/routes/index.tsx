@@ -1,11 +1,11 @@
-import { createFileRoute, useSearch, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useSearch, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { SITE_URL } from "@/lib/site";
 
 import { Footer } from "@/components/watchlist/Footer";
-import { FaqDialog, FAQ_ITEMS } from "@/components/watchlist/Faq";
+import { FAQ_ITEMS } from "@/components/watchlist/Faq";
 import { TickerInput } from "@/components/watchlist/TickerInput";
 import { FormatTabs } from "@/components/watchlist/FormatTabs";
 import { OutputBlock, type SortMode } from "@/components/watchlist/OutputBlock";
@@ -177,7 +177,7 @@ function Index() {
   const [shareLinkUrl, setShareLinkUrl] = useState("");
   const [liveStatus, setLiveStatus] = useState("");
   const [shortcutOpen, setShortcutOpen] = useState(false);
-  const [faqOpen, setFaqOpen] = useState(false);
+  
   const [onboardingActive, setOnboardingActive] = useState(false);
   const [sortMode, setSortMode] = useState<SortMode>("asc");
 
@@ -737,7 +737,7 @@ function Index() {
 
             <HelpMenu
               onGuide={() => setGuideOpen(true)}
-              onFaq={() => setFaqOpen(true)}
+              onFaq={() => navigate({ to: "/faq" })}
               onShortcuts={() => setShortcutOpen(true)}
             />
           </div>
@@ -907,7 +907,7 @@ function Index() {
 
       <ScrollToInputFab targetRef={textareaRef} />
       <GuideDialog open={guideOpen} onOpenChange={setGuideOpen} />
-      <FaqDialog open={faqOpen} onOpenChange={setFaqOpen} />
+      
       <ShortcutOverlay
         open={shortcutOpen}
         onOpenChange={setShortcutOpen}
