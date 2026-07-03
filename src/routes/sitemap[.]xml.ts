@@ -15,16 +15,19 @@ export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
-        const today = new Date().toISOString().split("T")[0];
+        // Stable lastmod: bump manually when content meaningfully changes.
+        // Crawlers discount lastmod that ticks daily on unchanged pages.
+        const lastmod = "2026-07-03";
         const entries: SitemapEntry[] = [
-          { path: "/", changefreq: "weekly", priority: "1.0", lastmod: today },
+          { path: "/", changefreq: "weekly", priority: "1.0", lastmod },
           {
             path: "/guides/import-to-tradingview",
             changefreq: "monthly",
             priority: "0.7",
-            lastmod: today,
+            lastmod,
           },
         ];
+
 
         const urls = entries.map((e) =>
           [

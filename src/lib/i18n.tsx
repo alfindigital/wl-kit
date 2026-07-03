@@ -74,13 +74,14 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored === "en" || stored === "id") {
         setLangState(stored);
-      } else if (navigator.language?.toLowerCase().startsWith("id")) {
-        setLangState("id");
       }
+      // No auto-switch from navigator.language: keep English as canonical
+      // locale so <html lang> and crawler-visible copy stay consistent.
     } catch {
-      // storage blocked — stay on default
+      // storage blocked, stay on default
     }
   }, []);
+
 
   useEffect(() => {
     try {
