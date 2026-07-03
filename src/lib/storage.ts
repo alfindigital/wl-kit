@@ -26,7 +26,9 @@ export function loadWatchlists(): SavedWatchlist[] {
       const v = (parsed as { version?: number }).version;
       if (typeof v === "number" && v > SCHEMA_VERSION) {
         // Newer schema written by a future app version — refuse to corrupt it.
-        console.warn("[storage] saved watchlists schema is newer than supported; skipping read");
+        if (import.meta.env.DEV)
+          console.warn("[storage] saved watchlists schema is newer than supported; skipping read");
+
         return [];
       }
       list = (parsed as { watchlists?: unknown }).watchlists;
@@ -50,11 +52,14 @@ export function saveWatchlists(list: SavedWatchlist[]): void {
   } catch (e) {
     const err = e as { name?: string };
     const reason = err?.name === "QuotaExceededError" ? "quota" : "other";
-    if (reason === "quota") {
-      console.warn("[storage] quota exceeded — watchlist not saved");
-    } else {
-      console.warn("[storage] failed to save watchlists", e);
-    }
+      if (import.meta.env.DEV) {
+        if (reason === "quota") {
+          console.warn("[storage] quota exceeded, watchlist not saved");
+        } else {
+          console.warn("[storage] failed to save watchlists", e);
+        }
+      }
+
     try {
       window.dispatchEvent(
         new CustomEvent("wlkit:storage-error", { detail: { reason, scope: "watchlists" } }),
