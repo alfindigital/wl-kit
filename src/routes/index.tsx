@@ -834,7 +834,7 @@ function Index() {
         <div className="mx-auto w-full max-w-2xl px-4 pb-10 pt-6 sm:px-6 sm:pt-10">
           <div className="mb-4 text-center sm:mb-6">
             <h1 className="font-display text-2xl leading-tight tracking-tight sm:text-3xl">
-              Build IDX watchlist, <em className="italic text-primary">Instantly.</em>
+              Build weighted watchlist, <em className="italic text-primary">Instantly.</em>
             </h1>
           </div>
 
@@ -904,18 +904,6 @@ function Index() {
                       {analysis.invalid.length > 3 ? "…" : ""}
                     </span>
                   </button>
-                )}
-                {analysis.unknown.length > 0 && (
-                  <span
-                    className="rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-700 dark:text-amber-400"
-                    title="Not on our IDX snapshot but included anyway (may be a recent IPO or a typo)"
-                  >
-                    {analysis.unknown.length} not on IDX list:{" "}
-                    <span className="font-mono">
-                      {analysis.unknown.slice(0, 3).join(", ")}
-                      {analysis.unknown.length > 3 ? "…" : ""}
-                    </span>
-                  </span>
                 )}
               </div>
             </div>
@@ -1035,7 +1023,7 @@ function Index() {
         onOpenChange={setShareImageOpen}
         dataUrl={shareImageData}
         name={loadedName || "My Watchlist"}
-        shareText={`${tickers.length} IDX tickers · made with WatchlistKit`}
+        shareText={`${tickers.length} tickers · made with WatchlistKit`}
         shareUrl={
           tickers.length
             ? `${typeof window !== "undefined" ? window.location.origin : ""}/?t=${tickers.join(",")}`

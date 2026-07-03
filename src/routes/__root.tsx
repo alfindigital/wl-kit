@@ -131,7 +131,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Format your IDX stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
+          "Format your stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
       },
       { name: "author", content: "alfindigital" },
       { property: "og:site_name", content: "WatchlistKit" },
@@ -144,12 +144,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         property: "og:description",
         content:
-          "Format your IDX stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
+          "Format your stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
       },
       {
         name: "twitter:description",
         content:
-          "Format your IDX stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
+          "Format your stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
       },
       { property: "og:image", content: OG_IMAGE_URL },
       { property: "og:image:alt", content: "WatchlistKit | Free IDX Stock Watchlist Formatter" },
@@ -196,7 +196,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           operatingSystem: "Web",
           browserRequirements: "Requires JavaScript. Requires HTML5.",
           description:
-            "Format your IDX stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
+            "Format your stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
           image: OG_IMAGE_URL,
           offers: {
             "@type": "Offer",
@@ -220,7 +220,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           url: WEBSITE_URL,
           inLanguage: "en-US",
           description:
-            "Format your IDX stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
+            "Format your stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
           publisher: {
             "@type": "Organization",
             name: "alfindigital",
