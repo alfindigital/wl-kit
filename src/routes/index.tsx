@@ -331,7 +331,7 @@ function Index() {
       }
     }, 300);
     return () => window.clearTimeout(id);
-  }, [input, format, sortMode]);
+  }, [input, format, sortMode, prefix]);
 
   useEffect(() => {
     if (search.c && typeof search.c === "string") {
