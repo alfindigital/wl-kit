@@ -10,6 +10,7 @@ import { Footer } from "@/components/watchlist/Footer";
 import { FAQ_ITEMS } from "@/components/watchlist/Faq";
 import { TickerInput } from "@/components/watchlist/TickerInput";
 import { FormatTabs } from "@/components/watchlist/FormatTabs";
+import { ExchangePrefixSelector, type ExchangePrefix } from "@/components/watchlist/ExchangePrefix";
 import { OutputBlock, type SortMode } from "@/components/watchlist/OutputBlock";
 import { ActionButtons } from "@/components/watchlist/ActionButtons";
 import { SaveDialog } from "@/components/watchlist/SaveDialog";
@@ -127,6 +128,7 @@ const searchSchema = z.object({
   c: z.string().optional(), // lz-string compressed ticker list (for long share URLs)
   f: z.enum(["tradingview", "plain", "newline"]).optional(),
   s: z.enum(["none", "asc", "desc"]).optional(),
+  p: z.enum(["", "IDX:", "BINANCE:"]).optional(),
 });
 
 type SearchParams = z.infer<typeof searchSchema>;
@@ -183,6 +185,7 @@ function Index() {
   
   const [input, setInput] = useState("");
   const [format, setFormat] = useState<OutputFormat>("tradingview");
+  const [prefix, setPrefix] = useState<ExchangePrefix>("");
   const [saved, setSaved] = useState<SavedWatchlist[]>([]);
   const [saveOpen, setSaveOpen] = useState(false);
   const [loadedName, setLoadedName] = useState<string | null>(null);
@@ -306,6 +309,8 @@ function Index() {
         setFormat(d.format as OutputFormat);
       if (typeof d?.sortMode === "string" && ["none", "asc", "desc"].includes(d.sortMode))
         setSortMode(d.sortMode as SortMode);
+      if (typeof d?.prefix === "string" && ["", "IDX:", "BINANCE:"].includes(d.prefix))
+        setPrefix(d.prefix as ExchangePrefix);
     } catch {
       // ignore
     }
@@ -319,7 +324,7 @@ function Index() {
       try {
         localStorage.setItem(
           "wlkit.session",
-          JSON.stringify({ version: 1, data: { input, format, sortMode } }),
+          JSON.stringify({ version: 1, data: { input, format, sortMode, prefix } }),
         );
       } catch {
         // ignore quota errors
