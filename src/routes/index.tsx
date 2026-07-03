@@ -10,6 +10,7 @@ import { Footer } from "@/components/watchlist/Footer";
 import { FAQ_ITEMS } from "@/components/watchlist/Faq";
 import { TickerInput } from "@/components/watchlist/TickerInput";
 import { FormatTabs } from "@/components/watchlist/FormatTabs";
+import { ExchangePrefixSelector, type ExchangePrefix } from "@/components/watchlist/ExchangePrefix";
 import { OutputBlock, type SortMode } from "@/components/watchlist/OutputBlock";
 import { ActionButtons } from "@/components/watchlist/ActionButtons";
 import { SaveDialog } from "@/components/watchlist/SaveDialog";
@@ -127,6 +128,7 @@ const searchSchema = z.object({
   c: z.string().optional(), // lz-string compressed ticker list (for long share URLs)
   f: z.enum(["tradingview", "plain", "newline"]).optional(),
   s: z.enum(["none", "asc", "desc"]).optional(),
+  p: z.enum(["", "IDX:", "BINANCE:"]).optional(),
 });
 
 type SearchParams = z.infer<typeof searchSchema>;
@@ -183,6 +185,7 @@ function Index() {
   
   const [input, setInput] = useState("");
   const [format, setFormat] = useState<OutputFormat>("tradingview");
+  const [prefix, setPrefix] = useState<ExchangePrefix>("");
   const [saved, setSaved] = useState<SavedWatchlist[]>([]);
   const [saveOpen, setSaveOpen] = useState(false);
   const [loadedName, setLoadedName] = useState<string | null>(null);
@@ -300,12 +303,14 @@ function Index() {
           ? (parsed as { version?: number }).version
           : 0;
       if (typeof v === "number" && v > 1) return; // future schema — skip
-      const d = data as { input?: unknown; format?: unknown; sortMode?: unknown };
+      const d = data as { input?: unknown; format?: unknown; sortMode?: unknown; prefix?: unknown };
       if (typeof d?.input === "string") setInput(d.input);
       if (typeof d?.format === "string" && ["tradingview", "plain", "newline"].includes(d.format))
         setFormat(d.format as OutputFormat);
       if (typeof d?.sortMode === "string" && ["none", "asc", "desc"].includes(d.sortMode))
         setSortMode(d.sortMode as SortMode);
+      if (typeof d?.prefix === "string" && ["", "IDX:", "BINANCE:"].includes(d.prefix))
+        setPrefix(d.prefix as ExchangePrefix);
     } catch {
       // ignore
     }
@@ -319,14 +324,14 @@ function Index() {
       try {
         localStorage.setItem(
           "wlkit.session",
-          JSON.stringify({ version: 1, data: { input, format, sortMode } }),
+          JSON.stringify({ version: 1, data: { input, format, sortMode, prefix } }),
         );
       } catch {
         // ignore quota errors
       }
     }, 300);
     return () => window.clearTimeout(id);
-  }, [input, format, sortMode]);
+  }, [input, format, sortMode, prefix]);
 
   useEffect(() => {
     if (search.c && typeof search.c === "string") {
@@ -345,6 +350,9 @@ function Index() {
     if (search.s && ["none", "asc", "desc"].includes(search.s)) {
       setSortMode(search.s);
     }
+    if (search.p && ["", "IDX:", "BINANCE:"].includes(search.p)) {
+      setPrefix(search.p);
+    }
   }, [search.t, search.c, search.f, search.s]);
 
   useEffect(() => {
@@ -361,7 +369,7 @@ function Index() {
     if (sortMode === "desc") return [...base].sort().reverse();
     return base;
   }, [analysis.valid, sortMode]);
-  const output = useMemo(() => formatTickers(tickers, format), [tickers, format]);
+  const output = useMemo(() => formatTickers(tickers, format, prefix), [tickers, format, prefix]);
 
   // Auto-scroll to the output block on mobile the first time tickers appear,
   // so users don't paste-and-think-nothing-happened below the fold.
@@ -414,9 +422,12 @@ function Index() {
     if (f === format) return;
     setFormat(f);
     navigate({ search: (prev: SearchParams) => ({ ...prev, f }) });
-    // Do not auto-copy on format switch — user may just be previewing.
-    // Explicit copy is still available via the Copy button, Cmd+Enter, or
-    // tapping the already-active tab (handled by FormatTabs.onSelect).
+  };
+
+  const handlePrefixChange = (p: ExchangePrefix) => {
+    if (p === prefix) return;
+    setPrefix(p);
+    navigate({ search: (prev: SearchParams) => ({ ...prev, p }) });
   };
 
 
@@ -658,6 +669,7 @@ function Index() {
     }
     if (format !== "tradingview") params.set("f", format);
     if (sortMode !== "none") params.set("s", sortMode);
+    if (prefix) params.set("p", prefix);
     return `${window.location.origin}/?${params.toString()}`;
   };
 
@@ -871,7 +883,7 @@ function Index() {
                 onChange={handleFormatChange}
                 onSelect={(f) => {
                   if (f === "tradingview" && f === format && tickers.length > 0) {
-                    navigator.clipboard.writeText(formatTickers(tickers, f)).then(
+                    navigator.clipboard.writeText(formatTickers(tickers, f, prefix)).then(
                       () => {
                         toast.success("Copied as TradingView");
                         setLiveStatus("Copied as TradingView");
@@ -881,6 +893,7 @@ function Index() {
                   }
                 }}
               />
+              <ExchangePrefixSelector value={prefix} onChange={handlePrefixChange} />
               <OutputBlock
                 output={output}
                 count={tickers.length}
