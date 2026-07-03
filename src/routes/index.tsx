@@ -796,6 +796,16 @@ function Index() {
     [],
   );
 
+  // Dirty = loaded watchlist exists and current tickers differ from original.
+  const isDirty = useMemo(() => {
+    if (!loadedId) return false;
+    if (tickers.length !== loadedOriginal.length) return true;
+    for (let i = 0; i < tickers.length; i++) {
+      if (tickers[i] !== loadedOriginal[i]) return true;
+    }
+    return false;
+  }, [loadedId, tickers, loadedOriginal]);
+
 
   return (
     <div className="flex min-h-dvh flex-col bg-background">
@@ -805,8 +815,8 @@ function Index() {
       >
         Skip to content
       </a>
-      {/* Unified app header: brand + theme + help menu (guide / FAQ / shortcuts) */}
-      <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur">
+      {/* Unified app header: brand + theme + help menu. Non-sticky on mobile to keep it out of the way. */}
+      <header className="border-b border-border/60 bg-background/80 backdrop-blur sm:sticky sm:top-0 sm:z-30">
         <div className="mx-auto flex w-full max-w-2xl items-center justify-between px-4 py-2.5 sm:px-6">
           <span className="font-display text-base font-semibold tracking-tight text-foreground">
             WatchlistKit
