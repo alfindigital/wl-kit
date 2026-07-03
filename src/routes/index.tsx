@@ -857,10 +857,6 @@ function Index() {
               <br />
               <em className="italic text-primary">Instantly.</em>
             </h1>
-
-            <p className="mt-2 font-mono text-xs uppercase tracking-wider text-muted-foreground">
-              <time dateTime={new Date().toISOString().split("T")[0]}>{dateStr}</time>
-            </p>
           </div>
 
           <div className="flex flex-col gap-4 sm:gap-5">
