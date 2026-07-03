@@ -93,9 +93,7 @@ function PrivacyPage() {
 
             <section>
               <h2 className="mb-1.5 text-base font-semibold">Disclaimer</h2>
-              <p>
-                WatchlistKit is a formatting utility, not investment advice.
-              </p>
+              <p>WatchlistKit is a formatting utility, not investment advice.</p>
             </section>
           </div>
         </div>

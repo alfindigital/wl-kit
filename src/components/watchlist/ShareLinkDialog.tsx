@@ -74,7 +74,6 @@ export function ShareLinkDialog({ open, onOpenChange, url, tickerCount }: Props)
     }
   };
 
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="rounded-2xl sm:max-w-md">

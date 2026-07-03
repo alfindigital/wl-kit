@@ -21,7 +21,6 @@ function relativeTime(ts: number): string {
   return `${Math.floor(d / 365)}y ago`;
 }
 
-
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
@@ -331,7 +330,6 @@ export function SavedWatchlists({
                       <span> · used {relativeTime(item.lastUsedAt)}</span>
                     ) : null}
                   </div>
-
                 </button>
               </div>
               {!selectMode && !isMobile && (
@@ -596,9 +594,7 @@ export function SavedWatchlists({
                   </p>
                 </div>
               ) : (
-                <p className="px-3 py-6 text-center text-sm text-muted-foreground">
-                  No matches.
-                </p>
+                <p className="px-3 py-6 text-center text-sm text-muted-foreground">No matches.</p>
               )
             ) : (
               <div className="flex flex-col gap-1">

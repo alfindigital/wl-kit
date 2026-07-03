@@ -52,13 +52,13 @@ export function saveWatchlists(list: SavedWatchlist[]): void {
   } catch (e) {
     const err = e as { name?: string };
     const reason = err?.name === "QuotaExceededError" ? "quota" : "other";
-      if (import.meta.env.DEV) {
-        if (reason === "quota") {
-          console.warn("[storage] quota exceeded, watchlist not saved");
-        } else {
-          console.warn("[storage] failed to save watchlists", e);
-        }
+    if (import.meta.env.DEV) {
+      if (reason === "quota") {
+        console.warn("[storage] quota exceeded, watchlist not saved");
+      } else {
+        console.warn("[storage] failed to save watchlists", e);
       }
+    }
 
     try {
       window.dispatchEvent(

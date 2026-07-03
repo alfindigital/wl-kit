@@ -35,7 +35,6 @@ export function ActionButtons({
     { label: "Share", icon: Share2, onClick: onShare },
   ];
 
-
   return (
     <div className="grid grid-cols-4 gap-2">
       {desktopActions.map(({ label, icon: Icon, onClick }) => {

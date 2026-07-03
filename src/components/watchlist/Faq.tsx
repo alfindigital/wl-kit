@@ -4,7 +4,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export const FAQ_ITEMS = [
   {
@@ -47,7 +53,9 @@ export function FaqDialog({
           <DialogTitle className="text-xl font-semibold tracking-tight sm:text-2xl">
             Frequently asked questions
           </DialogTitle>
-          <DialogDescription className="sr-only">Browse common questions and answers.</DialogDescription>
+          <DialogDescription className="sr-only">
+            Browse common questions and answers.
+          </DialogDescription>
         </DialogHeader>
         <Accordion type="single" collapsible className="mt-2">
           {FAQ_ITEMS.map((item, i) => (

@@ -3,7 +3,6 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Copy, ArrowUpDown, ArrowDownAZ, ArrowUpAZ, RotateCcw, Check } from "lucide-react";
 import type { OutputFormat } from "@/lib/tickers";
 
-
 export type SortMode = "none" | "asc" | "desc";
 
 export function OutputBlock({
@@ -44,9 +43,7 @@ export function OutputBlock({
             <>
               <span>·</span>
               <span>
-                {duplicates.length}{" "}
-                {duplicates.length === 1 ? "duplicate" : "duplicates"} removed
-
+                {duplicates.length} {duplicates.length === 1 ? "duplicate" : "duplicates"} removed
               </span>
             </>
           )}

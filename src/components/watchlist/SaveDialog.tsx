@@ -51,7 +51,9 @@ export function SaveDialog({
       <DialogContent className="rounded-2xl sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Save watchlist</DialogTitle>
-          <DialogDescription className="sr-only">Name your watchlist before saving.</DialogDescription>
+          <DialogDescription className="sr-only">
+            Name your watchlist before saving.
+          </DialogDescription>
         </DialogHeader>
         <Input
           ref={inputRef}

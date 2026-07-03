@@ -23,7 +23,6 @@ import { ShareLinkDialog } from "@/components/watchlist/ShareLinkDialog";
 import { CommandPalette } from "@/components/watchlist/CommandPalette";
 import { ThemeToggle } from "@/components/watchlist/ThemeToggle";
 
-
 import { OnboardingTour, type TourStep } from "@/components/watchlist/OnboardingTour";
 import { ShortcutOverlay } from "@/components/watchlist/ShortcutOverlay";
 import { ScrollToInputFab } from "@/components/watchlist/ScrollToInputFab";
@@ -159,7 +158,6 @@ function newId(): string {
 
 const MAX_IMPORT_BYTES = 1_000_000; // 1MB - matches TickerInput drop cap.
 
-
 export const Route = createFileRoute("/")({
   validateSearch: searchSchema,
   component: Index,
@@ -194,7 +192,7 @@ type DiffData = {
 function Index() {
   const search = useSearch({ from: "/" });
   const navigate = useNavigate({ from: "/" });
-  
+
   const [input, setInput] = useState("");
   const [format, setFormat] = useState<OutputFormat>("tradingview");
   const [prefix, setPrefix] = useState<ExchangePrefix>("");
@@ -212,10 +210,9 @@ function Index() {
   const [guideOpen, setGuideOpen] = useState(false);
   const [liveStatus, setLiveStatus] = useState("");
   const [shortcutOpen, setShortcutOpen] = useState(false);
-  
+
   const [onboardingActive, setOnboardingActive] = useState(false);
   const [sortMode, setSortMode] = useState<SortMode>("asc");
-
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -239,7 +236,6 @@ function Index() {
       else window.clearTimeout(id as number);
     };
   }, []);
-
 
   const dismissOnboarding = () => {
     try {
@@ -399,7 +395,6 @@ function Index() {
     }
   }, [tickers.length]);
 
-
   // Undo helper
   const updateSaved = (next: SavedWatchlist[], undoSnapshot: SavedWatchlist[], message: string) => {
     setSaved(next);
@@ -442,7 +437,6 @@ function Index() {
     setPrefix(p);
     navigate({ search: (prev: SearchParams) => ({ ...prev, p }) });
   };
-
 
   const handleSortChange = (s: SortMode) => {
     if (s === sortMode) return;
@@ -591,7 +585,6 @@ function Index() {
     }
   };
 
-
   const handleMerge = (ids: string[]) => {
     const sources = ids
       .map((id) => saved.find((w) => w.id === id))
@@ -695,8 +688,6 @@ function Index() {
     setShareLinkUrl(url);
     setShareLinkOpen(true);
   };
-
-
 
   const handleImage = async () => {
     if (!shareCardRef.current || tickers.length === 0) return;
@@ -816,7 +807,6 @@ function Index() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [output, tickers.length, saved.length, input]);
 
-
   // Dirty = loaded watchlist exists and current tickers differ from original.
   const isDirty = useMemo(() => {
     if (!loadedId) return false;
@@ -826,7 +816,6 @@ function Index() {
     }
     return false;
   }, [loadedId, tickers, loadedOriginal]);
-
 
   return (
     <div className="flex min-h-dvh flex-col bg-background">
@@ -867,7 +856,10 @@ function Index() {
             <div ref={inputStepRef} className="flex flex-col gap-2">
               <TickerInput ref={textareaRef} value={input} onChange={setInput} />
               {input.trim().length === 0 && (
-                <div className="flex flex-wrap items-center gap-1.5" aria-label="Quick-start presets">
+                <div
+                  className="flex flex-wrap items-center gap-1.5"
+                  aria-label="Quick-start presets"
+                >
                   <span className="text-xs text-muted-foreground">Try:</span>
                   {PRESETS.map((p) => (
                     <button
@@ -1050,16 +1042,16 @@ function Index() {
         <DialogContent className="max-h-[85vh] overflow-y-auto rounded-2xl sm:max-w-3xl">
           <DialogHeader className="sr-only">
             <DialogTitle>Import to TradingView</DialogTitle>
-            <DialogDescription>Step-by-step guide for importing your watchlist into TradingView.</DialogDescription>
+            <DialogDescription>
+              Step-by-step guide for importing your watchlist into TradingView.
+            </DialogDescription>
           </DialogHeader>
           <GuideContent inModal onClose={() => setGuideOpen(false)} />
         </DialogContent>
       </Dialog>
 
-
       <ScrollToInputFab targetRef={textareaRef} />
-      
-      
+
       <ShortcutOverlay
         open={shortcutOpen}
         onOpenChange={setShortcutOpen}
@@ -1144,4 +1136,3 @@ function DiffSection({
     </div>
   );
 }
-

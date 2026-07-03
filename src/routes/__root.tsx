@@ -12,7 +12,6 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { registerServiceWorker } from "@/lib/register-sw";
 
-
 import appCss from "../styles.css?url";
 import ogImage from "@/assets/og-image.jpg";
 import { SITE_URL } from "@/lib/site";
@@ -164,7 +163,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-title", content: "WatchlistKit" },
       { name: "google-site-verification", content: "J-Czc4w4Dto_XXTUZfW8lAMoT45CpTWqZ72Nt91yFbw" },
-
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -282,7 +280,6 @@ function RootComponent() {
           <Toaster position="top-center" />
         </TooltipProvider>
       </QueryClientProvider>
-
     </AppErrorBoundary>
   );
 }
