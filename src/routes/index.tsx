@@ -453,8 +453,6 @@ function Index() {
     const next = saved.map((w) =>
       w.id === loadedId ? { ...w, tickers, savedAt: Date.now(), lastUsedAt: Date.now() } : w,
     );
-    setSaved(next);
-    saveWatchlists(next);
     setLoadedOriginal(tickers);
     updateSaved(next, snapshot, `Updated "${item.name}"`);
   };
