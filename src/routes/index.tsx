@@ -350,6 +350,9 @@ function Index() {
     if (search.s && ["none", "asc", "desc"].includes(search.s)) {
       setSortMode(search.s);
     }
+    if (search.p && ["", "IDX:", "BINANCE:"].includes(search.p)) {
+      setPrefix(search.p);
+    }
   }, [search.t, search.c, search.f, search.s]);
 
   useEffect(() => {
@@ -366,7 +369,7 @@ function Index() {
     if (sortMode === "desc") return [...base].sort().reverse();
     return base;
   }, [analysis.valid, sortMode]);
-  const output = useMemo(() => formatTickers(tickers, format), [tickers, format]);
+  const output = useMemo(() => formatTickers(tickers, format, prefix), [tickers, format, prefix]);
 
   // Auto-scroll to the output block on mobile the first time tickers appear,
   // so users don't paste-and-think-nothing-happened below the fold.
@@ -419,9 +422,12 @@ function Index() {
     if (f === format) return;
     setFormat(f);
     navigate({ search: (prev: SearchParams) => ({ ...prev, f }) });
-    // Do not auto-copy on format switch — user may just be previewing.
-    // Explicit copy is still available via the Copy button, Cmd+Enter, or
-    // tapping the already-active tab (handled by FormatTabs.onSelect).
+  };
+
+  const handlePrefixChange = (p: ExchangePrefix) => {
+    if (p === prefix) return;
+    setPrefix(p);
+    navigate({ search: (prev: SearchParams) => ({ ...prev, p }) });
   };
 
 
@@ -663,6 +669,7 @@ function Index() {
     }
     if (format !== "tradingview") params.set("f", format);
     if (sortMode !== "none") params.set("s", sortMode);
+    if (prefix) params.set("p", prefix);
     return `${window.location.origin}/?${params.toString()}`;
   };
 
