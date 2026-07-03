@@ -1023,7 +1023,7 @@ function Index() {
         onOpenChange={setShareImageOpen}
         dataUrl={shareImageData}
         name={loadedName || "My Watchlist"}
-        shareText={`${tickers.length} IDX tickers · made with WatchlistKit`}
+        shareText={`${tickers.length} tickers · made with WatchlistKit`}
         shareUrl={
           tickers.length
             ? `${typeof window !== "undefined" ? window.location.origin : ""}/?t=${tickers.join(",")}`
