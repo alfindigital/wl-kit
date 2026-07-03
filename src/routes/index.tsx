@@ -905,18 +905,6 @@ function Index() {
                     </span>
                   </button>
                 )}
-                {analysis.unknown.length > 0 && (
-                  <span
-                    className="rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-700 dark:text-amber-400"
-                    title="Not on our IDX snapshot but included anyway (may be a recent IPO or a typo)"
-                  >
-                    {analysis.unknown.length} not on IDX list:{" "}
-                    <span className="font-mono">
-                      {analysis.unknown.slice(0, 3).join(", ")}
-                      {analysis.unknown.length > 3 ? "…" : ""}
-                    </span>
-                  </span>
-                )}
               </div>
             </div>
             {loadedName && isDirty && tickers.length > 0 && (
