@@ -887,25 +887,6 @@ function Index() {
                 onSortChange={handleSortChange}
                 duplicates={analysis.duplicates}
               />
-              <div className="-mt-2 flex flex-wrap items-center gap-2">
-                {analysis.invalid.length > 0 && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      textareaRef.current?.focus();
-                      window.scrollTo({ top: 0, behavior: "smooth" });
-                    }}
-                    className="rounded-full border border-destructive/30 bg-destructive/5 px-3 py-1 text-xs font-medium text-destructive transition-colors hover:bg-destructive/10"
-                    aria-label={`${analysis.invalid.length} unrecognized tokens. Click to review.`}
-                  >
-                    {analysis.invalid.length} invalid:{" "}
-                    <span className="font-mono">
-                      {analysis.invalid.slice(0, 3).map((t) => t.token).join(", ")}
-                      {analysis.invalid.length > 3 ? "…" : ""}
-                    </span>
-                  </button>
-                )}
-              </div>
             </div>
             {loadedName && isDirty && tickers.length > 0 && (
               <div className="flex flex-wrap items-center gap-2 rounded-xl border border-primary/30 bg-primary/5 px-3 py-2 text-xs">
