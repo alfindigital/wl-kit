@@ -73,7 +73,7 @@ function HelpMenu({
         >
           <BookOpen className="h-4 w-4 text-muted-foreground" />
           <span className="flex-1">Import to TradingView</span>
-
+          <kbd className="font-mono text-[10px] text-muted-foreground">G</kbd>
         </button>
         <button
           type="button"
@@ -776,6 +776,10 @@ function Index() {
       if (e.key === "?" && !inField && !mod) {
         e.preventDefault();
         setShortcutOpen((o) => !o);
+      }
+      if (e.key.toLowerCase() === "g" && !inField && !mod && !e.shiftKey) {
+        e.preventDefault();
+        navigate({ to: "/guides/import-to-tradingview" });
       }
     };
     window.addEventListener("keydown", onKey);
