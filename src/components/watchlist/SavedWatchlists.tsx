@@ -4,6 +4,24 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { haptic } from "@/lib/haptics";
 
+function relativeTime(ts: number): string {
+  const diff = Date.now() - ts;
+  if (diff < 0) return "just now";
+  const m = Math.floor(diff / 60_000);
+  if (m < 1) return "just now";
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h ago`;
+  const d = Math.floor(h / 24);
+  if (d < 7) return `${d}d ago`;
+  const w = Math.floor(d / 7);
+  if (w < 5) return `${w}w ago`;
+  const mo = Math.floor(d / 30);
+  if (mo < 12) return `${mo}mo ago`;
+  return `${Math.floor(d / 365)}y ago`;
+}
+
+
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
@@ -304,12 +322,16 @@ export function SavedWatchlists({
                   </div>
                   <div className="text-xs text-muted-foreground">
                     {item.tickers.length} tickers ·{" "}
-                    {new Date(item.savedAt).toLocaleDateString("en-GB", {
+                    {new Date(item.savedAt).toLocaleDateString("en-US", {
                       day: "2-digit",
                       month: "short",
                       year: "numeric",
                     })}
+                    {item.lastUsedAt && item.lastUsedAt > item.savedAt + 60_000 ? (
+                      <span> · used {relativeTime(item.lastUsedAt)}</span>
+                    ) : null}
                   </div>
+
                 </button>
               </div>
               {!selectMode && !isMobile && (

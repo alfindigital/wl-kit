@@ -203,13 +203,27 @@ function Index() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    try {
-      const done = localStorage.getItem("wlkit-onboarded");
-      if (!done) setOnboardingActive(true);
-    } catch {
-      // Storage blocked — skip onboarding gate; don't crash.
-    }
+    // Delay onboarding until the first paint settles so the spotlight
+    // doesn't overlap the header mid-animation on mobile.
+    const schedule =
+      (window as unknown as { requestIdleCallback?: (cb: () => void) => number })
+        .requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 300));
+    const id = schedule(() => {
+      try {
+        const done = localStorage.getItem("wlkit-onboarded");
+        if (!done) setOnboardingActive(true);
+      } catch {
+        // Storage blocked — skip onboarding gate; don't crash.
+      }
+    });
+    return () => {
+      const cancel = (window as unknown as { cancelIdleCallback?: (id: number) => void })
+        .cancelIdleCallback;
+      if (cancel) cancel(id as number);
+      else window.clearTimeout(id as number);
+    };
   }, []);
+
 
   const dismissOnboarding = () => {
     try {
@@ -662,19 +676,21 @@ function Index() {
   // watchlist) and open the chart for the first symbol as a jumping-off point.
   const handleOpenTradingView = () => {
     if (tickers.length === 0) return;
+    // Open synchronously so iOS Safari doesn't block it as an async popup,
+    // then fill the URL after the clipboard write settles.
+    const win = window.open("about:blank", "_blank", "noopener,noreferrer");
+    const target = `https://www.tradingview.com/chart/?symbol=IDX:${tickers[0]}`;
     navigator.clipboard?.writeText(formatTickers(tickers, "tradingview")).catch(() => {});
-    window.open(
-      `https://www.tradingview.com/chart/?symbol=IDX:${tickers[0]}`,
-      "_blank",
-      "noopener,noreferrer",
-    );
+    if (win) win.location.href = target;
+    else window.location.href = target;
     const msg =
       tickers.length > 1
-        ? "List copied — paste it into your TradingView watchlist"
+        ? "List copied. Paste it into your TradingView watchlist"
         : "Opening in TradingView";
     toast.success(msg);
     setLiveStatus(msg);
   };
+
 
   const handleImage = async () => {
     if (!shareCardRef.current || tickers.length === 0) return;
