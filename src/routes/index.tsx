@@ -15,6 +15,7 @@ import { OutputBlock, type SortMode } from "@/components/watchlist/OutputBlock";
 import { ActionButtons } from "@/components/watchlist/ActionButtons";
 import { SaveDialog } from "@/components/watchlist/SaveDialog";
 import { SavedWatchlists } from "@/components/watchlist/SavedWatchlists";
+import { GuideContent } from "@/components/watchlist/GuideContent";
 import { ShareCard } from "@/components/watchlist/ShareCard";
 import { ShareImageDialog } from "@/components/watchlist/ShareImageDialog";
 import { ShareLinkDialog } from "@/components/watchlist/ShareLinkDialog";
@@ -35,7 +36,7 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { HelpCircle, MessageCircleQuestion, Keyboard, BookOpen } from "lucide-react";
+import { HelpCircle, MessageCircleQuestion, Keyboard, BookOpen, Shield } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 function HelpMenu({
