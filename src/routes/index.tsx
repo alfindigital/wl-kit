@@ -43,13 +43,14 @@ function HelpMenu({
   onGuide,
   onFaq,
   onShortcuts,
+  onPrivacy,
 }: {
   onGuide: () => void;
   onFaq: () => void;
   onShortcuts: () => void;
+  onPrivacy: () => void;
 }) {
   const [open, setOpen] = useState(false);
-
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -88,7 +89,6 @@ function HelpMenu({
           <MessageCircleQuestion className="h-4 w-4 text-muted-foreground" />
           <span className="flex-1">FAQ</span>
           <kbd className="font-mono text-[10px] text-muted-foreground">?</kbd>
-
         </button>
         <button
           type="button"
@@ -101,7 +101,17 @@ function HelpMenu({
           <Keyboard className="h-4 w-4 text-muted-foreground" />
           <span className="flex-1">Keyboard shortcuts</span>
           <kbd className="font-mono text-[10px] text-muted-foreground">⇧?</kbd>
-
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setOpen(false);
+            onPrivacy();
+          }}
+          className="flex w-full items-center gap-3 rounded-lg px-2.5 py-2 text-left text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+        >
+          <Shield className="h-4 w-4 text-muted-foreground" />
+          <span className="flex-1">Privacy</span>
         </button>
       </PopoverContent>
     </Popover>
