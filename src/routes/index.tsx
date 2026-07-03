@@ -129,6 +129,21 @@ const searchSchema = z.object({
 
 type SearchParams = z.infer<typeof searchSchema>;
 
+// Fallback for browsers without crypto.randomUUID (older iOS Safari, non-HTTPS embeds).
+function newId(): string {
+  try {
+    if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+      return crypto.randomUUID();
+    }
+  } catch {
+    // ignore
+  }
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+const MAX_IMPORT_BYTES = 1_000_000; // 1MB — matches TickerInput drop cap.
+
+
 export const Route = createFileRoute("/")({
   validateSearch: searchSchema,
   component: Index,
@@ -323,6 +338,22 @@ function Index() {
   }, [analysis.valid, sortMode]);
   const output = useMemo(() => formatTickers(tickers, format), [tickers, format]);
 
+  // Auto-scroll to the output block on mobile the first time tickers appear,
+  // so users don't paste-and-think-nothing-happened below the fold.
+  const prevTickerCountRef = useRef(0);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const prev = prevTickerCountRef.current;
+    prevTickerCountRef.current = tickers.length;
+    if (prev === 0 && tickers.length > 0 && window.innerWidth < 640) {
+      // Wait a frame so layout settles before scrolling.
+      requestAnimationFrame(() => {
+        formatStepRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+  }, [tickers.length]);
+
+
   // Undo helper
   const updateSaved = (next: SavedWatchlist[], undoSnapshot: SavedWatchlist[], message: string) => {
     setSaved(next);
@@ -358,18 +389,11 @@ function Index() {
     if (f === format) return;
     setFormat(f);
     navigate({ search: (prev: SearchParams) => ({ ...prev, f }) });
-    if (tickers.length > 0) {
-      const next = formatTickers(tickers, f);
-      if (next === output) return;
-      navigator.clipboard.writeText(next).then(
-        () => {
-          toast.success(`Copied as ${labelFor(f)}`);
-          setLiveStatus(`Copied as ${labelFor(f)}`);
-        },
-        () => {},
-      );
-    }
+    // Do not auto-copy on format switch — user may just be previewing.
+    // Explicit copy is still available via the Copy button, Cmd+Enter, or
+    // tapping the already-active tab (handled by FormatTabs.onSelect).
   };
+
 
   const handleSortChange = (s: SortMode) => {
     if (s === sortMode) return;
@@ -391,7 +415,7 @@ function Index() {
       return;
     }
     const entry: SavedWatchlist = {
-      id: crypto.randomUUID(),
+      id: newId(),
       name: trimmed,
       tickers,
       savedAt: Date.now(),
@@ -468,13 +492,24 @@ function Index() {
   };
 
   const handleImport = async (file: File) => {
+    if (file.size > MAX_IMPORT_BYTES) {
+      const msg = "File too large (max 1MB)";
+      setLiveStatus(msg);
+      toast.error(msg);
+      return;
+    }
     try {
       const text = await file.text();
       const snapshot = saved;
       const { merged, added, skipped } = importAllTXT(saved, text);
-      setSaved(merged);
-      saveWatchlists(merged);
-      const msg = `Imported ${added}${skipped ? `, skipped ${skipped}` : ""}`;
+      const capped = merged.slice(0, MAX_WATCHLISTS);
+      const dropped = merged.length - capped.length;
+      setSaved(capped);
+      saveWatchlists(capped);
+      const parts = [`Imported ${added}`];
+      if (skipped) parts.push(`skipped ${skipped}`);
+      if (dropped) parts.push(`${dropped} over limit`);
+      const msg = parts.join(", ");
       setLiveStatus(msg);
       toast(msg, {
         action: {
@@ -492,6 +527,7 @@ function Index() {
     }
   };
 
+
   const handleMerge = (ids: string[]) => {
     const sources = ids
       .map((id) => saved.find((w) => w.id === id))
@@ -500,7 +536,7 @@ function Index() {
     const merged = mergeTickers(lists);
     const mergedName = sources.map((w) => w.name).join(" + ") || `Merged (${ids.length})`;
     const entry: SavedWatchlist = {
-      id: crypto.randomUUID(),
+      id: newId(),
       name: mergedName,
       tickers: merged,
       savedAt: Date.now(),
@@ -672,11 +708,14 @@ function Index() {
         handleOpenSave();
         return;
       }
-      if (mod && e.key.toLowerCase() === "d") {
+      // Only hijack Cmd/Ctrl+D when there's actually something to download and
+      // the user isn't typing — otherwise let the browser bookmark the tab.
+      if (mod && !inField && tickers.length > 0 && e.key.toLowerCase() === "d") {
         e.preventDefault();
         handleDownload();
         return;
       }
+
       if (mod && !inField && e.key.toLowerCase() === "v") {
         textareaRef.current?.focus();
       }
@@ -704,11 +743,16 @@ function Index() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [output, tickers.length, saved.length, input]);
 
-  const dateStr = new Date().toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
+  const dateStr = useMemo(
+    () =>
+      new Date().toLocaleDateString("en-US", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      }),
+    [],
+  );
+
 
   return (
     <div className="flex min-h-dvh flex-col bg-background">
@@ -780,6 +824,26 @@ function Index() {
                 onSortChange={handleSortChange}
                 duplicates={analysis.duplicates}
               />
+              {analysis.invalid.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    textareaRef.current?.focus();
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  className="-mt-2 self-start rounded-full border border-destructive/30 bg-destructive/5 px-3 py-1 text-xs font-medium text-destructive transition-colors hover:bg-destructive/10"
+                  aria-label={`${analysis.invalid.length} unrecognized tickers. Click to review.`}
+                >
+                  {analysis.invalid.length} unrecognized:{" "}
+                  <span className="font-mono">
+                    {analysis.invalid
+                      .slice(0, 3)
+                      .map((t) => t.token)
+                      .join(", ")}
+                    {analysis.invalid.length > 3 ? "…" : ""}
+                  </span>
+                </button>
+              )}
             </div>
             <div ref={actionStepRef}>
               <ActionButtons
@@ -985,6 +1049,3 @@ function DiffSection({
   );
 }
 
-function labelFor(f: OutputFormat): string {
-  return f === "tradingview" ? "TradingView" : f === "plain" ? "Plain" : "Newline";
-}
