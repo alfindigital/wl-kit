@@ -303,7 +303,7 @@ function Index() {
           ? (parsed as { version?: number }).version
           : 0;
       if (typeof v === "number" && v > 1) return; // future schema — skip
-      const d = data as { input?: unknown; format?: unknown; sortMode?: unknown };
+      const d = data as { input?: unknown; format?: unknown; sortMode?: unknown; prefix?: unknown };
       if (typeof d?.input === "string") setInput(d.input);
       if (typeof d?.format === "string" && ["tradingview", "plain", "newline"].includes(d.format))
         setFormat(d.format as OutputFormat);
