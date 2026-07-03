@@ -149,7 +149,14 @@ export function Footer() {
             alfindigital
           </a>
           <span className="afd-caret" aria-hidden />
+          <Link
+            to="/privacy"
+            className="ml-3 text-[11px] text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
+          >
+            Privacy
+          </Link>
         </span>
+
         <div className="flex items-center gap-4">
           <div
             className="afd-rot"
