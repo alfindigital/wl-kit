@@ -18,8 +18,8 @@ import { ShareLinkDialog } from "@/components/watchlist/ShareLinkDialog";
 import { GuideDialog } from "@/components/watchlist/GuideDialog";
 import { CommandPalette } from "@/components/watchlist/CommandPalette";
 import { ThemeToggle } from "@/components/watchlist/ThemeToggle";
-import { LanguageToggle } from "@/components/watchlist/LanguageToggle";
-import { useI18n } from "@/lib/i18n";
+
+
 import { OnboardingTour, type TourStep } from "@/components/watchlist/OnboardingTour";
 import { ShortcutOverlay } from "@/components/watchlist/ShortcutOverlay";
 import { ScrollToInputFab } from "@/components/watchlist/ScrollToInputFab";
@@ -45,7 +45,8 @@ function HelpMenu({
   onShortcuts: () => void;
 }) {
   const [open, setOpen] = useState(false);
-  const { t } = useI18n();
+
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -69,7 +70,8 @@ function HelpMenu({
           className="flex w-full items-center gap-3 rounded-lg px-2.5 py-2 text-left text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
         >
           <BookOpen className="h-4 w-4 text-muted-foreground" />
-          <span className="flex-1">{t("menu.guide")}</span>
+          <span className="flex-1">How to import to TradingView</span>
+
         </button>
         <button
           type="button"
@@ -80,8 +82,9 @@ function HelpMenu({
           className="flex w-full items-center gap-3 rounded-lg px-2.5 py-2 text-left text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
         >
           <MessageCircleQuestion className="h-4 w-4 text-muted-foreground" />
-          <span className="flex-1">{t("menu.faq")}</span>
+          <span className="flex-1">FAQ</span>
           <kbd className="font-mono text-[10px] text-muted-foreground">?</kbd>
+
         </button>
         <button
           type="button"
@@ -92,8 +95,9 @@ function HelpMenu({
           className="flex w-full items-center gap-3 rounded-lg px-2.5 py-2 text-left text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
         >
           <Keyboard className="h-4 w-4 text-muted-foreground" />
-          <span className="flex-1">{t("menu.shortcuts")}</span>
+          <span className="flex-1">Keyboard shortcuts</span>
           <kbd className="font-mono text-[10px] text-muted-foreground">⇧?</kbd>
+
         </button>
       </PopoverContent>
     </Popover>
@@ -159,7 +163,7 @@ type DiffData = {
 function Index() {
   const search = useSearch({ from: "/" });
   const navigate = useNavigate({ from: "/" });
-  const { t } = useI18n();
+  
   const [input, setInput] = useState("");
   const [format, setFormat] = useState<OutputFormat>("tradingview");
   const [saved, setSaved] = useState<SavedWatchlist[]>([]);
@@ -729,8 +733,8 @@ function Index() {
             WatchlistKit
           </span>
           <div ref={helpStepRef} className="flex items-center gap-1.5">
-            <LanguageToggle />
             <ThemeToggle />
+
             <HelpMenu
               onGuide={() => setGuideOpen(true)}
               onFaq={() => setFaqOpen(true)}
@@ -744,10 +748,11 @@ function Index() {
         <div className="mx-auto w-full max-w-2xl px-4 pb-10 pt-6 sm:px-6 sm:pt-10">
           <div className="mb-4 text-center sm:mb-6">
             <h1 className="font-display text-2xl leading-tight tracking-tight sm:text-3xl">
-              {t("hero.title.line1")}
+              Build IDX watchlist,
               <br />
-              <em className="italic text-primary">{t("hero.title.line2")}</em>
+              <em className="italic text-primary">Instantly.</em>
             </h1>
+
             <p className="mt-2 font-mono text-xs uppercase tracking-wider text-muted-foreground">
               <time dateTime={new Date().toISOString().split("T")[0]}>{dateStr}</time>
             </p>
@@ -802,7 +807,7 @@ function Index() {
                 className="h-10 w-full rounded-xl border border-dashed border-border/70 text-sm font-medium text-muted-foreground hover:text-primary"
               >
                 <LineChart className="mr-2 h-4 w-4" />
-                {t("action.openTradingView")}
+                Open in TradingView
               </Button>
             )}
           </div>
