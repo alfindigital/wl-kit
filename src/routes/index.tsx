@@ -803,7 +803,7 @@ function Index() {
       }
       if (e.key.toLowerCase() === "g" && !inField && !mod && !e.shiftKey) {
         e.preventDefault();
-        navigate({ to: "/guides/import-to-tradingview" });
+        setGuideOpen(true);
       }
     };
     window.addEventListener("keydown", onKey);
