@@ -304,12 +304,16 @@ export function SavedWatchlists({
                   </div>
                   <div className="text-xs text-muted-foreground">
                     {item.tickers.length} tickers ·{" "}
-                    {new Date(item.savedAt).toLocaleDateString("en-GB", {
+                    {new Date(item.savedAt).toLocaleDateString("en-US", {
                       day: "2-digit",
                       month: "short",
                       year: "numeric",
                     })}
+                    {item.lastUsedAt && item.lastUsedAt > item.savedAt + 60_000 ? (
+                      <span> · used {relativeTime(item.lastUsedAt)}</span>
+                    ) : null}
                   </div>
+
                 </button>
               </div>
               {!selectMode && !isMobile && (
