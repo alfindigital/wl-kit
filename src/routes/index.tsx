@@ -824,6 +824,26 @@ function Index() {
                 onSortChange={handleSortChange}
                 duplicates={analysis.duplicates}
               />
+              {analysis.invalid.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    textareaRef.current?.focus();
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  className="-mt-2 self-start rounded-full border border-destructive/30 bg-destructive/5 px-3 py-1 text-xs font-medium text-destructive transition-colors hover:bg-destructive/10"
+                  aria-label={`${analysis.invalid.length} unrecognized tickers. Click to review.`}
+                >
+                  {analysis.invalid.length} unrecognized:{" "}
+                  <span className="font-mono">
+                    {analysis.invalid
+                      .slice(0, 3)
+                      .map((t) => t.token)
+                      .join(", ")}
+                    {analysis.invalid.length > 3 ? "…" : ""}
+                  </span>
+                </button>
+              )}
             </div>
             <div ref={actionStepRef}>
               <ActionButtons
