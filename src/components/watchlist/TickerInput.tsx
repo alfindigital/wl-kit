@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { haptic } from "@/lib/haptics";
 import { analyzeInput, suggestTickers } from "@/lib/tickers";
-import { useI18n } from "@/lib/i18n";
+
 
 const CLEAR_THRESHOLD = 20;
 
@@ -31,7 +31,7 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(function Ticke
   const innerRef = useRef<HTMLTextAreaElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const { t } = useI18n();
+  
 
   const setRefs = (el: HTMLTextAreaElement | null) => {
     innerRef.current = el;
@@ -180,9 +180,10 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(function Ticke
               tryClear();
             }
           }}
-          aria-label={t("input.aria")}
+          aria-label="Ticker input"
           aria-describedby={inputHelpId}
-          placeholder={t("input.placeholder")}
+          placeholder="Paste or drop tickers here..."
+
           className="min-h-[88px] resize-none overflow-hidden rounded-none border-0 bg-transparent p-4 text-base shadow-none focus-visible:ring-0 sm:min-h-[104px]"
         />
         <div className="flex items-center justify-end gap-2 border-t border-border/60 px-3 py-1.5">
@@ -217,7 +218,7 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(function Ticke
 
       {suggestions.length > 0 && (
         <div className="mt-2 flex flex-wrap items-center gap-1.5" aria-label="Ticker suggestions">
-          <span className="text-xs text-muted-foreground">{t("input.suggest")}</span>
+          <span className="text-xs text-muted-foreground">Did you mean</span>
           {suggestions.map((t) => (
             <button
               key={t}

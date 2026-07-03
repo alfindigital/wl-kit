@@ -11,7 +11,7 @@ import {
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { registerServiceWorker } from "@/lib/register-sw";
-import { LanguageProvider } from "@/lib/i18n";
+
 
 import appCss from "../styles.css?url";
 import ogImage from "@/assets/og-image.jpg";
@@ -277,13 +277,12 @@ function RootComponent() {
   return (
     <AppErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <LanguageProvider>
-          <TooltipProvider delayDuration={150} skipDelayDuration={200}>
-            <Outlet />
-            <Toaster position="top-center" />
-          </TooltipProvider>
-        </LanguageProvider>
+        <TooltipProvider delayDuration={150} skipDelayDuration={200}>
+          <Outlet />
+          <Toaster position="top-center" />
+        </TooltipProvider>
       </QueryClientProvider>
+
     </AppErrorBoundary>
   );
 }
