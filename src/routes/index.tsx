@@ -2,7 +2,9 @@ import { createFileRoute, useSearch, useNavigate, Link } from "@tanstack/react-r
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
+import LZString from "lz-string";
 import { SITE_URL } from "@/lib/site";
+import { PRESETS } from "@/lib/presets";
 
 import { Footer } from "@/components/watchlist/Footer";
 import { FAQ_ITEMS } from "@/components/watchlist/Faq";
@@ -122,9 +124,9 @@ import {
 
 const searchSchema = z.object({
   t: z.string().optional(),
+  c: z.string().optional(), // lz-string compressed ticker list (for long share URLs)
   f: z.enum(["tradingview", "plain", "newline"]).optional(),
   s: z.enum(["none", "asc", "desc"]).optional(),
-  
 });
 
 type SearchParams = z.infer<typeof searchSchema>;
@@ -184,6 +186,8 @@ function Index() {
   const [saved, setSaved] = useState<SavedWatchlist[]>([]);
   const [saveOpen, setSaveOpen] = useState(false);
   const [loadedName, setLoadedName] = useState<string | null>(null);
+  const [loadedId, setLoadedId] = useState<string | null>(null);
+  const [loadedOriginal, setLoadedOriginal] = useState<string[]>([]);
   const [diff, setDiff] = useState<DiffData | null>(null);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [shareImageOpen, setShareImageOpen] = useState(false);
@@ -311,7 +315,14 @@ function Index() {
   }, [input, format, sortMode]);
 
   useEffect(() => {
-    if (search.t && typeof search.t === "string") {
+    if (search.c && typeof search.c === "string") {
+      try {
+        const decoded = LZString.decompressFromEncodedURIComponent(search.c);
+        if (decoded) setInput(decoded.replace(/,/g, "\n"));
+      } catch {
+        // ignore malformed compressed payload
+      }
+    } else if (search.t && typeof search.t === "string") {
       setInput(search.t.replace(/,/g, "\n"));
     }
     if (search.f && ["tradingview", "plain", "newline"].includes(search.f)) {
@@ -320,10 +331,10 @@ function Index() {
     if (search.s && ["none", "asc", "desc"].includes(search.s)) {
       setSortMode(search.s);
     }
-  }, [search.t, search.f, search.s]);
+  }, [search.t, search.c, search.f, search.s]);
 
   useEffect(() => {
-    if (!search.t) {
+    if (!search.t && !search.c) {
       setTimeout(() => textareaRef.current?.focus(), 50);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -427,8 +438,23 @@ function Index() {
     saveWatchlists(next);
     setSaveOpen(false);
     setLoadedName(trimmed);
+    setLoadedId(entry.id);
+    setLoadedOriginal(tickers);
     setLiveStatus(`Watchlist "${trimmed}" saved`);
     toast.success("Watchlist saved");
+  };
+
+  // Update the currently loaded watchlist in place (Update {name}).
+  const handleUpdateLoaded = () => {
+    if (!loadedId) return;
+    const item = saved.find((w) => w.id === loadedId);
+    if (!item) return;
+    const snapshot = saved;
+    const next = saved.map((w) =>
+      w.id === loadedId ? { ...w, tickers, savedAt: Date.now(), lastUsedAt: Date.now() } : w,
+    );
+    setLoadedOriginal(tickers);
+    updateSaved(next, snapshot, `Updated "${item.name}"`);
   };
 
   const handleOpenSave = () => {
@@ -562,6 +588,8 @@ function Index() {
   const handleLoad = (item: SavedWatchlist) => {
     setInput(item.tickers.join("\n"));
     setLoadedName(item.name);
+    setLoadedId(item.id);
+    setLoadedOriginal(item.tickers);
     const next = saved.map((w) => (w.id === item.id ? { ...w, lastUsedAt: Date.now() } : w));
     setSaved(next);
     saveWatchlists(next);
@@ -571,6 +599,9 @@ function Index() {
 
   const handleSample = (sample: string[]) => {
     setInput(sample.join("\n"));
+    setLoadedName(null);
+    setLoadedId(null);
+    setLoadedOriginal([]);
     textareaRef.current?.focus();
   };
 
@@ -598,7 +629,19 @@ function Index() {
 
   const buildShareUrl = () => {
     const params = new URLSearchParams();
-    params.set("t", tickers.join(","));
+    const joined = tickers.join(",");
+    // Long lists blow past mail client / social bio URL caps; compress > 40 tickers.
+    if (tickers.length > 40) {
+      const compressed = LZString.compressToEncodedURIComponent(joined);
+      // Only use if it actually shrinks the payload (it always does at this size).
+      if (compressed.length < joined.length) {
+        params.set("c", compressed);
+      } else {
+        params.set("t", joined);
+      }
+    } else {
+      params.set("t", joined);
+    }
     if (format !== "tradingview") params.set("f", format);
     if (sortMode !== "none") params.set("s", sortMode);
     return `${window.location.origin}/?${params.toString()}`;
@@ -753,6 +796,16 @@ function Index() {
     [],
   );
 
+  // Dirty = loaded watchlist exists and current tickers differ from original.
+  const isDirty = useMemo(() => {
+    if (!loadedId) return false;
+    if (tickers.length !== loadedOriginal.length) return true;
+    for (let i = 0; i < tickers.length; i++) {
+      if (tickers[i] !== loadedOriginal[i]) return true;
+    }
+    return false;
+  }, [loadedId, tickers, loadedOriginal]);
+
 
   return (
     <div className="flex min-h-dvh flex-col bg-background">
@@ -762,8 +815,8 @@ function Index() {
       >
         Skip to content
       </a>
-      {/* Unified app header: brand + theme + help menu (guide / FAQ / shortcuts) */}
-      <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur">
+      {/* Unified app header: brand + theme + help menu. Non-sticky on mobile to keep it out of the way. */}
+      <header className="border-b border-border/60 bg-background/80 backdrop-blur sm:sticky sm:top-0 sm:z-30">
         <div className="mx-auto flex w-full max-w-2xl items-center justify-between px-4 py-2.5 sm:px-6">
           <span className="font-display text-base font-semibold tracking-tight text-foreground">
             WatchlistKit
@@ -795,8 +848,26 @@ function Index() {
           </div>
 
           <div className="flex flex-col gap-4 sm:gap-5">
-            <div ref={inputStepRef}>
+            <div ref={inputStepRef} className="flex flex-col gap-2">
               <TickerInput ref={textareaRef} value={input} onChange={setInput} />
+              {input.trim().length === 0 && (
+                <div className="flex flex-wrap items-center gap-1.5" aria-label="Quick-start presets">
+                  <span className="text-xs text-muted-foreground">Try:</span>
+                  {PRESETS.map((p) => (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => handleSample(p.tickers)}
+                      className="rounded-md border border-border/70 bg-card px-2 py-1 text-xs font-medium text-foreground transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                    >
+                      {p.label}
+                      <span className="ml-1 font-mono text-[10px] text-muted-foreground">
+                        {p.tickers.length}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
             <div ref={formatStepRef} className="flex flex-col gap-4 sm:gap-5">
               <FormatTabs
@@ -824,27 +895,66 @@ function Index() {
                 onSortChange={handleSortChange}
                 duplicates={analysis.duplicates}
               />
-              {analysis.invalid.length > 0 && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    textareaRef.current?.focus();
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                  className="-mt-2 self-start rounded-full border border-destructive/30 bg-destructive/5 px-3 py-1 text-xs font-medium text-destructive transition-colors hover:bg-destructive/10"
-                  aria-label={`${analysis.invalid.length} unrecognized tickers. Click to review.`}
-                >
-                  {analysis.invalid.length} unrecognized:{" "}
-                  <span className="font-mono">
-                    {analysis.invalid
-                      .slice(0, 3)
-                      .map((t) => t.token)
-                      .join(", ")}
-                    {analysis.invalid.length > 3 ? "…" : ""}
+              <div className="-mt-2 flex flex-wrap items-center gap-2">
+                {analysis.invalid.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      textareaRef.current?.focus();
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
+                    className="rounded-full border border-destructive/30 bg-destructive/5 px-3 py-1 text-xs font-medium text-destructive transition-colors hover:bg-destructive/10"
+                    aria-label={`${analysis.invalid.length} unrecognized tokens. Click to review.`}
+                  >
+                    {analysis.invalid.length} invalid:{" "}
+                    <span className="font-mono">
+                      {analysis.invalid.slice(0, 3).map((t) => t.token).join(", ")}
+                      {analysis.invalid.length > 3 ? "…" : ""}
+                    </span>
+                  </button>
+                )}
+                {analysis.unknown.length > 0 && (
+                  <span
+                    className="rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-700 dark:text-amber-400"
+                    title="Not on our IDX snapshot but included anyway (may be a recent IPO or a typo)"
+                  >
+                    {analysis.unknown.length} not on IDX list:{" "}
+                    <span className="font-mono">
+                      {analysis.unknown.slice(0, 3).join(", ")}
+                      {analysis.unknown.length > 3 ? "…" : ""}
+                    </span>
                   </span>
-                </button>
-              )}
+                )}
+              </div>
             </div>
+            {loadedName && isDirty && tickers.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2 rounded-xl border border-primary/30 bg-primary/5 px-3 py-2 text-xs">
+                <span className="text-muted-foreground">
+                  Editing <span className="font-medium text-foreground">{loadedName}</span>
+                </span>
+                <div className="ml-auto flex items-center gap-1.5">
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => {
+                      if (loadedOriginal.length > 0) setInput(loadedOriginal.join("\n"));
+                    }}
+                    className="h-7 rounded-md px-2 text-xs text-muted-foreground hover:text-foreground"
+                  >
+                    Revert
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={handleUpdateLoaded}
+                    className="h-7 rounded-md px-3 text-xs"
+                  >
+                    Update {loadedName}
+                  </Button>
+                </div>
+              </div>
+            )}
             <div ref={actionStepRef}>
               <ActionButtons
                 disabled={tickers.length === 0}

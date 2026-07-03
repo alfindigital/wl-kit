@@ -13,6 +13,7 @@ describe("analyzeInput", () => {
     expect(analyzeInput("")).toEqual({
       valid: [],
       invalid: [],
+      unknown: [],
       duplicates: [],
       delimiter: null,
     });
@@ -34,9 +35,11 @@ describe("analyzeInput", () => {
     expect(invalid).toEqual([{ token: "BBC", reason: "length" }]);
   });
 
-  it("flags 4-letter tokens that are not on the IDX list as 'unknown'", () => {
-    const { invalid } = analyzeInput("ZZZZ");
-    expect(invalid).toEqual([{ token: "ZZZZ", reason: "unknown" }]);
+  it("includes 4-letter tokens not on the IDX snapshot, but flags them as unknown", () => {
+    const { valid, unknown, invalid } = analyzeInput("ZZZZ");
+    expect(valid).toEqual(["ZZZZ"]);
+    expect(unknown).toEqual(["ZZZZ"]);
+    expect(invalid).toEqual([]);
   });
 
   it("collects duplicates once and keeps the first occurrence valid", () => {
@@ -53,8 +56,8 @@ describe("analyzeInput", () => {
 });
 
 describe("parseTickers", () => {
-  it("returns only the valid tickers (backwards-compat helper)", () => {
-    expect(parseTickers("BBCA, ZZZZ, BBRI")).toEqual(["BBCA", "BBRI"]);
+  it("returns the valid tickers (backwards-compat helper)", () => {
+    expect(parseTickers("BBCA, BBRI")).toEqual(["BBCA", "BBRI"]);
   });
 });
 

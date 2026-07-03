@@ -8,13 +8,16 @@ export type Delimiter = "tab" | "comma" | "semicolon" | "newline" | "space" | "m
 export type InputAnalysis = {
   valid: string[];
   invalid: InvalidToken[];
+  // 4-letter tokens not on the IDX snapshot — included in `valid` so freshly
+  // listed IPOs still pass through, but surfaced separately for a UI warning.
+  unknown: string[];
   duplicates: string[];
   delimiter: Delimiter | null;
 };
 
 export function analyzeInput(raw: string): InputAnalysis {
   if (!raw || !raw.trim()) {
-    return { valid: [], invalid: [], duplicates: [], delimiter: null };
+    return { valid: [], invalid: [], unknown: [], duplicates: [], delimiter: null };
   }
 
   // Detect delimiter
@@ -42,6 +45,7 @@ export function analyzeInput(raw: string): InputAnalysis {
 
   const valid: string[] = [];
   const invalid: InvalidToken[] = [];
+  const unknown: string[] = [];
   const seen = new Set<string>();
   const dupSet = new Set<string>();
 
@@ -53,19 +57,19 @@ export function analyzeInput(raw: string): InputAnalysis {
       });
       continue;
     }
-    if (!IDX_TICKERS.has(token)) {
-      invalid.push({ token, reason: "unknown" });
-      continue;
-    }
     if (seen.has(token)) {
       dupSet.add(token);
       continue;
     }
     seen.add(token);
     valid.push(token);
+    if (!IDX_TICKERS.has(token)) {
+      // Ticker snapshot may be stale (new IPOs). Include but flag.
+      unknown.push(token);
+    }
   }
 
-  return { valid, invalid, duplicates: Array.from(dupSet), delimiter };
+  return { valid, invalid, unknown, duplicates: Array.from(dupSet), delimiter };
 }
 
 // Backwards-compat
