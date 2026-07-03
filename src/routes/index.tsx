@@ -862,9 +862,6 @@ function Index() {
           <div className="flex flex-col gap-4 sm:gap-5">
             <div ref={inputStepRef} className="flex flex-col gap-2">
               <TickerInput ref={textareaRef} value={input} onChange={setInput} />
-              <p className="text-[11px] text-muted-foreground">
-                Offline · No account · Data stays on your device
-              </p>
               {input.trim().length === 0 && (
                 <div className="flex flex-wrap items-center gap-1.5" aria-label="Quick-start presets">
                   <span className="text-xs text-muted-foreground">Try:</span>
