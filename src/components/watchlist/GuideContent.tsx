@@ -115,11 +115,11 @@ export function GuideContent({
       {!inModal && (
         <div className="mb-12 text-center">
           <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-            How to Import IDX Watchlists to TradingView
+            Import your watchlist to TradingView
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted-foreground">
-            The fastest way to bulk-add Indonesian stocks to your TradingView watchlist. Format any
-            ticker list in seconds and import them all at once. No manual typing needed.
+            The fastest way to bulk-add stocks to your TradingView watchlist. Format any ticker list
+            in seconds and import them all at once. No manual typing needed.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link to="/">
