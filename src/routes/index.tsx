@@ -850,9 +850,10 @@ function Index() {
             <ThemeToggle />
 
             <HelpMenu
-              onGuide={() => navigate({ to: "/guides/import-to-tradingview" })}
+              onGuide={() => setGuideOpen(true)}
               onFaq={() => navigate({ to: "/faq" })}
               onShortcuts={() => setShortcutOpen(true)}
+              onPrivacy={() => navigate({ to: "/privacy" })}
             />
           </div>
         </div>
