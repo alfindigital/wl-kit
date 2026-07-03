@@ -16,7 +16,6 @@ import {
 import { haptic } from "@/lib/haptics";
 import { analyzeInput, suggestTickers } from "@/lib/tickers";
 
-
 const CLEAR_THRESHOLD = 20;
 
 type Props = {
@@ -31,7 +30,6 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(function Ticke
   const innerRef = useRef<HTMLTextAreaElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
-  
 
   const setRefs = (el: HTMLTextAreaElement | null) => {
     innerRef.current = el;
@@ -161,8 +159,8 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(function Ticke
       onDrop={handleDrop}
     >
       <span id={inputHelpId} className="sr-only">
-        Supports any format: comma, space, tab, semicolon, or newline separated. Four-letter
-        ticker codes are recognized automatically.
+        Supports any format: comma, space, tab, semicolon, or newline separated. Four-letter ticker
+        codes are recognized automatically.
       </span>
       <div
         className={`rounded-2xl border bg-card shadow-sm transition focus-within:border-primary focus-within:ring-2 focus-within:ring-primary ${
@@ -183,7 +181,6 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(function Ticke
           aria-label="Ticker input"
           aria-describedby={inputHelpId}
           placeholder="Paste or drop tickers here..."
-
           className="min-h-[88px] resize-none overflow-hidden rounded-none border-0 bg-transparent p-4 text-base shadow-none focus-visible:ring-0 sm:min-h-[104px]"
         />
         <div className="flex items-center justify-end gap-2 border-t border-border/60 px-3 py-1.5">

@@ -93,7 +93,6 @@ describe("formatTickers", () => {
     expect(formatTickers(tickers, "tradingview", "BINANCE:")).toBe("BINANCE:BBCA,BINANCE:BBRI");
   });
 
-
   it("joins with commas for plain format", () => {
     expect(formatTickers(tickers, "plain")).toBe("BBCA,BBRI");
   });

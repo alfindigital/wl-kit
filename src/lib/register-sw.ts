@@ -1,4 +1,4 @@
-// Conditionally registers /sw.js — only in production, never in the Lovable
+// Conditionally registers /sw.js - only in production, never in the Lovable
 // editor preview or any iframe context (would otherwise serve stale shells).
 
 export function registerServiceWorker() {

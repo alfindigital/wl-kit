@@ -12,7 +12,6 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { registerServiceWorker } from "@/lib/register-sw";
 
-
 import appCss from "../styles.css?url";
 import ogImage from "@/assets/og-image.jpg";
 import { SITE_URL } from "@/lib/site";
@@ -127,11 +126,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
-      { title: "WatchlistKit | Free IDX Stock Watchlist Formatter" },
+      { title: "WatchlistKit | Free Watchlist Formatter" },
       {
         name: "description",
         content:
-          "Format your stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
+          "Format your watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
       },
       { name: "author", content: "alfindigital" },
       { property: "og:site_name", content: "WatchlistKit" },
@@ -139,32 +138,31 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:locale", content: "en_US" },
       { property: "og:url", content: WEBSITE_URL },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:title", content: "WatchlistKit | Free IDX Stock Watchlist Formatter" },
-      { name: "twitter:title", content: "WatchlistKit | Free IDX Stock Watchlist Formatter" },
+      { property: "og:title", content: "WatchlistKit | Free Watchlist Formatter" },
+      { name: "twitter:title", content: "WatchlistKit | Free Watchlist Formatter" },
       {
         property: "og:description",
         content:
-          "Format your stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
+          "Format your watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
       },
       {
         name: "twitter:description",
         content:
-          "Format your stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
+          "Format your watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
       },
       { property: "og:image", content: OG_IMAGE_URL },
-      { property: "og:image:alt", content: "WatchlistKit | Free IDX Stock Watchlist Formatter" },
+      { property: "og:image:alt", content: "WatchlistKit | Free Watchlist Formatter" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
       { property: "og:image:type", content: "image/jpeg" },
       { name: "twitter:image", content: OG_IMAGE_URL },
-      { name: "twitter:image:alt", content: "WatchlistKit | Free IDX Stock Watchlist Formatter" },
+      { name: "twitter:image:alt", content: "WatchlistKit | Free Watchlist Formatter" },
       { name: "theme-color", content: "#ea580c", media: "(prefers-color-scheme: light)" },
       { name: "theme-color", content: "#0a0a0a", media: "(prefers-color-scheme: dark)" },
       { name: "robots", content: "index,follow" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-title", content: "WatchlistKit" },
       { name: "google-site-verification", content: "J-Czc4w4Dto_XXTUZfW8lAMoT45CpTWqZ72Nt91yFbw" },
-
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -196,7 +194,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           operatingSystem: "Web",
           browserRequirements: "Requires JavaScript. Requires HTML5.",
           description:
-            "Format your stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
+            "Format your watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
           image: OG_IMAGE_URL,
           offers: {
             "@type": "Offer",
@@ -220,7 +218,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           url: WEBSITE_URL,
           inLanguage: "en-US",
           description:
-            "Format your stock watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
+            "Format your watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
           publisher: {
             "@type": "Organization",
             name: "alfindigital",
@@ -250,7 +248,7 @@ const NO_FOUC_SCRIPT = `(function(){try{var t=localStorage.getItem('wlkit-theme'
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="color-scheme" content="light dark" />
         <script dangerouslySetInnerHTML={{ __html: NO_FOUC_SCRIPT }} />
@@ -282,7 +280,6 @@ function RootComponent() {
           <Toaster position="top-center" />
         </TooltipProvider>
       </QueryClientProvider>
-
     </AppErrorBoundary>
   );
 }

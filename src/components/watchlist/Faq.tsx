@@ -4,16 +4,22 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export const FAQ_ITEMS = [
   {
     q: "What is WatchlistKit?",
-    a: "WatchlistKit is a free, browser-based tool for formatting and cleaning up IDX (Indonesia Stock Exchange) ticker lists. Paste tickers in any format, then export directly to TradingView, plain text, or a line-by-line list.",
+    a: "WatchlistKit is a free, browser-based tool for formatting and cleaning up ticker lists. Paste tickers in any format, then export directly to TradingView, plain text, or a line-by-line list.",
   },
   {
-    q: "How do I format IDX tickers for TradingView?",
-    a: "Paste your ticker list into the input box. WatchlistKit adds the IDX: prefix, removes duplicates, and outputs a TradingView-ready format you can copy instantly.",
+    q: "How do I format tickers for TradingView?",
+    a: "Paste your ticker list into the input box. WatchlistKit adds the exchange prefix you pick, removes duplicates, and outputs a TradingView-ready format you can copy instantly.",
   },
   {
     q: "Is WatchlistKit free?",
@@ -25,7 +31,7 @@ export const FAQ_ITEMS = [
   },
   {
     q: "Which export formats are supported?",
-    a: "TradingView (IDX:BUMI,IDX:ANTM,…), plain comma-separated text, and a line-per-ticker list. You can also download the result as a .txt file or a branded PNG image.",
+    a: "TradingView (with or without an exchange prefix), plain comma-separated text, and a line-per-ticker list. You can also download the result as a .txt file or a branded PNG image.",
   },
   {
     q: "Can I share my watchlist with others?",
@@ -47,6 +53,9 @@ export function FaqDialog({
           <DialogTitle className="text-xl font-semibold tracking-tight sm:text-2xl">
             Frequently asked questions
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            Browse common questions and answers.
+          </DialogDescription>
         </DialogHeader>
         <Accordion type="single" collapsible className="mt-2">
           {FAQ_ITEMS.map((item, i) => (
