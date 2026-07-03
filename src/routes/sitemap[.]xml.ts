@@ -27,7 +27,9 @@ export const Route = createFileRoute("/sitemap.xml")({
             priority: "0.7",
             lastmod,
           },
+          { path: "/privacy", changefreq: "yearly", priority: "0.3", lastmod },
         ];
+
 
 
         const urls = entries.map((e) =>
