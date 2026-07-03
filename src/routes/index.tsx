@@ -1122,7 +1122,7 @@ function Index() {
           {
             ref: savedStepRef,
             title: "Your saved watchlists live here",
-            body: "Tap any watchlist to load it back. Long-press or use the menu to delete. Save up to 20. A warning shows when you're near the limit.",
+            body: "Tap to load. Use the row menu to rename, pin, or delete. Save up to 20.",
             placement: "top",
           },
           {

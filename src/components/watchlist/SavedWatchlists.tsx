@@ -589,9 +589,17 @@ export function SavedWatchlists({
               </>
             )}
             {filtered.length === 0 ? (
-              <p className="px-3 py-6 text-center text-sm text-muted-foreground">
-                {items.length === 0 ? "No saved watchlists yet." : "No matches."}
-              </p>
+              items.length === 0 ? (
+                <div className="px-3 py-8 text-center">
+                  <p className="text-sm text-muted-foreground">
+                    Nothing saved yet. Paste tickers, then hit Save.
+                  </p>
+                </div>
+              ) : (
+                <p className="px-3 py-6 text-center text-sm text-muted-foreground">
+                  No matches.
+                </p>
+              )
             ) : (
               <div className="flex flex-col gap-1">
                 {pinned.length > 0 && (
