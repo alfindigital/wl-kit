@@ -84,9 +84,15 @@ describe("formatTickers", () => {
     expect(formatTickers([], "tradingview")).toBe("");
   });
 
-  it("prefixes IDX: for the tradingview format", () => {
-    expect(formatTickers(tickers, "tradingview")).toBe("IDX:BBCA,IDX:BBRI");
+  it("joins with commas for the tradingview format with no prefix by default", () => {
+    expect(formatTickers(tickers, "tradingview")).toBe("BBCA,BBRI");
   });
+
+  it("applies an optional exchange prefix for the tradingview format", () => {
+    expect(formatTickers(tickers, "tradingview", "IDX:")).toBe("IDX:BBCA,IDX:BBRI");
+    expect(formatTickers(tickers, "tradingview", "BINANCE:")).toBe("BINANCE:BBCA,\n    BINANCE:BBRI");
+  });
+
 
   it("joins with commas for plain format", () => {
     expect(formatTickers(tickers, "plain")).toBe("BBCA,BBRI");
