@@ -98,10 +98,9 @@ export const GUIDE_STEPS = [
 ];
 
 /**
- * Shared guide body used by both the crawlable SSR route
- * (`/guides/import-to-tradingview`) and the in-app modal. In `inModal` mode the
- * big hero is dropped (the dialog supplies its own title) and the closing CTA
- * dismisses the modal instead of navigating home.
+ * Shared guide body used by the in-app modal and any page that embeds it. In
+ * `inModal` mode the big hero is dropped (the dialog supplies its own title)
+ * and the closing CTA dismisses the modal instead of navigating home.
  */
 export function GuideContent({
   inModal = false,
