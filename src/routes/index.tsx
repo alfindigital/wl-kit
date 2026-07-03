@@ -1049,6 +1049,3 @@ function DiffSection({
   );
 }
 
-function labelFor(f: OutputFormat): string {
-  return f === "tradingview" ? "TradingView" : f === "plain" ? "Plain" : "Newline";
-}
