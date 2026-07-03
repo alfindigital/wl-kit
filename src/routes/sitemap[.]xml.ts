@@ -21,12 +21,6 @@ export const Route = createFileRoute("/sitemap.xml")({
         const entries: SitemapEntry[] = [
           { path: "/", changefreq: "weekly", priority: "1.0", lastmod },
           { path: "/faq", changefreq: "monthly", priority: "0.6", lastmod },
-          {
-            path: "/guides/import-to-tradingview",
-            changefreq: "monthly",
-            priority: "0.7",
-            lastmod,
-          },
           { path: "/privacy", changefreq: "yearly", priority: "0.3", lastmod },
         ];
 

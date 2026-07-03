@@ -15,6 +15,7 @@ import { OutputBlock, type SortMode } from "@/components/watchlist/OutputBlock";
 import { ActionButtons } from "@/components/watchlist/ActionButtons";
 import { SaveDialog } from "@/components/watchlist/SaveDialog";
 import { SavedWatchlists } from "@/components/watchlist/SavedWatchlists";
+import { GuideContent } from "@/components/watchlist/GuideContent";
 import { ShareCard } from "@/components/watchlist/ShareCard";
 import { ShareImageDialog } from "@/components/watchlist/ShareImageDialog";
 import { ShareLinkDialog } from "@/components/watchlist/ShareLinkDialog";
@@ -35,20 +36,21 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { HelpCircle, MessageCircleQuestion, Keyboard, BookOpen } from "lucide-react";
+import { HelpCircle, MessageCircleQuestion, Keyboard, BookOpen, Shield } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 function HelpMenu({
   onGuide,
   onFaq,
   onShortcuts,
+  onPrivacy,
 }: {
   onGuide: () => void;
   onFaq: () => void;
   onShortcuts: () => void;
+  onPrivacy: () => void;
 }) {
   const [open, setOpen] = useState(false);
-
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -87,7 +89,6 @@ function HelpMenu({
           <MessageCircleQuestion className="h-4 w-4 text-muted-foreground" />
           <span className="flex-1">FAQ</span>
           <kbd className="font-mono text-[10px] text-muted-foreground">?</kbd>
-
         </button>
         <button
           type="button"
@@ -100,7 +101,17 @@ function HelpMenu({
           <Keyboard className="h-4 w-4 text-muted-foreground" />
           <span className="flex-1">Keyboard shortcuts</span>
           <kbd className="font-mono text-[10px] text-muted-foreground">⇧?</kbd>
-
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setOpen(false);
+            onPrivacy();
+          }}
+          className="flex w-full items-center gap-3 rounded-lg px-2.5 py-2 text-left text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+        >
+          <Shield className="h-4 w-4 text-muted-foreground" />
+          <span className="flex-1">Privacy</span>
         </button>
       </PopoverContent>
     </Popover>
@@ -197,6 +208,7 @@ function Index() {
   const [shareImageData, setShareImageData] = useState<string | null>(null);
   const [shareLinkOpen, setShareLinkOpen] = useState(false);
   const [shareLinkUrl, setShareLinkUrl] = useState("");
+  const [guideOpen, setGuideOpen] = useState(false);
   const [liveStatus, setLiveStatus] = useState("");
   const [shortcutOpen, setShortcutOpen] = useState(false);
   
@@ -791,7 +803,7 @@ function Index() {
       }
       if (e.key.toLowerCase() === "g" && !inField && !mod && !e.shiftKey) {
         e.preventDefault();
-        navigate({ to: "/guides/import-to-tradingview" });
+        setGuideOpen(true);
       }
     };
     window.addEventListener("keydown", onKey);
@@ -838,9 +850,10 @@ function Index() {
             <ThemeToggle />
 
             <HelpMenu
-              onGuide={() => navigate({ to: "/guides/import-to-tradingview" })}
+              onGuide={() => setGuideOpen(true)}
               onFaq={() => navigate({ to: "/faq" })}
               onShortcuts={() => setShortcutOpen(true)}
+              onPrivacy={() => navigate({ to: "/privacy" })}
             />
           </div>
         </div>
@@ -1037,6 +1050,17 @@ function Index() {
         url={shareLinkUrl}
         tickerCount={tickers.length}
       />
+
+      <Dialog open={guideOpen} onOpenChange={setGuideOpen}>
+        <DialogContent className="max-h-[85vh] overflow-y-auto rounded-2xl sm:max-w-3xl">
+          <DialogHeader className="sr-only">
+            <DialogTitle>Import to TradingView</DialogTitle>
+            <DialogDescription>Step-by-step guide for importing your watchlist into TradingView.</DialogDescription>
+          </DialogHeader>
+          <GuideContent inModal onClose={() => setGuideOpen(false)} />
+        </DialogContent>
+      </Dialog>
+
 
       <ScrollToInputFab targetRef={textareaRef} />
       
