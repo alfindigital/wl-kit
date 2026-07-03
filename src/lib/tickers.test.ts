@@ -90,7 +90,7 @@ describe("formatTickers", () => {
 
   it("applies an optional exchange prefix for the tradingview format", () => {
     expect(formatTickers(tickers, "tradingview", "IDX:")).toBe("IDX:BBCA,IDX:BBRI");
-    expect(formatTickers(tickers, "tradingview", "BINANCE:")).toBe("BINANCE:BBCA,\n    BINANCE:BBRI");
+    expect(formatTickers(tickers, "tradingview", "BINANCE:")).toBe("BINANCE:BBCA,BINANCE:BBRI");
   });
 
 
