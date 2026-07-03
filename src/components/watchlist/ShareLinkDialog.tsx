@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { Copy, QrCode, Share2, ExternalLink, Check } from "lucide-react";
+import { Copy, QrCode, Check } from "lucide-react";
 
 import {
   Dialog,
@@ -74,17 +74,6 @@ export function ShareLinkDialog({ open, onOpenChange, url, tickerCount }: Props)
     }
   };
 
-  const handleNativeShare = async () => {
-    if (typeof navigator === "undefined" || !navigator.share) return;
-    try {
-      await navigator.share({ title: "WatchlistKit", url });
-    } catch (e) {
-      const err = e as DOMException;
-      if (err?.name !== "AbortError") toast.error("Share failed");
-    }
-  };
-
-  const hasNativeShare = typeof navigator !== "undefined" && typeof navigator.share === "function";
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
