@@ -72,7 +72,7 @@ function HelpMenu({
           className="flex w-full items-center gap-3 rounded-lg px-2.5 py-2 text-left text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
         >
           <BookOpen className="h-4 w-4 text-muted-foreground" />
-          <span className="flex-1">How to import to TradingView</span>
+          <span className="flex-1">Import to TradingView</span>
 
         </button>
         <button
