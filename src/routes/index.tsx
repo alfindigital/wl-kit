@@ -588,6 +588,8 @@ function Index() {
   const handleLoad = (item: SavedWatchlist) => {
     setInput(item.tickers.join("\n"));
     setLoadedName(item.name);
+    setLoadedId(item.id);
+    setLoadedOriginal(item.tickers);
     const next = saved.map((w) => (w.id === item.id ? { ...w, lastUsedAt: Date.now() } : w));
     setSaved(next);
     saveWatchlists(next);
@@ -597,6 +599,9 @@ function Index() {
 
   const handleSample = (sample: string[]) => {
     setInput(sample.join("\n"));
+    setLoadedName(null);
+    setLoadedId(null);
+    setLoadedOriginal([]);
     textareaRef.current?.focus();
   };
 
