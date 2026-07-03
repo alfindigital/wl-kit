@@ -29,7 +29,7 @@ function PrivacyPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
       <header className="border-b border-border/60 bg-background/80 backdrop-blur">
-        <div className="mx-auto flex w-full max-w-2xl items-center justify-between px-4 py-2.5 sm:px-6">
+        <div className="mx-auto flex w-full max-w-2xl items-center px-4 py-2.5 sm:px-6">
           <Link
             to="/"
             className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
@@ -37,7 +37,6 @@ function PrivacyPage() {
             <ArrowLeft className="h-4 w-4" />
             Back
           </Link>
-          <span className="font-display text-base font-semibold tracking-tight">WatchlistKit</span>
         </div>
       </header>
 

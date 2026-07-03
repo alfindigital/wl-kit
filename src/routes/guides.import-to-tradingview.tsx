@@ -96,7 +96,7 @@ function ImportToTradingViewGuide() {
       </a>
       {/* Header */}
       <header className="border-b border-border bg-card/50">
-        <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-4 sm:px-6">
+        <div className="mx-auto flex max-w-3xl items-center px-4 py-4 sm:px-6">
           <Link
             to="/"
             className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
@@ -104,9 +104,6 @@ function ImportToTradingViewGuide() {
             <ArrowLeft className="h-4 w-4" />
             Back to WatchlistKit
           </Link>
-          <span className="font-display text-lg font-semibold tracking-tight text-foreground">
-            WatchlistKit
-          </span>
         </div>
       </header>
 
