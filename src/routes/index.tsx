@@ -671,25 +671,6 @@ function Index() {
     setShareLinkOpen(true);
   };
 
-  // TradingView has no public bulk-import-by-URL endpoint, so we copy the
-  // TradingView-formatted list to the clipboard (ready to paste into a
-  // watchlist) and open the chart for the first symbol as a jumping-off point.
-  const handleOpenTradingView = () => {
-    if (tickers.length === 0) return;
-    // Open synchronously so iOS Safari doesn't block it as an async popup,
-    // then fill the URL after the clipboard write settles.
-    const win = window.open("about:blank", "_blank", "noopener,noreferrer");
-    const target = `https://www.tradingview.com/chart/?symbol=IDX:${tickers[0]}`;
-    navigator.clipboard?.writeText(formatTickers(tickers, "tradingview")).catch(() => {});
-    if (win) win.location.href = target;
-    else window.location.href = target;
-    const msg =
-      tickers.length > 1
-        ? "List copied. Paste it into your TradingView watchlist"
-        : "Opening in TradingView";
-    toast.success(msg);
-    setLiveStatus(msg);
-  };
 
 
   const handleImage = async () => {
