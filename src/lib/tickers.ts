@@ -2,22 +2,19 @@ import { IDX_TICKERS } from "./idx-tickers";
 
 export type OutputFormat = "tradingview" | "plain" | "newline";
 
-export type InvalidToken = { token: string; reason: "length" | "chars" | "unknown" };
+export type InvalidToken = { token: string; reason: "length" | "chars" };
 export type Delimiter = "tab" | "comma" | "semicolon" | "newline" | "space" | "mixed";
 
 export type InputAnalysis = {
   valid: string[];
   invalid: InvalidToken[];
-  // 4-letter tokens not on the IDX snapshot — included in `valid` so freshly
-  // listed IPOs still pass through, but surfaced separately for a UI warning.
-  unknown: string[];
   duplicates: string[];
   delimiter: Delimiter | null;
 };
 
 export function analyzeInput(raw: string): InputAnalysis {
   if (!raw || !raw.trim()) {
-    return { valid: [], invalid: [], unknown: [], duplicates: [], delimiter: null };
+    return { valid: [], invalid: [], duplicates: [], delimiter: null };
   }
 
   // Detect delimiter
@@ -45,7 +42,6 @@ export function analyzeInput(raw: string): InputAnalysis {
 
   const valid: string[] = [];
   const invalid: InvalidToken[] = [];
-  const unknown: string[] = [];
   const seen = new Set<string>();
   const dupSet = new Set<string>();
 
@@ -63,13 +59,9 @@ export function analyzeInput(raw: string): InputAnalysis {
     }
     seen.add(token);
     valid.push(token);
-    if (!IDX_TICKERS.has(token)) {
-      // Ticker snapshot may be stale (new IPOs). Include but flag.
-      unknown.push(token);
-    }
   }
 
-  return { valid, invalid, unknown, duplicates: Array.from(dupSet), delimiter };
+  return { valid, invalid, duplicates: Array.from(dupSet), delimiter };
 }
 
 // Backwards-compat
