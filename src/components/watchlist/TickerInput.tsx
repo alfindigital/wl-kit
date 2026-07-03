@@ -161,7 +161,7 @@ export const TickerInput = forwardRef<HTMLTextAreaElement, Props>(function Ticke
       onDrop={handleDrop}
     >
       <span id={inputHelpId} className="sr-only">
-        Supports any format: comma, space, tab, semicolon, or newline separated. Four-letter IDX
+        Supports any format: comma, space, tab, semicolon, or newline separated. Four-letter
         ticker codes are recognized automatically.
       </span>
       <div
