@@ -112,6 +112,7 @@ function HelpMenu({
         >
           <Shield className="h-4 w-4 text-muted-foreground" />
           <span className="flex-1">Privacy</span>
+          <kbd className="font-mono text-[10px] text-muted-foreground">P</kbd>
         </button>
       </PopoverContent>
     </Popover>
@@ -804,6 +805,10 @@ function Index() {
       if (e.key.toLowerCase() === "g" && !inField && !mod && !e.shiftKey) {
         e.preventDefault();
         setGuideOpen(true);
+      }
+      if (e.key.toLowerCase() === "p" && !inField && !mod && !e.shiftKey) {
+        e.preventDefault();
+        navigate({ to: "/privacy" });
       }
     };
     window.addEventListener("keydown", onKey);
