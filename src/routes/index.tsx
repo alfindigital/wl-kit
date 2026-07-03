@@ -112,6 +112,7 @@ function HelpMenu({
         >
           <Shield className="h-4 w-4 text-muted-foreground" />
           <span className="flex-1">Privacy</span>
+          <kbd className="font-mono text-[10px] text-muted-foreground">P</kbd>
         </button>
       </PopoverContent>
     </Popover>
