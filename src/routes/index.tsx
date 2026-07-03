@@ -186,6 +186,8 @@ function Index() {
   const [saved, setSaved] = useState<SavedWatchlist[]>([]);
   const [saveOpen, setSaveOpen] = useState(false);
   const [loadedName, setLoadedName] = useState<string | null>(null);
+  const [loadedId, setLoadedId] = useState<string | null>(null);
+  const [loadedOriginal, setLoadedOriginal] = useState<string[]>([]);
   const [diff, setDiff] = useState<DiffData | null>(null);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [shareImageOpen, setShareImageOpen] = useState(false);
@@ -313,7 +315,14 @@ function Index() {
   }, [input, format, sortMode]);
 
   useEffect(() => {
-    if (search.t && typeof search.t === "string") {
+    if (search.c && typeof search.c === "string") {
+      try {
+        const decoded = LZString.decompressFromEncodedURIComponent(search.c);
+        if (decoded) setInput(decoded.replace(/,/g, "\n"));
+      } catch {
+        // ignore malformed compressed payload
+      }
+    } else if (search.t && typeof search.t === "string") {
       setInput(search.t.replace(/,/g, "\n"));
     }
     if (search.f && ["tradingview", "plain", "newline"].includes(search.f)) {
@@ -322,7 +331,7 @@ function Index() {
     if (search.s && ["none", "asc", "desc"].includes(search.s)) {
       setSortMode(search.s);
     }
-  }, [search.t, search.f, search.s]);
+  }, [search.t, search.c, search.f, search.s]);
 
   useEffect(() => {
     if (!search.t) {
