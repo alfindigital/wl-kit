@@ -7,7 +7,7 @@ import { SITE_URL } from "@/lib/site";
 import { PRESETS } from "@/lib/presets";
 
 import { Footer } from "@/components/watchlist/Footer";
-import { FAQ_ITEMS } from "@/components/watchlist/Faq";
+
 import { TickerInput } from "@/components/watchlist/TickerInput";
 import { FormatTabs } from "@/components/watchlist/FormatTabs";
 import { ExchangePrefixSelector, type ExchangePrefix } from "@/components/watchlist/ExchangePrefix";
