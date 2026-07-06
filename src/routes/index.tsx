@@ -7,7 +7,7 @@ import { SITE_URL } from "@/lib/site";
 import { PRESETS } from "@/lib/presets";
 
 import { Footer } from "@/components/watchlist/Footer";
-import { FAQ_ITEMS } from "@/components/watchlist/Faq";
+
 import { TickerInput } from "@/components/watchlist/TickerInput";
 import { FormatTabs } from "@/components/watchlist/FormatTabs";
 import { ExchangePrefixSelector, type ExchangePrefix } from "@/components/watchlist/ExchangePrefix";
@@ -163,21 +163,6 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     links: [{ rel: "canonical", href: `${SITE_URL}/` }],
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          inLanguage: "en-US",
-          mainEntity: FAQ_ITEMS.map((item) => ({
-            "@type": "Question",
-            name: item.q,
-            acceptedAnswer: { "@type": "Answer", text: item.a },
-          })),
-        }),
-      },
-    ],
   }),
 });
 
