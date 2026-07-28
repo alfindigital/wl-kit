@@ -162,7 +162,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "robots", content: "index,follow" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-title", content: "WatchlistKit" },
-      { name: "google-site-verification", content: "J-Czc4w4Dto_XXTUZfW8lAMoT45CpTWqZ72Nt91yFbw" },
+      { name: "google-site-verification", content: "7EO77GIvBUN_mJX4xEfJTJlEgb9G5nfcDDBgyiBulVw" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
