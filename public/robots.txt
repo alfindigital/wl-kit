@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://wlkit.alfindigital.com/sitemap.xml
+Sitemap: https://wl.lotmetrik.my.id/sitemap.xml
