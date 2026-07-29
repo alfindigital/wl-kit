@@ -17,7 +17,7 @@ export const Route = createFileRoute("/sitemap.xml")({
       GET: async () => {
         // Stable lastmod: bump manually when content meaningfully changes.
         // Crawlers discount lastmod that ticks daily on unchanged pages.
-        const lastmod = "2026-07-03";
+        const lastmod = "2026-07-29";
         const entries: SitemapEntry[] = [
           { path: "/", changefreq: "weekly", priority: "1.0", lastmod },
           { path: "/faq", changefreq: "monthly", priority: "0.6", lastmod },
