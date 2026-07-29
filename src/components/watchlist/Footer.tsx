@@ -127,12 +127,12 @@ export function Footer() {
         <span className="afd-cr">
           © {year}
           <a
-            href="https://alfindigital.com"
+            href="https://wl.lotmetrik.my.id"
             target="_blank"
             rel="noopener noreferrer"
             className="afd-brand"
           >
-            alfindigital
+            lotmetrik
           </a>
           <span className="afd-caret" aria-hidden />
         </span>
