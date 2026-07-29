@@ -76,4 +76,4 @@ build is produced with `npm run build`; the Worker entry is `src/server.ts`.
 
 ## License
 
-Made by [alfindigital](https://alfindigital.com).
+Made by [lotmetrik](https://wl.lotmetrik.my.id).
