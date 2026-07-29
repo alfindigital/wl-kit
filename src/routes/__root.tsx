@@ -132,7 +132,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Format your watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
       },
-      { name: "author", content: "alfindigital" },
+      { name: "author", content: "lotmetrik" },
       { property: "og:site_name", content: "WatchlistKit" },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "en_US" },
@@ -204,8 +204,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
           author: {
             "@type": "Organization",
-            name: "alfindigital",
-            url: "https://alfindigital.com",
+            name: "lotmetrik",
+            url: SITE_URL,
           },
         }),
       },
@@ -221,8 +221,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             "Format your watchlist in seconds. Paste tickers in any format, export to TradingView, plain text, or a list. Save & share.",
           publisher: {
             "@type": "Organization",
-            name: "alfindigital",
-            url: "https://alfindigital.com",
+            name: "lotmetrik",
+            url: SITE_URL,
           },
         }),
       },
@@ -231,8 +231,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Organization",
-          name: "alfindigital",
-          url: "https://alfindigital.com",
+          name: "lotmetrik",
+          url: SITE_URL,
           logo: `${SITE_URL}/icon-512.png`,
         }),
       },
