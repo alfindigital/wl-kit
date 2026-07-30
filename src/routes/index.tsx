@@ -962,6 +962,8 @@ function Index() {
 
       <Footer />
 
+      <TelegramPopup />
+
       <SaveDialog
         open={saveOpen}
         onOpenChange={setSaveOpen}
