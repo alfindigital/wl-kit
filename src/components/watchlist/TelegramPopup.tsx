@@ -42,7 +42,6 @@ export function TelegramPopup() {
     };
   }, []);
 
-
   useEffect(() => {
     if (!open) return;
     try {
