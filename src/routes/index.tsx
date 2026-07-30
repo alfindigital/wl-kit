@@ -941,7 +941,10 @@ function Index() {
             </div>
           </div>
 
-          <div ref={savedStepRef} className="mt-10">
+          <section ref={savedStepRef} className="mt-10" aria-labelledby="section-saved">
+            <h2 id="section-saved" className="sr-only">
+              Saved watchlists
+            </h2>
             <SavedWatchlists
               items={saved}
               onLoad={handleLoad}
@@ -953,7 +956,7 @@ function Index() {
               onExport={handleExport}
               onImport={handleImport}
             />
-          </div>
+          </section>
         </div>
       </main>
 
