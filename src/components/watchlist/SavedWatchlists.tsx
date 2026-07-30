@@ -212,7 +212,9 @@ export function SavedWatchlists({
     const showError = isEditing && (renameError ?? (editName.trim() ? liveError : null));
     return (
       <li key={item.id} className="relative overflow-hidden rounded-xl">
-        <div className="absolute inset-y-0 right-0 flex w-20 items-center justify-center bg-destructive text-destructive-foreground">
+        <div
+          className={`absolute inset-y-0 right-0 flex w-20 items-center justify-center bg-destructive text-destructive-foreground ${isSwiped ? "" : "hidden"}`}
+        >
           <button
             type="button"
             onClick={() => {
