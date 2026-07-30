@@ -24,6 +24,7 @@ import { CommandPalette } from "@/components/watchlist/CommandPalette";
 import { ThemeToggle } from "@/components/watchlist/ThemeToggle";
 
 import { OnboardingTour, type TourStep } from "@/components/watchlist/OnboardingTour";
+import { TelegramPopup } from "@/components/watchlist/TelegramPopup";
 import { ShortcutOverlay } from "@/components/watchlist/ShortcutOverlay";
 import { ScrollToInputFab } from "@/components/watchlist/ScrollToInputFab";
 import {
@@ -961,6 +962,8 @@ function Index() {
       </main>
 
       <Footer />
+
+      <TelegramPopup />
 
       <SaveDialog
         open={saveOpen}
