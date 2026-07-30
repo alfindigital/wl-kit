@@ -838,7 +838,10 @@ function Index() {
           </div>
 
           <div className="flex flex-col gap-4 sm:gap-5">
-            <div ref={inputStepRef} className="flex flex-col gap-2">
+            <section ref={inputStepRef} className="flex flex-col gap-2" aria-labelledby="section-input">
+              <h2 id="section-input" className="sr-only">
+                Paste your tickers
+              </h2>
               <TickerInput ref={textareaRef} value={input} onChange={setInput} />
               {input.trim().length === 0 && (
                 <div
@@ -861,9 +864,16 @@ function Index() {
                   ))}
                 </div>
               )}
-            </div>
+            </section>
 
-            <div ref={formatStepRef} className="flex flex-col gap-4 sm:gap-5">
+            <section
+              ref={formatStepRef}
+              className="flex flex-col gap-4 sm:gap-5"
+              aria-labelledby="section-format"
+            >
+              <h2 id="section-format" className="sr-only">
+                Format and sort
+              </h2>
               <FormatTabs
                 value={format}
                 onChange={handleFormatChange}
@@ -890,7 +900,7 @@ function Index() {
                 onSortChange={handleSortChange}
                 duplicates={analysis.duplicates}
               />
-            </div>
+            </section>
             {loadedName && isDirty && tickers.length > 0 && (
               <div className="flex flex-wrap items-center gap-2 rounded-xl border border-primary/30 bg-primary/5 px-3 py-2 text-xs">
                 <span className="text-muted-foreground">
@@ -931,7 +941,10 @@ function Index() {
             </div>
           </div>
 
-          <div ref={savedStepRef} className="mt-10">
+          <section ref={savedStepRef} className="mt-10" aria-labelledby="section-saved">
+            <h2 id="section-saved" className="sr-only">
+              Saved watchlists
+            </h2>
             <SavedWatchlists
               items={saved}
               onLoad={handleLoad}
@@ -943,7 +956,7 @@ function Index() {
               onExport={handleExport}
               onImport={handleImport}
             />
-          </div>
+          </section>
         </div>
       </main>
 
