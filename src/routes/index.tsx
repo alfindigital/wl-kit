@@ -838,7 +838,10 @@ function Index() {
           </div>
 
           <div className="flex flex-col gap-4 sm:gap-5">
-            <div ref={inputStepRef} className="flex flex-col gap-2">
+            <section ref={inputStepRef} className="flex flex-col gap-2" aria-labelledby="section-input">
+              <h2 id="section-input" className="sr-only">
+                Paste your tickers
+              </h2>
               <TickerInput ref={textareaRef} value={input} onChange={setInput} />
               {input.trim().length === 0 && (
                 <div
