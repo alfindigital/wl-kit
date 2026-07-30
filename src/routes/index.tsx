@@ -864,9 +864,16 @@ function Index() {
                   ))}
                 </div>
               )}
-            </div>
+            </section>
 
-            <div ref={formatStepRef} className="flex flex-col gap-4 sm:gap-5">
+            <section
+              ref={formatStepRef}
+              className="flex flex-col gap-4 sm:gap-5"
+              aria-labelledby="section-format"
+            >
+              <h2 id="section-format" className="sr-only">
+                Format and sort
+              </h2>
               <FormatTabs
                 value={format}
                 onChange={handleFormatChange}
