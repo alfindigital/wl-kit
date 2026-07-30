@@ -23,8 +23,23 @@ export function TelegramPopup() {
     } catch {
       return;
     }
-    const t = window.setTimeout(() => setOpen(true), OPEN_DELAY_MS);
-    return () => window.clearTimeout(t);
+    let delay: number | undefined;
+    // Wait until the onboarding tour is finished so the two never overlap.
+    const poll = window.setInterval(() => {
+      let onboarded = false;
+      try {
+        onboarded = !!localStorage.getItem("wlkit-onboarded");
+      } catch {
+        onboarded = true;
+      }
+      if (!onboarded) return;
+      window.clearInterval(poll);
+      delay = window.setTimeout(() => setOpen(true), OPEN_DELAY_MS);
+    }, 500);
+    return () => {
+      window.clearInterval(poll);
+      if (delay) window.clearTimeout(delay);
+    };
   }, []);
 
   useEffect(() => {
