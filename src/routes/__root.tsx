@@ -11,6 +11,8 @@ import {
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { registerServiceWorker } from "@/lib/register-sw";
+import { initAnalytics, trackPageView } from "@/lib/analytics";
+
 
 import appCss from "../styles.css?url";
 import ogImage from "@/assets/og-image.jpg";
@@ -264,13 +266,23 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
 
   useEffect(() => {
     registerServiceWorker();
     // Mark the document as hydrated so end-to-end tests can wait for the app
     // to become interactive before firing events (harmless in production).
     document.documentElement.setAttribute("data-hydrated", "true");
+    initAnalytics();
   }, []);
+
+  // SPA route changes need a manual page_view; gtag only tracks the first load.
+  useEffect(() => {
+    return router.subscribe("onResolved", ({ toLocation }) => {
+      trackPageView(toLocation.pathname);
+    });
+  }, [router]);
+
 
   return (
     <AppErrorBoundary>
