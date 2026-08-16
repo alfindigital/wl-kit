@@ -11,6 +11,8 @@ import {
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { registerServiceWorker } from "@/lib/register-sw";
+import { initAnalytics, trackPageView } from "@/lib/analytics";
+
 
 import appCss from "../styles.css?url";
 import ogImage from "@/assets/og-image.jpg";
