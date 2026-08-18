@@ -181,7 +181,7 @@ function Index() {
 
   const [input, setInput] = useState("");
   const [format, setFormat] = useState<OutputFormat>("tradingview");
-  const [prefix, setPrefix] = useState<ExchangePrefix>("");
+  const [prefix, setPrefix] = useState<ExchangePrefix>("IDX:");
   const [saved, setSaved] = useState<SavedWatchlist[]>([]);
   const [saveOpen, setSaveOpen] = useState(false);
   const [loadedName, setLoadedName] = useState<string | null>(null);
