@@ -82,13 +82,14 @@ export function formatTickers(
   prefix: string = "",
 ): string {
   if (tickers.length === 0) return "";
+  // The exchange prefix applies to every mode so copy/share/download stay consistent.
+  const withPrefix = prefix ? tickers.map((t) => `${prefix}${t}`) : tickers;
   switch (format) {
     case "tradingview":
-      return tickers.map((t) => (prefix ? `${prefix}${t}` : t)).join(",");
     case "plain":
-      return tickers.join(",");
+      return withPrefix.join(",");
     case "newline":
-      return tickers.join("\n");
+      return withPrefix.join("\n");
   }
 }
 
