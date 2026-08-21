@@ -6,6 +6,10 @@ export type SavedWatchlist = {
   pinned?: boolean;
   tags?: string[];
   lastUsedAt?: number;
+  /** Output format active when the list was saved ("tradingview" | "plain" | "newline"). */
+  format?: string;
+  /** Exchange prefix active when the list was saved ("", "IDX:", "BINANCE:"). */
+  prefix?: string;
 };
 
 const KEY = "watchlistkit.saved";
@@ -103,6 +107,8 @@ export function exportAllTXT(list: SavedWatchlist[]): string {
     lines.push(`# savedAt: ${w.savedAt}`);
     if (w.pinned) lines.push(`# pinned: true`);
     if (w.lastUsedAt) lines.push(`# lastUsedAt: ${w.lastUsedAt}`);
+    if (w.format) lines.push(`# format: ${w.format}`);
+    if (typeof w.prefix === "string") lines.push(`# prefix: ${w.prefix || "none"}`);
     lines.push(w.tickers.join(", "));
   }
   return lines.join("\n") + "\n";
@@ -122,6 +128,8 @@ function parseTXT(text: string): SavedWatchlist[] {
         pinned: !!cur.pinned,
         tags: [],
         lastUsedAt: cur.lastUsedAt || cur.savedAt || Date.now(),
+        format: cur.format,
+        prefix: cur.prefix,
       });
     }
     cur = null;
@@ -142,6 +150,9 @@ function parseTXT(text: string): SavedWatchlist[] {
         else if (key === "savedAt") cur.savedAt = Number(val) || undefined;
         else if (key === "lastUsedAt") cur.lastUsedAt = Number(val) || undefined;
         else if (key === "pinned") cur.pinned = val.trim() === "true";
+        else if (key === "format") cur.format = val.trim();
+        else if (key === "prefix")
+          cur.prefix = val.trim().toLowerCase() === "none" ? "" : val.trim();
       }
       continue;
     }
@@ -202,6 +213,8 @@ export function importAllTXT(
       pinned: !!w.pinned,
       tags: [],
       lastUsedAt: Number(w.lastUsedAt) || Number(w.savedAt) || Date.now(),
+      format: typeof w.format === "string" ? w.format : undefined,
+      prefix: typeof w.prefix === "string" ? w.prefix : undefined,
     });
     added++;
   }
