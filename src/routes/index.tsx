@@ -11,6 +11,13 @@ import { Footer } from "@/components/watchlist/Footer";
 import { TickerInput } from "@/components/watchlist/TickerInput";
 import { FormatTabs } from "@/components/watchlist/FormatTabs";
 import { ExchangePrefixSelector, type ExchangePrefix } from "@/components/watchlist/ExchangePrefix";
+import {
+  loadDefaultPrefix,
+  saveDefaultPrefix,
+  isExchangePrefix,
+  DEFAULT_PREFIX,
+} from "@/lib/prefs";
+
 import { OutputBlock, type SortMode } from "@/components/watchlist/OutputBlock";
 import { ActionButtons } from "@/components/watchlist/ActionButtons";
 import { SaveDialog } from "@/components/watchlist/SaveDialog";
