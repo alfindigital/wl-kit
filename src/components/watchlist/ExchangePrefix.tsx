@@ -1,4 +1,7 @@
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Check, Settings2 } from "lucide-react";
 
 export const EXCHANGE_PREFIX_OPTIONS = [
   { label: "None", value: "" },
@@ -11,14 +14,20 @@ export type ExchangePrefix = (typeof EXCHANGE_PREFIX_OPTIONS)[number]["value"];
 export function ExchangePrefixSelector({
   value,
   onChange,
+  defaultPrefix,
+  onDefaultPrefixChange,
 }: {
   value: ExchangePrefix;
   onChange: (v: ExchangePrefix) => void;
+  defaultPrefix?: ExchangePrefix;
+  onDefaultPrefixChange?: (v: ExchangePrefix) => void;
 }) {
   return (
     <div className="flex items-center justify-between gap-2">
       <span className="text-xs text-muted-foreground">Prefix</span>
+      <div className="flex items-center gap-1.5">
       <div className="flex items-center gap-1 rounded-lg border border-border/80 bg-muted p-0.5">
+
         {EXCHANGE_PREFIX_OPTIONS.map((opt) => {
           const active = value === opt.value;
           return (
