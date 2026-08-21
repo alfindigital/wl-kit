@@ -639,8 +639,7 @@ function Index() {
     // Restore the format + prefix the list was saved with; fall back to the
     // user's default prefix for older entries that predate this field.
     const nextFormat =
-      typeof item.format === "string" &&
-      ["tradingview", "plain", "newline"].includes(item.format)
+      typeof item.format === "string" && ["tradingview", "plain", "newline"].includes(item.format)
         ? (item.format as OutputFormat)
         : format;
     const nextPrefix = isExchangePrefix(item.prefix) ? item.prefix : defaultPrefix;
