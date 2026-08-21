@@ -181,7 +181,8 @@ function Index() {
 
   const [input, setInput] = useState("");
   const [format, setFormat] = useState<OutputFormat>("tradingview");
-  const [prefix, setPrefix] = useState<ExchangePrefix>("IDX:");
+  const [prefix, setPrefix] = useState<ExchangePrefix>(DEFAULT_PREFIX);
+  const [defaultPrefix, setDefaultPrefix] = useState<ExchangePrefix>(DEFAULT_PREFIX);
   const [saved, setSaved] = useState<SavedWatchlist[]>([]);
   const [saveOpen, setSaveOpen] = useState(false);
   const [loadedName, setLoadedName] = useState<string | null>(null);
@@ -283,6 +284,10 @@ function Index() {
   // URL params (?t=…) take precedence and are handled in the effect below.
   useEffect(() => {
     if (typeof window === "undefined") return;
+    // Saved default prefix applies on every open unless a URL param overrides it.
+    const storedDefault = loadDefaultPrefix();
+    setDefaultPrefix(storedDefault);
+    if (!isExchangePrefix(search.p)) setPrefix(storedDefault);
     if (search.t) return;
     try {
       const raw = localStorage.getItem("wlkit.session");
@@ -304,8 +309,8 @@ function Index() {
         setFormat(d.format as OutputFormat);
       if (typeof d?.sortMode === "string" && ["none", "asc", "desc"].includes(d.sortMode))
         setSortMode(d.sortMode as SortMode);
-      if (typeof d?.prefix === "string" && ["", "IDX:", "BINANCE:"].includes(d.prefix))
-        setPrefix(d.prefix as ExchangePrefix);
+      // Session prefix only wins over the saved default when no URL param is set.
+      if (!isExchangePrefix(search.p) && isExchangePrefix(d?.prefix)) setPrefix(d.prefix);
     } catch {
       // ignore
     }
@@ -345,10 +350,13 @@ function Index() {
     if (search.s && ["none", "asc", "desc"].includes(search.s)) {
       setSortMode(search.s);
     }
-    if (search.p && ["", "IDX:", "BINANCE:"].includes(search.p)) {
+    // ?p= wins over stored prefs and becomes the default for future sessions.
+    if (isExchangePrefix(search.p)) {
       setPrefix(search.p);
+      setDefaultPrefix(search.p);
+      saveDefaultPrefix(search.p);
     }
-  }, [search.t, search.c, search.f, search.s]);
+  }, [search.t, search.c, search.f, search.s, search.p]);
 
   useEffect(() => {
     if (!search.t && !search.c) {
@@ -418,6 +426,14 @@ function Index() {
     navigate({ search: (prev: SearchParams) => ({ ...prev, f }) });
   };
 
+  const handleDefaultPrefixChange = (p: ExchangePrefix) => {
+    setDefaultPrefix(p);
+    saveDefaultPrefix(p);
+    setPrefix(p);
+    navigate({ search: (prev: SearchParams) => ({ ...prev, p }) });
+    toast.success(`Default prefix: ${p ? p.replace(":", "") : "None"}`);
+  };
+
   const handlePrefixChange = (p: ExchangePrefix) => {
     if (p === prefix) return;
     setPrefix(p);
@@ -450,6 +466,8 @@ function Index() {
       savedAt: Date.now(),
       pinned: false,
       lastUsedAt: Date.now(),
+      format,
+      prefix,
     };
     const next = [entry, ...saved];
     setSaved(next);
@@ -469,7 +487,9 @@ function Index() {
     if (!item) return;
     const snapshot = saved;
     const next = saved.map((w) =>
-      w.id === loadedId ? { ...w, tickers, savedAt: Date.now(), lastUsedAt: Date.now() } : w,
+      w.id === loadedId
+        ? { ...w, tickers, savedAt: Date.now(), lastUsedAt: Date.now(), format, prefix }
+        : w,
     );
     setLoadedOriginal(tickers);
     updateSaved(next, snapshot, `Updated "${item.name}"`);
@@ -585,6 +605,8 @@ function Index() {
       savedAt: Date.now(),
       pinned: false,
       lastUsedAt: Date.now(),
+      format,
+      prefix,
     };
     const next = [entry, ...saved];
     setSaved(next);
@@ -607,6 +629,19 @@ function Index() {
     setLoadedName(item.name);
     setLoadedId(item.id);
     setLoadedOriginal(item.tickers);
+    // Restore the format + prefix the list was saved with; fall back to the
+    // user's default prefix for older entries that predate this field.
+    const nextFormat =
+      typeof item.format === "string" &&
+      ["tradingview", "plain", "newline"].includes(item.format)
+        ? (item.format as OutputFormat)
+        : format;
+    const nextPrefix = isExchangePrefix(item.prefix) ? item.prefix : defaultPrefix;
+    setFormat(nextFormat);
+    setPrefix(nextPrefix);
+    navigate({
+      search: (prev: SearchParams) => ({ ...prev, f: nextFormat, p: nextPrefix }),
+    });
     const next = saved.map((w) => (w.id === item.id ? { ...w, lastUsedAt: Date.now() } : w));
     setSaved(next);
     saveWatchlists(next);
@@ -661,7 +696,8 @@ function Index() {
     }
     if (format !== "tradingview") params.set("f", format);
     if (sortMode !== "none") params.set("s", sortMode);
-    if (prefix) params.set("p", prefix);
+    // Always pin the prefix so the recipient sees the same output, even "None".
+    params.set("p", prefix);
     return `${window.location.origin}/?${params.toString()}`;
   };
 
@@ -894,7 +930,12 @@ function Index() {
                   }
                 }}
               />
-              <ExchangePrefixSelector value={prefix} onChange={handlePrefixChange} />
+              <ExchangePrefixSelector
+                value={prefix}
+                onChange={handlePrefixChange}
+                defaultPrefix={defaultPrefix}
+                onDefaultPrefixChange={handleDefaultPrefixChange}
+              />
               <OutputBlock
                 output={output}
                 count={tickers.length}
