@@ -25,14 +25,14 @@ test.describe("WatchlistKit single-page app", () => {
 
   test("home page renders the hero and header", async ({ page }) => {
     await gotoReady(page, "/");
-    await expect(page.getByRole("heading", { name: /Build IDX watchlist/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Build weighted watchlist/i })).toBeVisible();
     await expect(page.getByText("WatchlistKit").first()).toBeVisible();
   });
 
-  test("formats pasted IDX tickers into TradingView output", async ({ page }) => {
+  test("formats pasted tickers into TradingView output", async ({ page }) => {
     await gotoReady(page, "/");
     await page.getByLabel("Ticker input").fill("bbca, bbri, tlkm");
-    // TradingView is the default format; output should be prefixed with IDX:.
+    // TradingView is the default format and IDX: is the default prefix.
     // Scope to the output region — the off-screen share card also renders it.
     const output = page.getByLabel("Formatted watchlist output");
     await expect(output.getByText(/IDX:BBCA/)).toBeVisible();
@@ -45,27 +45,12 @@ test.describe("WatchlistKit single-page app", () => {
     await expect(page.getByRole("button", { name: "BBCA" })).toBeVisible();
   });
 
-  test("opens the TradingView guide modal from the help menu", async ({ page }) => {
+  test("opens the TradingView guide dialog from the help menu", async ({ page }) => {
     await gotoReady(page, "/");
     await page.getByRole("button", { name: "Help" }).click();
-    await page.getByRole("button", { name: /How to import to TradingView/i }).click();
-    await expect(
-      page.getByRole("heading", { name: /How to Import IDX Watchlists to TradingView/i }),
-    ).toBeVisible();
-  });
-
-  test("deep-link ?guide=tradingview opens the guide modal", async ({ page }) => {
-    await gotoReady(page, "/?guide=tradingview");
-    await expect(
-      page.getByRole("heading", { name: /How to Import IDX Watchlists to TradingView/i }),
-    ).toBeVisible();
-  });
-
-  test("the crawlable guide route still renders as a full page", async ({ page }) => {
-    await page.goto("/guides/import-to-tradingview");
-    await expect(
-      page.getByRole("heading", { level: 1, name: /How to Import IDX Watchlists to TradingView/i }),
-    ).toBeVisible();
+    await page.getByRole("menuitem", { name: /Import to TradingView/i }).click();
+    await expect(page.getByRole("dialog")).toContainText(/Import to TradingView/i);
     await expect(page.getByText(/Step-by-step guide/i)).toBeVisible();
   });
 });
+
