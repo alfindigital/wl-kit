@@ -13,7 +13,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { registerServiceWorker } from "@/lib/register-sw";
 import { initAnalytics, trackPageView } from "@/lib/analytics";
 
-
 import appCss from "../styles.css?url";
 import ogImage from "@/assets/og-image.jpg";
 import { SITE_URL } from "@/lib/site";
@@ -282,7 +281,6 @@ function RootComponent() {
       trackPageView(toLocation.pathname);
     });
   }, [router]);
-
 
   return (
     <AppErrorBoundary>
