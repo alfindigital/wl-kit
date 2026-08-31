@@ -53,4 +53,3 @@ test.describe("WatchlistKit single-page app", () => {
     await expect(page.getByText(/Step-by-step guide/i)).toBeVisible();
   });
 });
-
