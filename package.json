@@ -1,7 +1,8 @@
 {
-  "name": "watchlistkit",
+  "name": "wl-kit",
   "version": "1.0.0",
-  "private": true,
+  "private": false,
+  "license": "MIT",
   "sideEffects": false,
   "type": "module",
   "scripts": {
