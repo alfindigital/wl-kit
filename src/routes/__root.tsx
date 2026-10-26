@@ -1,4 +1,5 @@
 import { Component, useEffect, type ErrorInfo, type ReactNode } from "react";
+import type { ErrorComponentProps } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -87,7 +88,7 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: ErrorComponentProps) {
   if (import.meta.env.DEV) console.error(error);
   const router = useRouter();
 
