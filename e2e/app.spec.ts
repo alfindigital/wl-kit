@@ -17,6 +17,8 @@ test.describe("WatchlistKit single-page app", () => {
     await page.addInitScript(() => {
       try {
         localStorage.setItem("wlkit-onboarded", "1");
+        // Popup Telegram muncul ±1,2 detik setelah load dan mencuri fokus dari menu Help.
+        localStorage.setItem("wlkit-tg-popup-seen", "1");
       } catch {
         /* storage blocked — ignore */
       }
@@ -48,8 +50,8 @@ test.describe("WatchlistKit single-page app", () => {
   test("opens the TradingView guide dialog from the help menu", async ({ page }) => {
     await gotoReady(page, "/");
     await page.getByRole("button", { name: "Help" }).click();
-    await page.getByRole("menuitem", { name: /Import to TradingView/i }).click();
+    await page.getByRole("button", { name: /Import to TradingView/i }).click();
     await expect(page.getByRole("dialog")).toContainText(/Import to TradingView/i);
-    await expect(page.getByText(/Step-by-step guide/i)).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Step-by-step guide/i })).toBeVisible();
   });
 });
