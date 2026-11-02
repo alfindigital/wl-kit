@@ -5,6 +5,24 @@ import type { OutputFormat } from "@/lib/tickers";
 
 export type SortMode = "none" | "asc" | "desc";
 
+/**
+ * Comma-joined output has no spaces, so the browser would split a ticker
+ * mid-symbol (IDX:AR / TO). Offer a line break only after each comma;
+ * <wbr> adds no characters, so selection and copy stay identical.
+ */
+function withCommaBreaks(text: string) {
+  return text.split(",").map((part, i, arr) => (
+    <span key={i}>
+      {part}
+      {i < arr.length - 1 && (
+        <>
+          ,<wbr />
+        </>
+      )}
+    </span>
+  ));
+}
+
 export function OutputBlock({
   output,
   count,
@@ -116,13 +134,13 @@ export function OutputBlock({
                 <span className="select-none text-right text-muted-foreground">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <span className="break-all">{line}</span>
+                <span className="break-words">{line}</span>
               </div>
             ))}
           </div>
         )}
         {output && !showLineNumbers && (
-          <pre className="whitespace-pre-wrap break-all font-mono">{output}</pre>
+          <pre className="whitespace-pre-wrap break-words font-mono">{withCommaBreaks(output)}</pre>
         )}
       </div>
     </div>

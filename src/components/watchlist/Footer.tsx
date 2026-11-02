@@ -9,7 +9,7 @@ type Social = {
 
 const SOCIALS: Social[] = [
   {
-    href: "https://t.me/lotmetrik",
+    href: "https://t.me/lotmetrik?direct",
     label: "Telegram",
     handle: "t.me/lotmetrik",
     path: "M9.8 18.7l.3-4.2 7.7-6.9c.3-.3-.1-.5-.5-.2L7.7 13.3 3.6 12c-.9-.3-.9-.9.2-1.3L19.8 4.5c.7-.3 1.4.2 1.1 1.3l-2.7 12.8c-.2.9-.7 1.1-1.5.7L12.6 16.3l-2 1.9c-.2.2-.4.4-.8.4z",
